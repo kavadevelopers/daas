@@ -132,5 +132,5 @@ class Apidelivery extends CI_Controller
 		retJson(['No Script Found Here']);
 	}
 }
-?>
+
 
