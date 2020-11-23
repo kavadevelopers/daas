@@ -151,8 +151,10 @@
 
     <script>
         $(document).ready(function() {
-
-        $('#login').submit(function(event) {
+            $('#login').submit(function(event) {
+                event.preventDefault();
+            });
+        $('#logina').submit(function(event) {
 
             event.preventDefault();
             var user = $('#user').val();

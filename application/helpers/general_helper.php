@@ -9,6 +9,10 @@ function pre_print($array)
     exit;
 }
 
+function retJson($array){
+    header("Content-type: application/json");
+    echo json_encode($array);
+}
 
 function _vdatetime($datetime)
 {
