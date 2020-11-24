@@ -23,7 +23,7 @@ class Apicustomer extends CI_Controller
 			if($user->num_rows() > 0){
 				$user = $user->row_array();
 				if($user['password'] === md5($this->input->post('password'))){
-					if($user['verified'] == 1){
+					if($user['verified'] == "1"){
 						if($user['block'] == ""){
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token')]);
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
