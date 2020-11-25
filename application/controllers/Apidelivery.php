@@ -124,8 +124,8 @@ class Apidelivery extends CI_Controller
 	public function getintouch()
 	{
 		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile')){
-			$old = $this->db->get_where('z_delivery',['mobile' => $this->input->post('mobile'),'df' => ''])->num_rows();
-			if($old == 0){
+			$old = $this->db->get_where('z_delivery',['mobile' => $this->input->post('mobile'),'df' => '']);
+			if($old->num_rows() == 0){
 				$otp = mt_rand(100000, 999999);
 				$data = [
 					'fname'			=> $this->input->post('fname'),
@@ -135,7 +135,7 @@ class Apidelivery extends CI_Controller
 					'token'			=> '',
 					'df'			=> '',
 					'block'			=> '',
-					'approved'		=> '1',
+					'approved'		=> '0',
 					'registered_at'	=> date('Y-m-d H:i:s'),
 					'otp'			=> $otp
 				];
@@ -143,7 +143,26 @@ class Apidelivery extends CI_Controller
 				$user = $this->db->insert_id();
 				retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $user]);
 			}else{
-				retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
+				$oldRow = $old->row_array();
+				if($oldRow['verified'] == '0'){
+					$otp = mt_rand(100000, 999999);
+					$data = [
+						'fname'			=> $this->input->post('fname'),
+						'lname'			=> $this->input->post('lname'),
+						'mobile'		=> $this->input->post('mobile'),
+						'deviceid'		=> '',
+						'token'			=> '',
+						'df'			=> '',
+						'block'			=> '',
+						'approved'		=> '0',
+						'registered_at'	=> date('Y-m-d H:i:s'),
+						'otp'			=> $otp
+					];
+					$this->db->where('id',$oldRow['id'])->update('z_delivery',$data);
+					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
+				}else{
+					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
+				}
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`fname`,`lname` and `mobile` are Required']);

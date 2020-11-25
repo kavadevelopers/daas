@@ -105,8 +105,8 @@ class Apicustomer extends CI_Controller
 	public function register()
 	{
 		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile') && $this->input->post('password') && $this->input->post('gender')){
-			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '','verified' => '1'])->num_rows();
-			if($old == 0){
+			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
+			if($old->num_rows() == 0){
 				$otp = mt_rand(100000, 999999);
 				$data = [
 					'fname'			=> $this->input->post('fname'),
@@ -125,7 +125,27 @@ class Apicustomer extends CI_Controller
 				$user = $this->db->insert_id();
 				retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $user]);
 			}else{
-				retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
+				$oldRow = $old->row_array();
+				if($oldRow['verified'] == '0'){
+					$otp = mt_rand(100000, 999999);
+					$data = [
+						'fname'			=> $this->input->post('fname'),
+						'lname'			=> $this->input->post('lname'),
+						'mobile'		=> $this->input->post('mobile'),
+						'password'		=> md5($this->input->post('password')),
+						'gender'		=> $this->input->post('gender'),
+						'deviceid'		=> '',
+						'token'			=> '',
+						'df'			=> '',
+						'block'			=> '',
+						'registered_at'	=> date('Y-m-d H:i:s'),
+						'otp'			=> $otp
+					];
+					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
+					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
+				}else{
+					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
+				}
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required']);
