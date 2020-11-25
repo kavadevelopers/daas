@@ -6,6 +6,36 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function faq()
+	{
+		$list = $this->db->get('faq_customer');
+		retJson(['_return' => true,'count' => $list->num_rows(),'list' => $list->result_array()]);
+	}
+
+	public function how()
+	{
+		$content = $this->db->get_where('pages',['id' => '4'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function about()
+	{
+		$content = $this->db->get_where('pages',['id' => '3'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function privacy()
+	{
+		$content = $this->db->get_where('pages',['id' => '2'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function terms()
+	{
+		$content = $this->db->get_where('pages',['id' => '1'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
 	public function logout()
 	{
 		if($this->input->post('userid')){

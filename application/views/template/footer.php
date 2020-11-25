@@ -94,16 +94,10 @@
     <script type="text/javascript">
         $(document).ready(function($) {
             if(window.innerWidth > 990){
-                $('#mobile-collapse').click(); 
+                //$('#mobile-collapse').click(); 
             }
         });
     </script>
-
-    <!-- 3. AddChat JS -->
-    <!-- Modern browsers -->
-    <script  type="module" src="<?php echo base_url('asset/addchat/js/addchat.min.js') ?>"></script>
-    <!-- Fallback support for Older browsers -->
-    <script nomodule src="<?php echo base_url('asset/addchat/js/addchat-legacy.min.js') ?>"></script>
 
 	</body>
 </html>

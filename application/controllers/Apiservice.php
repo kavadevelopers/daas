@@ -6,6 +6,30 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function faq()
+	{
+		$list = $this->db->get('faq_service');
+		retJson(['_return' => true,'count' => $list->num_rows(),'list' => $list->result_array()]);
+	}
+
+	public function about()
+	{
+		$content = $this->db->get_where('pages',['id' => '10'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function privacy()
+	{
+		$content = $this->db->get_where('pages',['id' => '9'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function terms()
+	{
+		$content = $this->db->get_where('pages',['id' => '8'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
 	public function logout()
 	{
 		if($this->input->post('userid')){

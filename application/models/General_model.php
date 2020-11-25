@@ -11,7 +11,5 @@ class General_model extends CI_Model
 	{
 		return $this->db->get_where('setting',['id' => '1'])->row_array();
 	}
-
-	
 }
 ?>

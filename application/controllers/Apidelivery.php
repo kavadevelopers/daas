@@ -6,6 +6,30 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	public function faq()
+	{
+		$list = $this->db->get('faq_delivery');
+		retJson(['_return' => true,'count' => $list->num_rows(),'list' => $list->result_array()]);
+	}
+
+	public function about()
+	{
+		$content = $this->db->get_where('pages',['id' => '7'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function privacy()
+	{
+		$content = $this->db->get_where('pages',['id' => '6'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
+	public function terms()
+	{
+		$content = $this->db->get_where('pages',['id' => '5'])->row_array();
+		retJson(['_return' => true,'content' => $content['content']]);
+	}
+
 	public function logout()
 	{
 		if($this->input->post('userid')){

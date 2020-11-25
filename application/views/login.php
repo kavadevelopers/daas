@@ -50,7 +50,7 @@
     </div>
     <!-- Pre-loader end -->
 
-    <section class="login-block" style="background: #727271 !important;">
+    <section class="login-block" style="background: #39ACE2;">
         <!-- Container-fluid starts -->
         <div class="container">
             <div class="row">
@@ -59,8 +59,8 @@
                     
                         <form class="md-float-material form-material" action="#" method="post" id="login" >
                             <div class="text-center">
-                                <!-- <img src="<?php echo base_url(); ?><?=$this->config->config["logoFile"]?>" alt="" style="width: 150px;"> -->
-                                <p style="font-size: 30px;color: #EDBE0A;font-weight: bold;"><?= get_setting()['name'] ?></p>
+                                <img src="<?php echo base_url('asset/images/logo.png'); ?>" alt="" style="width: 90px;">                               
+                                <!-- <p style="font-size: 30px;color: #EDBE0A;font-weight: bold;"><?= get_setting()['name'] ?></p> -->
                             </div>
                             <div class="auth-box card">
                                 <div class="card-block">
@@ -151,10 +151,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#login').submit(function(event) {
-                event.preventDefault();
-            });
-        $('#logina').submit(function(event) {
+        $('#login').submit(function(event) {
 
             event.preventDefault();
             var user = $('#user').val();

@@ -10,7 +10,7 @@
       <![endif]-->
     <!-- Meta -->
     <!-- 1. AddChat css -->
-    <link href="<?php echo base_url('asset/addchat/css/addchat.min.css') ?>" rel="stylesheet">
+    
     <title><?php if(isset($_title)){ echo $_title.' | '; } ?><?= get_setting()['name']; ?></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
@@ -63,12 +63,7 @@
 
 <body>
 
-    <!-- 2. AddChat widget -->
-    <div id="addchat_app" 
-        data-baseurl="<?php echo base_url() ?>"
-        data-csrfname="<?php echo $this->security->get_csrf_token_name() ?>"
-        data-csrftoken="<?php echo $this->security->get_csrf_hash() ?>"
-    ></div>
+    
     
     <!-- Pre-loader start -->
     <div class="theme-loader">
@@ -149,34 +144,6 @@
                             </li>
                         </ul> -->
                         <ul class="nav-right">
-                            <li class="header-notification">
-                                <div class="dropdown-primary dropdown">
-                                    <div class="dropdown-toggle" data-toggle="dropdown" id="zeroTodoCounter">
-                                        <i class="feather icon-bookmark"></i>
-                                        <span class="badge bg-c-pink" id="todoCounter">0</span>
-                                    </div>
-                                    <ul class="show-notification notification-view dropdown-menu notifyMy" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" id="todoList">
-                                        <li>
-                                            <h6>To-Do Notifications</h6>
-                                            <label class="label label-warning" id="newTodo" style="display: none;">New</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
-                            <li class="header-notification">
-                                <div class="dropdown-primary dropdown">
-                                    <div class="dropdown-toggle" data-toggle="dropdown" id="zeroNotificationCounter">
-                                        <i class="feather icon-bell"></i>
-                                        <span class="badge bg-c-pink" id="notificationCounter">0</span>
-                                    </div>
-                                    <ul class="show-notification notification-view dropdown-menu notifyMy" data-dropdown-in="fadeIn" data-dropdown-out="fadeOut" id="notificationList">
-                                        <li>
-                                            <h6>Notifications</h6>
-                                            <label class="label label-danger" id="newNotification" style="display: none;">New</label>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </li>
                             <li class="user-profile header-notification">
                                 <div class="dropdown-primary dropdown">
                                     <div class="dropdown-toggle" data-toggle="dropdown">

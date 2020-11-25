@@ -28,7 +28,7 @@
                                     <div class="user-title">
                                         <h2><?= get_user()['name'] ?></h2>
                                         <span class="text-white">
-                                            <?= getRole(get_user()['user_type']) ?> 
+                                            Super Admin 
                                             <?php if(get_user()['user_type'] == 2 || get_user()['user_type'] == 3){ ?> 
                                                 - <?= user_type() ?> 
                                             <?php } ?>

@@ -23,14 +23,6 @@
                             <?= form_error('company') ?>
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Referal Amount x n <span class="-req">*</span></label>
-                            <input name="ref_amount" type="text" class="form-control numbers" placeholder="Referal Amount x n" value="<?= set_value('ref_amount',get_setting()['ref_amount']); ?>" >
-                            <?= form_error('ref_amount') ?>
-                        </div>
-                    </div>
                     
                 </div>
             </div>
