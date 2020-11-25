@@ -74,7 +74,7 @@ class Apiservice extends CI_Controller
 			$user = $this->db->get_where('z_service',['mobile' => $this->input->post('mobile'),'df' => '']);
 			if($user->num_rows() > 0){
 				$user = $user->row_array();
-				if($user['verified'] == 1){
+				if($user['verified'] == 'Verified'){
 					if($user['block'] == ""){
 						$otp = mt_rand(100000, 999999);
 						$this->db->where('id',$user['id'])->update('z_service',['loginotp' => $otp]);
@@ -110,7 +110,7 @@ class Apiservice extends CI_Controller
 		if($this->input->post('userid') && $this->input->post('otp')){
 			$user = $this->db->get_where('z_service',['id' => $this->input->post('userid')])->row_array();
 			if($user && $user['otp'] == $this->input->post('otp')){
-				$this->db->where('id',$this->input->post('userid'))->update('z_service',['verified' => 1]);
+				$this->db->where('id',$this->input->post('userid'))->update('z_service',['verified' => 'Verified']);
 				retJson(['_return' => true,'msg' => 'Registration Successful.']);
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid OTP.']);
@@ -148,7 +148,7 @@ class Apiservice extends CI_Controller
 				retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
-				if($oldRow['verified'] == '0'){
+				if($oldRow['verified'] == 'Not Verified'){
 					$otp = mt_rand(100000, 999999);
 					$data = [
 						'fname'			=> $this->input->post('fname'),
@@ -166,12 +166,11 @@ class Apiservice extends CI_Controller
 						'registered_at'	=> date('Y-m-d H:i:s'),
 						'otp'			=> $otp
 					];
-					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
+					$this->db->where('id',$oldRow['id'])->update('z_service',$data);
 					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
 				}
-				retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`fname`,`lname`,`address`,`business`,`category`,`gender` and `mobile` are Required']);

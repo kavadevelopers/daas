@@ -53,7 +53,7 @@ class Apicustomer extends CI_Controller
 			if($user->num_rows() > 0){
 				$user = $user->row_array();
 				if($user['password'] === md5($this->input->post('password'))){
-					if($user['verified'] == "1"){
+					if($user['verified'] == "Verified"){
 						if($user['block'] == ""){
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token')]);
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
@@ -91,7 +91,7 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('userid') && $this->input->post('otp')){
 			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
 			if($user && $user['otp'] == $this->input->post('otp')){
-				$this->db->where('id',$this->input->post('userid'))->update('z_customer',['verified' => 1]);
+				$this->db->where('id',$this->input->post('userid'))->update('z_customer',['verified' => 'Verified']);
 				retJson(['_return' => true,'msg' => 'Registration Successful.']);
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid OTP.']);
@@ -123,10 +123,10 @@ class Apicustomer extends CI_Controller
 				];
 				$this->db->insert('z_customer',$data);
 				$user = $this->db->insert_id();
-				retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $user]);
+				retJson(['_return' => true,'msg' => 'Registration Successful. Please Verify OTP.','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
-				if($oldRow['verified'] == '0'){
+				if($oldRow['verified'] == 'Not Verified'){
 					$otp = mt_rand(100000, 999999);
 					$data = [
 						'fname'			=> $this->input->post('fname'),
