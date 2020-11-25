@@ -35,13 +35,22 @@
                         </a>
                     </li>
                 </ul>
+                <div class="pcoded-navigatio-lavel">Users</div>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["customers"])[0]; ?>">
+                        <a href="<?= base_url('customers') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-address-card-o"></i></span>
+                            <span class="pcoded-mtext">Customers</span>
+                        </a>
+                    </li>
+                </ul>
                 <div class="pcoded-navigatio-lavel">App CMS</div>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["customercms"])[2]; ?>">
                         <a href="javascript:void(0)">
                             <span class="pcoded-micon"><i class="fa fa-address-card-o"></i></span>
                             <span class="pcoded-mtext">Customer App</span>
-                         </a>   
+                         </a>   0
                         <ul class="pcoded-submenu">
                             <li class="<?= menu(2,["terms"])[0]; ?>">
                                 <a href="<?= base_url('customercms/terms') ?>">

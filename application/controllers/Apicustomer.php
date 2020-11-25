@@ -6,6 +6,42 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function reset_password()
+	{
+		if($this->input->post('userid') && $this->input->post('otp') && $this->input->post('password')){
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			if($user && $user['otp'] == $this->input->post('otp')){
+				$this->db->where('id',$this->input->post('userid'))->update('z_customer',['password' => md5($this->input->post('password'))]);
+				retJson(['_return' => true,'msg' => 'Password Changed.']);
+			}else{
+				retJson(['_return' => false,'msg' => 'Please Enter Valid OTP.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`otp` and `password` are Required']);
+		}
+	}
+
+	public function forget_password()
+	{
+		if($this->input->post('mobile')){
+			$user = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
+			if($user->num_rows() > 0){
+				$oldRow = $user->row_array();
+				if($oldRow['verified'] == 'Verified'){
+					$otp = mt_rand(100000, 999999);
+					$this->db->where('id',$oldRow['id'])->update('z_customer',['otp' => $otp]);
+					retJson(['_return' => true,'msg' => 'OTP Sent','otp' => $otp,'userid' => $oldRow['id']]);
+				}else{
+					retJson(['_return' => false,'msg' => 'Mobile No. Not Verified.']);
+				}
+			}else{
+				retJson(['_return' => false,'msg' => 'Mobile No. Not Registered.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`mobile` is Required']);
+		}	
+	}
+
 	public function faq()
 	{
 		$list = $this->db->get('faq_customer');

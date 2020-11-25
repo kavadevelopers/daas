@@ -18,6 +18,13 @@
 			}
 			return false;
 		});
+
+		$('.btn-status').click(function() {
+			if(confirm('Are you sure you want to change status?')){
+				return true;
+			}
+			return false;
+		});
     });
 </script>
 
