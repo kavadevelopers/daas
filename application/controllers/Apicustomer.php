@@ -6,6 +6,41 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function edit_profile()
+	{
+		if($this->input->post('userid') && $this->input->post('fname') && $this->input->post('lname') && $this->input->post('gender')){
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			if($user){
+				$data = [
+					'fname'		=> $this->input->post('fname'),
+					'lname'		=> $this->input->post('lname'),
+					'gender'	=> $this->input->post('gender')
+				];
+				$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
+				retJson(['_return' => true,'msg' => 'Profile Updated.']);
+			}else{
+				retJson(['_return' => false,'msg' => 'User Not Found']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`fname`,`lname` and `gender` are Required']);
+		}	
+	}
+
+	public function change_password()
+	{
+		if($this->input->post('userid') && $this->input->post('old_password') && $this->input->post('new_password')){
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			if($user && $user['password'] == md5($this->input->post('old_password'))){
+				$this->db->where('id',$this->input->post('userid'))->update('z_customer',['password' => md5($this->input->post('new_password'))]);
+				retJson(['_return' => true,'msg' => 'Password Changed.']);
+			}else{
+				retJson(['_return' => false,'msg' => 'Old Password Not Match.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`old_password` and `new_password` are Required']);
+		}
+	}
+
 	public function reset_password()
 	{
 		if($this->input->post('userid') && $this->input->post('otp') && $this->input->post('password')){

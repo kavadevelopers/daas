@@ -8,7 +8,6 @@ class Customers extends CI_Controller
 		$this->auth->check_session();
 	}
 
-
 	public function index()
 	{
 		$data['_title']		= "Customers";

@@ -12,6 +12,14 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["business_category"])[0]; ?>">
+                        <a href="<?= base_url('business_category') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-briefcase"></i></span>
+                            <span class="pcoded-mtext">Business Categories</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["profile"])[0]; ?>">
                         <a href="<?= base_url('profile') ?>">
                             <span class="pcoded-micon"><i class="feather icon-user"></i></span>
@@ -44,13 +52,69 @@
                         </a>
                     </li>
                 </ul>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["delivery"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-car"></i></span>
+                            <span class="pcoded-mtext">Delivery</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["new"])[0]; ?>">
+                                <a href="<?= base_url('delivery/new') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">New</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["approved"])[0]; ?>">
+                                <a href="<?= base_url('delivery/approved') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Approved</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["rejected"])[0]; ?>">
+                                <a href="<?= base_url('delivery/rejected') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Rejected</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["service"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-wrench"></i></span>
+                            <span class="pcoded-mtext">Service</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["new"])[0]; ?>">
+                                <a href="<?= base_url('service/new') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">New</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["approved"])[0]; ?>">
+                                <a href="<?= base_url('service/approved') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Approved</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["rejected"])[0]; ?>">
+                                <a href="<?= base_url('service/rejected') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Rejected</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 <div class="pcoded-navigatio-lavel">App CMS</div>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["customercms"])[2]; ?>">
                         <a href="javascript:void(0)">
                             <span class="pcoded-micon"><i class="fa fa-address-card-o"></i></span>
                             <span class="pcoded-mtext">Customer App</span>
-                         </a>   0
+                         </a>
                         <ul class="pcoded-submenu">
                             <li class="<?= menu(2,["terms"])[0]; ?>">
                                 <a href="<?= base_url('customercms/terms') ?>">
