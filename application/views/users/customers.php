@@ -15,7 +15,7 @@
     <div class="row">
     	<div class="col-md-12">
             <div class="card">
-                <div class="card-block">
+                <div class="card-block table-responsive">
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>

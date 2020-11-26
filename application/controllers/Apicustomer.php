@@ -17,7 +17,31 @@ class Apicustomer extends CI_Controller
 					'gender'	=> $this->input->post('gender')
 				];
 				$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
-				retJson(['_return' => true,'msg' => 'Profile Updated.']);
+
+				$config['upload_path'] = './uploads/user/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+			    if (isset ( $_FILES ['image'] ) && $_FILES ['image']['error'] == 0) {
+					$file_name = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $file_name;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('image')){
+			    		$data = [
+							'image'		=> $file_name
+						];
+						$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
+
+						if($user['image'] != 'male.png' && file_exists(FCPATH.'uploads/user/'.$user['image'])){
+	   		            	unlink(FCPATH.'/uploads/user/'.$user['image']);   
+	 		        	}
+			    	}
+				}
+
+				$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+				$user['image'] = base_url('uploads/user/').$user['image'];
+				retJson(['_return' => true,'msg' => 'Profile Updated.','data' => $user]);
 			}else{
 				retJson(['_return' => false,'msg' => 'User Not Found']);
 			}
@@ -127,6 +151,7 @@ class Apicustomer extends CI_Controller
 					if($user['verified'] == "Verified"){
 						if($user['block'] == ""){
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token')]);
+							$user['image'] = base_url('uploads/user/').$user['image'];
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
 						}else{
 							retJson(['_return' => false,'msg' => 'Account is Blocked.']);	

@@ -64,7 +64,7 @@
 
         <div class="col-md-8">
             <div class="card">
-                <div class="card-block">
+                <div class="card-block table-responsive">
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>
