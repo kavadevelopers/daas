@@ -19,7 +19,7 @@
     <meta name="keywords" content="Kava Developers">
     <meta name="author" content="Kava Developers">
     <!-- Favicon icon -->
-    <link rel="icon" href="<?= base_url() ?>asset/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="<?= base_url() ?>asset/images/favicon.png" type="image/x-icon">
     <script type="text/javascript" src="<?= base_url() ?>asset/bower_components/jquery/js/jquery.min.js"></script>
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
@@ -128,7 +128,7 @@
                             <i class="feather icon-menu"></i>
                         </a>
                         <a href="<?= base_url() ?>">
-                            <img class="img-fluid" src="<?= base_url() ?>asset/assets/images/logo.png" alt="Theme-Logo">
+                            <img class="img-fluid" src="<?= base_url() ?>asset/images/logo.png" alt="Theme-Logo" style="width: 30px;">
                         </a>
                         <a class="mobile-options">
                             <i class="feather icon-more-horizontal"></i>
