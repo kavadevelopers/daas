@@ -9,7 +9,11 @@ class Apicommon extends CI_Controller
 
 	public function get_business_categories()
 	{
-		$query = $this->db->get_where('business_categories',['df' => '']);
+		$where = ['df' => ''];
+		if($this->input->post('type')){
+			$where = ['df' => '','type' => $this->input->post('type')];
+		}
+		$query = $this->db->get_where('business_categories',$where);
 		$list = $query->result_array();
 		foreach ($list as $key => $value) {
 			$list[$key]['image'] = getCategoryThumb($value['image']);
