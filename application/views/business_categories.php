@@ -16,7 +16,7 @@
         <?php if($_e == 0){ ?>
             <div class="col-md-4">
                 <div class="card">
-                    <form method="post" action="<?= base_url('business_category/save') ?>">
+                    <form method="post" action="<?= base_url('business_category/save') ?>" enctype="multipart/form-data">
                         <div class="card-block">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -25,6 +25,31 @@
                                     <?= form_error('name') ?>
                                 </div>
                             </div>                 
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Type <span class="-req">*</span></label>
+                                    <select class="form-control" name="type" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="supplier">Supplier</option>
+                                        <option value="service">Service</option>
+                                    </select>
+                                    <?= form_error('type') ?>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Admin Cutoff Percent <span class="-req">*</span></label>
+                                    <input name="cutoff" type="text" class="form-control decimal-num" value="<?= set_value('cutoff'); ?>" placeholder="Admin Cutoff Percent" required>
+                                    <?= form_error('cutoff') ?>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Thumbnail <span class="-req">*</span></label>
+                                    <input name="image" type="file" class="form-control" onchange="readFileImage(this)" value="<?= set_value('image'); ?>" required>
+                                    <?= form_error('image') ?>
+                                </div>
+                            </div> 
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-success">
@@ -37,7 +62,7 @@
         <?php }else{ ?>
             <div class="col-md-4">
                 <div class="card">
-                    <form method="post" action="<?= base_url('business_category/update') ?>">
+                    <form method="post" action="<?= base_url('business_category/update') ?>" enctype="multipart/form-data">
                         <div class="card-block">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -45,7 +70,35 @@
                                     <input name="name" type="text" class="form-control" value="<?= set_value('name',$single['name']); ?>" placeholder="Name" required>
                                     <?= form_error('name') ?>
                                 </div>
-                            </div>         
+                            </div>    
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Type <span class="-req">*</span></label>
+                                    <select class="form-control" name="type" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="supplier" <?= $single['type'] == "supplier"?'selected':''; ?>>Supplier</option>
+                                        <option value="service" <?= $single['type'] == "service"?'selected':''; ?>>Service</option>
+                                    </select>
+                                    <?= form_error('type') ?>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Admin Cutoff Percent <span class="-req">*</span></label>
+                                    <input name="cutoff" type="text" class="form-control decimal-num" value="<?= set_value('cutoff',$single['cutoff']); ?>" placeholder="Admin Cutoff Percent" required>
+                                    <?= form_error('cutoff') ?>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Thumbnail</label>
+                                    <input name="image" type="file" class="form-control" onchange="readFileImage(this)" value="<?= set_value('image'); ?>" >
+                                    <?= form_error('image') ?>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+                                <img src="<?= getCategoryThumb($single['image']) ?>" style="max-width: 50px;">
+                            </div>      
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('business_category') ?>" class="btn btn-danger">
@@ -68,16 +121,22 @@
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>
-                                <th class="text-center">#</th>
+                                <th class="text-center">Type</th>
                                 <th>Name</th>
+                                <th class="text-center">Type</th>
+                                <th class="text-center">Cutoff</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($list as $key => $value) { ?>
                                 <tr>
-                                    <td class="text-center"><?= $key + 1 ?></td>
+                                    <td class="text-center">
+                                        <img src="<?= getCategoryThumb($value['image'])?>" style="max-width: 50px;">
+                                    </td>
                                     <td><?= $value['name'] ?></td>
+                                    <td class="text-center"><?= ucfirst($value['type'])  ?></td>
+                                    <td class="text-center"><?= $value['cutoff']  ?>%</td>
                                     <td class="text-center">
                                         <a href="<?= base_url('business_category/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>

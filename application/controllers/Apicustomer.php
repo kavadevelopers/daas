@@ -6,6 +6,16 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function getbanner()
+	{
+		$query = $this->db->get_where('banner');
+		$list = $query->result_array();
+		foreach ($list as $key => $value) {
+			$list[$key]['image'] = base_url('uploads/banner/').$value['image'];
+		}
+		retJson(['_return' => true,'count' => $query->num_rows(),'list' => $list]);
+	}
+
 	public function edit_profile()
 	{
 		if($this->input->post('userid') && $this->input->post('fname') && $this->input->post('lname') && $this->input->post('gender')){
@@ -34,7 +44,7 @@ class Apicustomer extends CI_Controller
 						$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
 
 						if($user['image'] != 'male.png' && file_exists(FCPATH.'uploads/user/'.$user['image'])){
-	   		            	unlink(FCPATH.'/uploads/user/'.$user['image']);   
+	   		            	@unlink(FCPATH.'/uploads/user/'.$user['image']);   
 	 		        	}
 			    	}
 				}

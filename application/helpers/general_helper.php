@@ -82,4 +82,13 @@ function menu($seg,$array)
         }
     }
 }
+
+function getCategoryThumb($file)
+{
+    if($file == ""){
+        return base_url('uploads/category/thumbnail.png');
+    }else{
+        return base_url('uploads/category/').$file;
+    }
+}
 ?>

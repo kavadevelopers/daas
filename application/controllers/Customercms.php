@@ -127,5 +127,52 @@ class Customercms extends CI_Controller
 		$this->session->set_flashdata('msg', 'FAQ Deleted');
 		redirect(base_url('customercms/faq'));
 	}
+
+	public function banner()
+	{
+		$data['_title']		= "Customer App - Banners";
+		$data['list']	= $this->db->get_where('banner')->result_array();
+		$this->load->theme('cms/customer/banner',$data);
+	}
+
+	public function save_banner()
+	{
+		$config['upload_path'] = './uploads/banner/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $file_name = "";
+	    $this->load->library('upload', $config);
+	    if (isset($_FILES ['image']) && $_FILES ['image']['error'] == 0) {
+			$file_name = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+			$config['file_name'] = $file_name;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('image')){
+	    		$data = [
+					'image'	=> $file_name
+				];
+				$this->db->insert('banner',$data);
+				$this->session->set_flashdata('msg', 'Banner Added');
+				redirect(base_url('customercms/banner'));
+	    	}else{
+	    		$this->session->set_flashdata('error', 'Please Select Valid Image');
+				redirect(base_url('customercms/banner'));
+	    	}
+		}else{
+			$this->session->set_flashdata('error', 'Please Select Valid Image');
+			redirect(base_url('customercms/banner'));
+		}
+	}
+
+	public function delete_banner($id)
+	{
+		$single = $this->db->get_where('banner',['id' => $id])->row_array();
+		if(file_exists(FCPATH.'/uploads/banner/'.$single['image'])){
+			@unlink(FCPATH.'/uploads/banner/'.$single['image']);
+		}
+		$this->db->where('id',$id)->delete('banner');
+		$this->session->set_flashdata('msg', 'Banner Deleted');
+		redirect(base_url('customercms/banner'));
+	}
 }
 ?>

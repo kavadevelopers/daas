@@ -116,6 +116,12 @@
                             <span class="pcoded-mtext">Customer App</span>
                          </a>
                         <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["banner"])[0]; ?>">
+                                <a href="<?= base_url('customercms/banner') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Home Banner</span>
+                                </a>
+                            </li>
                             <li class="<?= menu(2,["terms"])[0]; ?>">
                                 <a href="<?= base_url('customercms/terms') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-list"></i></span>

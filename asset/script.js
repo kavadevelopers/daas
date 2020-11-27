@@ -246,13 +246,7 @@ function readFileImage(input) {
         }
         else{
             if (extension == 'jpg' || extension == 'png' || extension == 'jpeg') {
-                var reader = new FileReader();
-
-                reader.onload = function (e) {
-                    $("#imgProfile").attr('src', e.target.result);
-                }
-
-                reader.readAsDataURL(input.files[0]);
+                
             }
             else
             {

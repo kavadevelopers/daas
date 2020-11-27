@@ -19,7 +19,7 @@
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>
-                                <th class="text-center">#</th>
+                                <th class="text-center"></th>
                                 <th>Name</th>
                                 <th class="text-center">Mobile</th>
                                 <th class="text-center">Gender</th>
@@ -31,7 +31,9 @@
                         <tbody>
                             <?php foreach ($list as $key => $value) { ?>
                                 <tr>
-                                    <td class="text-center"><?= $key + 1 ?></td>
+                                    <td class="text-center">
+                                        <img src="<?= base_url('uploads/user/').$value['image'] ?>" style="max-width: 50px;">
+                                    </td>
                                     <td><?= $value['fname'].' '.$value['lname'] ?></td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>

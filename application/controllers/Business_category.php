@@ -18,8 +18,27 @@ class Business_category extends CI_Controller
 
 	public function save()
 	{
+		$config['upload_path'] = './uploads/category/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $file_name = "";
+	    $this->load->library('upload', $config);
+	    if (isset($_FILES ['image']) && $_FILES ['image']['error'] == 0) {
+			$file_name = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+			$config['file_name'] = $file_name;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('image')){
+	    		
+	    	}else{
+	    		$file_name = "";
+	    	}
+		}
 		$data = [
-			'name'	=> $this->input->post('name')
+			'name'		=> $this->input->post('name'),
+			'type'		=> $this->input->post('type'),
+			'cutoff'	=> $this->input->post('cutoff'),
+			'image'		=> $file_name
 		];
 		$this->db->insert('business_categories',$data);
 
@@ -39,9 +58,29 @@ class Business_category extends CI_Controller
 	public function update()
 	{
 		$data = [
-			'name'	=> $this->input->post('name')
+			'name'		=> $this->input->post('name'),
+			'type'		=> $this->input->post('type'),
+			'cutoff'	=> $this->input->post('cutoff')
 		];
 		$this->db->where('id',$this->input->post('id'))->update('business_categories',$data);
+
+		$config['upload_path'] = './uploads/category/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = FALSE;
+	    $this->load->library('upload', $config);
+	    if (isset($_FILES ['image']) && $_FILES ['image']['error'] == 0) {
+			$file_name = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+			$config['file_name'] = $file_name;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('image')){
+	    		$old = $this->db->get_where('business_categories',['id' => $this->input->post('id')])->row_array();
+	    		if($old['image'] != "" && file_exists(FCPATH.'uploads/category/'.$old['image'])){
+	    			@unlink(FCPATH.'/uploads/category/'.$old['image']);
+	    		}
+	    		$this->db->where('id',$this->input->post('id'))->update('business_categories',['image' => $file_name]);
+	    	}
+		}
 
 		$this->session->set_flashdata('msg', 'Category Updated');
 		redirect(base_url('business_category'));
