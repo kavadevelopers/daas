@@ -6,6 +6,152 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function order()
+	{
+		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
+			$desc = "";
+			if($this->input->post('desc')){
+				$desc = $this->input->post('desc');
+			}
+			$last_id = $this->db->order_by('id','desc')->limit(1)->get('corder')->row_array();
+			if($last_id){
+				$order_id = mt_rand(10000000, 99999999).($last_id['id'] + 1);
+			}else{
+				$order_id = mt_rand(10000000, 99999999).'1';
+			}
+			$data = [
+				'userid'		=> $this->input->post('userid'),
+				'order_id'		=> $order_id,
+				'type'			=> $this->input->post('type'),
+				'category'		=> $this->input->post('category'),
+				'descr'			=> $desc,
+				'status'		=> 'order_placed',
+				'status_desc'	=> 'Order Placed',
+				'created_at'	=> date('Y-m-d H:i:s')
+			];
+			$this->db->insert('corder',$data);
+			$or_id = $this->db->insert_id();
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img1']) && $_FILES['img1']['error'] == 0){
+				$img1 = microtime(true).".".pathinfo($_FILES['img1']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img1;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img1')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img1','image' => $img1]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img2']) && $_FILES['img2']['error'] == 0){
+				$img2 = microtime(true).".".pathinfo($_FILES['img2']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img2;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img2')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img2','image' => $img2]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img3']) && $_FILES['img3']['error'] == 0){
+				$img3 = microtime(true).".".pathinfo($_FILES['img3']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img3;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img3')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img3','image' => $img3]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img4']) && $_FILES['img4']['error'] == 0){
+				$img4 = microtime(true).".".pathinfo($_FILES['img4']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img4;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img4')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img4','image' => $img4]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img5']) && $_FILES['img5']['error'] == 0){
+				$img5 = microtime(true).".".pathinfo($_FILES['img5']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img5;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img5')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img5','image' => $img5]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['img6']) && $_FILES['img6']['error'] == 0){
+				$img6 = microtime(true).".".pathinfo($_FILES['img6']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $img6;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('img6')){
+		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
+		    	}
+			}
+			retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`category` and `type` are Required']);
+		}
+	}
+
+	public function save_address()
+	{
+		if($this->input->post('userid') && $this->input->post('flat_no') && $this->input->post('street_no') && $this->input->post('address_line') && $this->input->post('latitude') && $this->input->post('longitude')){
+			$old = $this->db->get_where('address',['id' => $this->input->post('userid')])->num_rows();
+			if($old > 0){
+				$data = [
+					'flat_no'		=> $this->input->post('flat_no'),
+					'street_no'		=> $this->input->post('street_no'),
+					'address_line'	=> $this->input->post('address_line'),
+					'latitude'		=> $this->input->post('latitude'),
+					'longitude'		=> $this->input->post('longitude')
+				];	
+				$this->db->where('userid',$this->input->post('userid'))->update('address',$data);
+				retJson(['_return' => true,'msg' => 'Address Updated.']);
+			}else{
+				$data = [
+					'userid'		=> $this->input->post('userid'),
+					'flat_no'		=> $this->input->post('flat_no'),
+					'street_no'		=> $this->input->post('street_no'),
+					'address_line'	=> $this->input->post('address_line'),
+					'latitude'		=> $this->input->post('latitude'),
+					'longitude'		=> $this->input->post('longitude')
+				];	
+				$this->db->insert('address',$data);
+				retJson(['_return' => true,'msg' => 'Address Saved.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`flat_no`,`street_no`,`address_line`,`latitude` and `longitude` are Required']);
+		}
+	}
+
 	public function getbanner()
 	{
 		$query = $this->db->get_where('banner');
