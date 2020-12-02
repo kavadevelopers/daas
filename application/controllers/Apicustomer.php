@@ -203,7 +203,7 @@ class Apicustomer extends CI_Controller
 	public function save_address()
 	{
 		if($this->input->post('userid') && $this->input->post('flat_no') && $this->input->post('street_no') && $this->input->post('address_line') && $this->input->post('latitude') && $this->input->post('longitude')){
-			$old = $this->db->get_where('address',['id' => $this->input->post('userid')])->num_rows();
+			$old = $this->db->get_where('address',['userid' => $this->input->post('userid')])->num_rows();
 			if($old > 0){
 				$data = [
 					'flat_no'		=> $this->input->post('flat_no'),
