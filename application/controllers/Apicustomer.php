@@ -387,6 +387,12 @@ class Apicustomer extends CI_Controller
 						if($user['block'] == ""){
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token')]);
 							$user['image'] = base_url('uploads/user/').$user['image'];
+							$address = $this->db->get_where('address',['userid'] => $user['id'])->row_array();
+							$ad = 0;
+							if($address){
+								$ad = 1;
+							}
+							$user['address']	= $ad;
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
 						}else{
 							retJson(['_return' => false,'msg' => 'Account is Blocked.']);	
