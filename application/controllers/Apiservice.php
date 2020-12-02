@@ -6,6 +6,64 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function accept_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('price') && $this->input->post('user_id')){
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'status' => 'upcoming','df' => '','price' => '0.00'])->row_array();
+			if($order){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['price' => $this->input->post('price'),'service' => $this->input->post('user_id'),'status_desc' => 'Price Added']
+				);
+				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
+			}else{
+				retJson(['_return' => false,'msg' => 'Order Already Accepted.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price` and `user_id` are Required']);
+		}	
+	}
+
+	public function getorder()
+	{
+		if($this->input->post('order_id')){	
+			$single = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+			if($single){
+				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
+				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
+				$single['address']	= $address;
+				retJson(['_return' => true,'data' => $single]);				
+			}else{
+				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function getorders()
+	{
+		if($this->input->post('status') && $this->input->post('category')){
+			$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
+			if($this->input->post('status') == "upcoming"){
+				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'price' => '0.00','df' => ''];
+			}
+			$list = $this->db->get_where('corder',$where);
+			$nlist = $list->result_array();
+			foreach ($list->result_array() as $key => $value) {
+				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
+				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
+				$nlist[$key]['address']		  = $address;
+			}
+
+
+			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+		}else{
+			retJson(['_return' => false,'msg' => '`status` = (`upcoming`,`ongoing`,`completed`) and `category` are Required']);
+		}
+	}
+
 	public function faq()
 	{
 		$list = $this->db->get('faq_service');

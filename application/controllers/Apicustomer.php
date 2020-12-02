@@ -6,6 +6,84 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function cancel_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid')){
+			$single = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'userid' => $this->input->post('order_id')])->row_array();
+			if($single){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status' => 'completed','status_desc' => 'Canceled By Customer.','cancel' => 'canceled']
+				);
+				retJson(['_return' => true,'msg' => 'Order Canceled.']);
+			}else{
+				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+		}
+	}
+
+	public function accept_order()
+	{
+		if($this->input->post('type') && $this->input->post('order_id') && $this->input->post('userid')){
+			if($this->input->post('type') == 'accept'){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status' => 'ongoing','status_desc' => 'Accepted By Customer.']
+				);
+				retJson(['_return' => true,'msg' => 'Order Accepted.']);	
+			}else if($this->input->post('type') == 'reject'){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '']
+				);
+				retJson(['_return' => true,'msg' => 'Order Rejected.']);	
+			}else{
+				retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`) Please Enter Valid Type']);	
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id` and `userid` are Required']);
+		}
+	}
+
+	public function getorder()
+	{
+		if($this->input->post('order_id')){	
+			$single = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+			if($single){
+				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
+				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
+				$single['address']	= $address;
+				retJson(['_return' => true,'data' => $single]);				
+			}else{
+				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function getorders()
+	{
+		if($this->input->post('userid') && $this->input->post('status')){
+			if($this->input->post('status') == 'current'){
+				$where = ['status !=' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
+			}else{
+				$where = ['status' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
+			}
+			$list = $this->db->get_where('corder',$where);
+			$nlist = $list->result_array();
+			foreach ($list->result_array() as $key => $value) {
+				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
+				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
+				$nlist[$key]['address']		  = $address;
+			}
+			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+		}else{
+			retJson(['_return' => false,'msg' => '`status` = (`current`,`past`) and `userid` are Required']);
+		}
+	}
+
 	public function order()
 	{
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
@@ -25,8 +103,9 @@ class Apicustomer extends CI_Controller
 				'type'			=> $this->input->post('type'),
 				'category'		=> $this->input->post('category'),
 				'descr'			=> $desc,
-				'status'		=> 'order_placed',
+				'status'		=> 'upcoming',
 				'status_desc'	=> 'Order Placed',
+				'notes'			=> '',
 				'created_at'	=> date('Y-m-d H:i:s')
 			];
 			$this->db->insert('corder',$data);
