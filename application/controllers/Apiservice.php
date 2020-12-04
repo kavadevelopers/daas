@@ -46,9 +46,12 @@ class Apiservice extends CI_Controller
 		if($this->input->post('status') && $this->input->post('category')){
 			$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			if($this->input->post('status') == "upcoming"){
-				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'price' => '0.00','df' => ''];
+				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			}
-			$list = $this->db->get_where('corder',$where);
+			if($this->input->post('status') == "ongoing"){
+				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'df' => '','id' => '0'];
+			}
+			$list = $this->db->get_where('corder',$where)->order_by('id','desc');
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
