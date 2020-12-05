@@ -6,6 +6,28 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	public function mydashboard()
+	{
+		if($this->input->post('user_id')){
+			$upcoming = $this->db->get_where('corder',['status' => "upcoming",'df' => ''])->num_rows();
+			$ongoing = $this->db->get_where('corder',['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+			$compeleted = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+			$canceled = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
+
+			$ret = [
+				'upcoming' 	=> $upcoming, 
+				'ongoing' 	=> $ongoing, 
+				'completed' => $compeleted, 
+				'canceled' 	=> $canceled, 
+				'cash' 		=> "0.00", 
+				'bank' 		=> "0.00"
+			];
+			retJson(['_return' => true,'data' => $ret]);	
+		}else{
+			retJson(['_return' => false,'msg' => '`user_id` is Required']);
+		}
+	}
+
 	public function update_latlon()
 	{
 		if($this->input->post('userid') && $this->input->post('lat') && $this->input->post('lon')){

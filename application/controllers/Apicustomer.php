@@ -28,12 +28,12 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('type') && $this->input->post('order_id') && $this->input->post('userid')){
 			if($this->input->post('type') == 'accept'){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status' => 'ongoing','status_desc' => 'Accepted By Customer.']
+					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging']
 				);
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);	
 			}else if($this->input->post('type') == 'reject'){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '']
+					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '','notes' => 'Pending']
 				);
 				retJson(['_return' => true,'msg' => 'Order Rejected.']);	
 			}else{
@@ -105,7 +105,7 @@ class Apicustomer extends CI_Controller
 				'descr'			=> $desc,
 				'status'		=> 'upcoming',
 				'status_desc'	=> 'Order Placed',
-				'notes'			=> '',
+				'notes'			=> 'Pending',
 				'created_at'	=> date('Y-m-d H:i:s')
 			];
 			$this->db->insert('corder',$data);

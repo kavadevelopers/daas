@@ -6,13 +6,45 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function order_packed()
+	{
+		if($this->input->post('user_id') && $this->input->post('order_id')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',['notes' => 'Shipped']);
+			retJson(['_return' => true,'msg' => 'Order Status Changed']);
+		}else{
+			retJson(['_return' => false,'msg' => '`user_id` and `order_id` is Required']);
+		}
+	}
+
+	public function mydashboard()
+	{
+		if($this->input->post('user_id') && $this->input->post('category')){
+			$upcoming = $this->db->get_where('corder',['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''])->num_rows();
+			$ongoing = $this->db->get_where('corder',['status' => "ongoing",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+			$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+			$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
+
+			$ret = [
+				'upcoming' 	=> $upcoming, 
+				'ongoing' 	=> $ongoing, 
+				'completed' => $compeleted, 
+				'canceled' 	=> $canceled, 
+				'cash' 		=> "0.00", 
+				'bank' 		=> "0.00"
+			];
+			retJson(['_return' => true,'data' => $ret]);	
+		}else{
+			retJson(['_return' => false,'msg' => '`user_id` and `category` is Required']);
+		}
+	}
+
 	public function accept_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('price') && $this->input->post('user_id')){
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'status' => 'upcoming','df' => '','price' => '0.00'])->row_array();
 			if($order){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['price' => $this->input->post('price'),'service' => $this->input->post('user_id'),'status_desc' => 'Price Added']
+					['price' => $this->input->post('price'),'service' => $this->input->post('user_id'),'status_desc' => 'Price Added','notes' => 'Waiting']
 				);
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
 			}else{
@@ -49,7 +81,10 @@ class Apiservice extends CI_Controller
 				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			}
 			if($this->input->post('status') == "ongoing"){
-				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'df' => '','id' => '0'];
+				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
+			}
+			if($this->input->post('status') == "completed"){
+				$where = ['status' => "completed",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''];
 			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();
