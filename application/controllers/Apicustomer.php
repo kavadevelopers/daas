@@ -74,9 +74,15 @@ class Apicustomer extends CI_Controller
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
+				$service = $this->db->get_where('z_service',['id' => $value['service']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
 				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['address']		  = $address;
+				if($service){
+					$nlist[$key]['service']		  = $service['fname'].' '.$service['lname'];
+				}else{
+					$nlist[$key]['service'] = "";
+				}
 			}
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
