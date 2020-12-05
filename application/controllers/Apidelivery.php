@@ -6,6 +6,30 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	public function update_latlon()
+	{
+		if($this->input->post('userid') && $this->input->post('lat') && $this->input->post('lon')){
+			$old = $this->db->get_where('delivery_latlon',['user' => $this->input->post('userid')])->row_array();
+			if($old){
+				$data = [
+					'lat'		=> $this->input->post('lat'),
+					'lon'		=> $this->input->post('lon')
+				];
+				$this->db->where('id',$this->input->post('userid'))->update('delivery_latlon',$data);
+			}else{
+				$data = [
+					'user'		=> $this->input->post('userid'),
+					'lat'		=> $this->input->post('lat'),
+					'lon'		=> $this->input->post('lon')
+				];
+				$this->db->insert('delivery_latlon',$data);
+			}
+			retJson(['_return' => true,'msg' => 'Lat - Lon Saved']);
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`lat` and `lon` is Required']);
+		}
+	}
+
 	public function faq()
 	{
 		$list = $this->db->get('faq_delivery');
