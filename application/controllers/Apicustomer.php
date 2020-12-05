@@ -70,7 +70,7 @@ class Apicustomer extends CI_Controller
 			}else{
 				$where = ['status' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
 			}
-			$list = $this->db->get_where('corder',$where)->order_by('id','desc');
+			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();

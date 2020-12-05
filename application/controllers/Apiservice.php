@@ -51,7 +51,7 @@ class Apiservice extends CI_Controller
 			if($this->input->post('status') == "ongoing"){
 				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'df' => '','id' => '0'];
 			}
-			$list = $this->db->get_where('corder',$where)->order_by('id','desc');
+			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
