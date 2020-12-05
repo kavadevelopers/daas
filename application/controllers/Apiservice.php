@@ -66,7 +66,7 @@ class Apiservice extends CI_Controller
 				$single['address']	= $address;
 				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
 				foreach ($images as $imageskey => $imagesvalue) {
-					$images[$imageskey]['image']	=> base_url('uploads/order/').$imagesvalue['image'];
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$nlist[$key]['images']			=>	$images;
 				retJson(['_return' => true,'data' => $single]);				
@@ -100,7 +100,7 @@ class Apiservice extends CI_Controller
 				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['address']		  = $address;
 				foreach ($images as $imageskey => $imagesvalue) {
-					$images[$imageskey]['image']	=> base_url('uploads/order/').$imagesvalue['image'];
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$nlist[$key]['images']			=>	$images;
 			}
