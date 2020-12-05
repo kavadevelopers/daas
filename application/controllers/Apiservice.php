@@ -75,7 +75,7 @@ class Apiservice extends CI_Controller
 
 	public function getorders()
 	{
-		if($this->input->post('status') && $this->input->post('category')){
+		if($this->input->post('status') && $this->input->post('category') && $this->input->post('user_id')){
 			$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			if($this->input->post('status') == "upcoming"){
 				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
@@ -98,7 +98,7 @@ class Apiservice extends CI_Controller
 
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
-			retJson(['_return' => false,'msg' => '`status` = (`upcoming`,`ongoing`,`completed`) and `category` are Required']);
+			retJson(['_return' => false,'msg' => '`status` = (`upcoming`,`ongoing`,`completed`),`user_id` and `category` are Required']);
 		}
 	}
 

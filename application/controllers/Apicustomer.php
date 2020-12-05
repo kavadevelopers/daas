@@ -79,9 +79,9 @@ class Apicustomer extends CI_Controller
 				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['address']		  = $address;
 				if($service){
-					$nlist[$key]['service']		  = $service['fname'].' '.$service['lname'];
+					$nlist[$key]['service']		  	= $service['fname'].' '.$service['lname'];
 				}else{
-					$nlist[$key]['service'] = "";
+					$nlist[$key]['service'] 		= "";
 				}
 			}
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
