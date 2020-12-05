@@ -68,7 +68,7 @@ class Apiservice extends CI_Controller
 				foreach ($images as $imageskey => $imagesvalue) {
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
-				$nlist[$key]['images']			=	$images;
+				$single['images']			=	$images;
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
