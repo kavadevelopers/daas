@@ -84,7 +84,7 @@ class Apiservice extends CI_Controller
 				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
 			}
 			if($this->input->post('status') == "completed"){
-				$where = ['status' => "completed",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''];
+				$where = ['status' => "completed",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
 			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();

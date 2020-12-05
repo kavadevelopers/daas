@@ -6,6 +6,75 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	public function completed()
+	{
+		if($this->input->post('order_id')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Completed','notes' => 'Delivered','status' => 'completed']
+			);
+			retJson(['_return' => true,'msg' => 'Order Completed']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function ontheway()
+	{
+		if($this->input->post('order_id')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'On The Way','notes' => 'Out For Delivery']
+			);
+			retJson(['_return' => true,'msg' => 'Status Changed.']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function getorder()
+	{
+		if($this->input->post('order_id')){	
+			$single = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+			if($single){
+				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
+				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
+				$nlist[$key]['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
+				$nlist[$key]['pick']  			= $service;
+				$nlist[$key]['drop']		 	= $address;
+				retJson(['_return' => true,'data' => $single]);				
+			}else{
+				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function getorders()
+	{
+		if($this->input->post('status') && $this->input->post('user_id')){
+			if($this->input->post('status') == "ongoing"){
+				$where = ['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => ''];
+			}
+			if($this->input->post('status') == "completed"){
+				$where = ['status' => "completed",'driver' => $this->input->post('user_id'),'df' => ''];
+			}
+			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+			$nlist = $list->result_array();
+			foreach ($list->result_array() as $key => $value) {
+				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
+				$service = $this->db->get_where('z_service',['id' => $value['service']])->row_array();
+				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
+				$nlist[$key]['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
+				$nlist[$key]['pick']  			= $service;
+				$nlist[$key]['drop']		 	= $address;
+			}
+			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+		}else{
+			retJson(['_return' => false,'msg' => '`status` = (`ongoing`,`completed`) and `user_id` are Required']);
+		}
+	}
+
 	public function mydashboard()
 	{
 		if($this->input->post('user_id')){

@@ -30,6 +30,14 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging']
 				);
+
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => ''])->row_array();
+				if($driver){
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver' => $driver['id']]
+					);					
+				}				
+
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);	
 			}else if($this->input->post('type') == 'reject'){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
