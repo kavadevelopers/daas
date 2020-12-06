@@ -6,6 +6,8 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	
+
 	public function completed()
 	{
 		if($this->input->post('order_id')){	

@@ -6,6 +6,31 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function accept_alignment_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id')){
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'status' => 'upcoming','df' => '','service' => ''])->row_array();
+			if($order){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['service' => $this->input->post('user_id'),'status_desc' => 'Order Accepted By Service Provider','status' => 'ongoing','notes' => 'Driver Assigned']
+				);
+
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => ''])->row_array();
+				if($driver){
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver' => $driver['id']]
+					);					
+				}	
+				
+				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
+			}else{
+				retJson(['_return' => false,'msg' => 'Order Already Accepted.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `user_id` are Required']);
+		}	
+	}
+
 	public function service_work_done()
 	{
 		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
