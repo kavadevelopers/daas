@@ -38,9 +38,9 @@ class Apidelivery extends CI_Controller
 				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
 				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
-				$nlist[$key]['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
-				$nlist[$key]['pick']  			= $service;
-				$nlist[$key]['drop']		 	= $address;
+				$single['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
+				$single['pick']  			= $service;
+				$single['drop']		 	= $address;
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
