@@ -6,6 +6,37 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function pay_service_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Paid By Customer','notes' => 'Order completed','status' => 'completed']
+			);
+			retJson(['_return' => true,'msg' => 'Order Completed.']);
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+		}
+	}
+
+	public function accept_reject_service_order_pricing()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid') && $this->input->post('type')){
+			if($this->input->post('type') == 'accept'){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status_desc' => 'Work In Progress','notes' => 'Price Accepted By Customer']
+				);
+				retJson(['_return' => true,'msg' => 'Order Accepted.']);
+			}else{
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status_desc' => 'Order Placed','notes' => 'Waiting For Another Service Provider','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+				);
+				retJson(['_return' => true,'msg' => 'Order Rejected.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id` and `userid` are Required']);
+		}
+	}
+
 	public function cancel_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){

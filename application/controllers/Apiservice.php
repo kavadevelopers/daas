@@ -6,6 +6,59 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function service_work_done()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Work Done Waiting for Payment','notes' => 'Work Done By Service Provider','price' => $this->input->post('price')]
+			);
+			retJson(['_return' => true,'msg' => 'Order Updated.']);		
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price` and `user_id` are Required']);
+		}
+	}
+
+	public function cancel_service_order()
+	{
+		if($this->input->post('order_id')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Order Placed','notes' => 'Waiting For Another Service Provider','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+			);
+			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
+		}	
+	}
+
+	public function add_pricing_service_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
+			);
+			retJson(['_return' => true,'msg' => 'Order Updated.']);		
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
+		}	
+	}
+
+	public function accept_service_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id')){
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'status' => 'upcoming','df' => '','service' => ''])->row_array();
+			if($order){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['service' => $this->input->post('user_id'),'status_desc' => 'Order Accepted By Service Provider','status' => 'ongoing','notes' => 'Coming For Visit']
+				);
+				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
+			}else{
+				retJson(['_return' => false,'msg' => 'Order Already Accepted.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `user_id` are Required']);
+		}	
+	}
+
 	public function order_packed()
 	{
 		if($this->input->post('user_id') && $this->input->post('order_id')){
