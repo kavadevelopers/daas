@@ -92,6 +92,11 @@ class Apicustomer extends CI_Controller
 				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
 				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$single['address']	= $address;
+				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
+				foreach ($images as $imageskey => $imagesvalue) {
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
+				}
+				$single['images']			=	$images;
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
@@ -115,6 +120,7 @@ class Apicustomer extends CI_Controller
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
 				$service = $this->db->get_where('z_service',['id' => $value['service']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
+				$images = $this->db->get_where('corder_images',['order_id' => $value['id']])->result_array();
 				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['address']		  = $address;
 				if($service){
@@ -122,6 +128,10 @@ class Apicustomer extends CI_Controller
 				}else{
 					$nlist[$key]['service'] 		= "";
 				}
+				foreach ($images as $imageskey => $imagesvalue) {
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
+				}
+				$nlist[$key]['images']			=	$images;
 			}
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
