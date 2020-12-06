@@ -6,10 +6,25 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
-	public function accept_with_price_time()
+	public function reject_alignment()
+	{
+		if($this->input->post('order_id')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Order Canceled By Service Provider','notes' => 'Order Canceled By Service Provider','status' => 'completed']
+			);
+			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}	
+	}
+
+	public function accept_alignment_with_price_time()
 	{
 		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time')){
-			
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
+			);
+			retJson(['_return' => true,'msg' => 'Price Added']);
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
 		}
