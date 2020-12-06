@@ -6,7 +6,29 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
-	
+	public function item_dropped_at_service_provider()
+	{
+		if($this->input->post('order_id')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Item Drop At Store','notes' => 'Item Dropped At Service Provider']
+			);
+			retJson(['_return' => true,'msg' => 'Status Changed.']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
+
+	public function item_picked_from_customer()
+	{
+		if($this->input->post('order_id')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Item Picked From Customer','notes' => 'Item Collected By Driver']
+			);
+			retJson(['_return' => true,'msg' => 'Status Changed.']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+		}
+	}
 
 	public function completed()
 	{

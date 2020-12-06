@@ -28,7 +28,7 @@ class Apicustomer extends CI_Controller
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);
 			}else{
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status_desc' => 'Order Placed','notes' => 'Waiting For Another Service Provider','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+					['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
 				);
 				retJson(['_return' => true,'msg' => 'Order Rejected.']);
 			}

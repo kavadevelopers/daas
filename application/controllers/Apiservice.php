@@ -6,6 +6,15 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function accept_with_price_time()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time')){
+			
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
+		}
+	}
+
 	public function accept_alignment_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('user_id')){
@@ -21,7 +30,7 @@ class Apiservice extends CI_Controller
 						['driver' => $driver['id']]
 					);					
 				}	
-				
+
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
 			}else{
 				retJson(['_return' => false,'msg' => 'Order Already Accepted.']);
