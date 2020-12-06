@@ -43,7 +43,7 @@ class Apicustomer extends CI_Controller
 			$single = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'userid' => $this->input->post('userid')])->row_array();
 			if($single){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status' => 'completed','status_desc' => 'Canceled By Customer.','cancel' => 'canceled']
+					['status' => 'completed','status_desc' => 'Canceled By Customer.','cancel' => 'canceled','notes' => 'Canceled']
 				);
 				retJson(['_return' => true,'msg' => 'Order Canceled.']);
 			}else{
