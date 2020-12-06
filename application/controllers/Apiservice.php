@@ -6,6 +6,27 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function alignment_work_done()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Work Done By Service Provicer','notes' => 'Work Done By Service Provider','price' => $this->input->post('price'),'return_order' => 'true']
+			);
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+			if($order['done_driver1'] == 'yes'){
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => ''])->row_array();
+				if($driver){
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver2' => $driver['id']]
+					);					
+				}
+			}
+			retJson(['_return' => true,'msg' => 'Order Updated.']);		
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`price` and `user_id` are Required']);
+		}
+	}
+
 	public function reject_alignment()
 	{
 		if($this->input->post('order_id')){
@@ -24,6 +45,13 @@ class Apiservice extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
 			);
+
+			if($this->input->post('time') > 0.5){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['done_driver1' => 'yes']
+				);
+			}
+
 			retJson(['_return' => true,'msg' => 'Price Added']);
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);

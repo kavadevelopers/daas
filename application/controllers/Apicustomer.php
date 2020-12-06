@@ -6,6 +6,30 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function pay_alignment_order()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes']
+			);
+			retJson(['_return' => true,'msg' => 'Status Changed']);
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+		}
+	}
+
+	public function confirm_alignment_price()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Work In Progress','notes' => 'Work In Progress','status' => 'ongoing']
+			);
+			retJson(['_return' => true,'msg' => 'Status Changed.']);
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+		}
+	}
+
 	public function pay_service_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){	
