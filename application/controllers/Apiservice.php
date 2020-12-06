@@ -22,11 +22,11 @@ class Apiservice extends CI_Controller
 	{
 		if($this->input->post('order_id')){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Order Placed','notes' => 'Waiting For Another Service Provider','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+				['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
 			);
 			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
+			retJson(['_return' => false,'msg' => '`order_id` is Required']);
 		}	
 	}
 
