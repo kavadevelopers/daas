@@ -38,7 +38,7 @@
                                     <td><?= $value['fname'].' '.$value['lname'] ?></td>
                                     <td><?= $value['business'] ?></td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
-                                    <td class="text-center"><?= $value['category'] ?></td>
+                                    <td class="text-center"><?= get_category($value['category'])['name'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>
                                     <td><?= $value['address'] ?></td>
                                     <td class="text-center"><?= $value['verified'] ?></td>

@@ -112,6 +112,16 @@ function get_service($id){
     return $CI->db->get_where('z_service',['id' => $id])->row_array();
 }
 
+function get_category($id){
+    $CI =& get_instance();
+    $cat = $CI->db->get_where('business_categories',['id' => $id])->row_array();
+    if($cat){
+        return $cat;
+    }else{
+        return ['name' => ''];
+    }
+}
+
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];

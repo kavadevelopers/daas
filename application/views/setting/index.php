@@ -23,6 +23,14 @@
                             <?= form_error('company') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Firebase Server Key <span class="-req">*</span></label>
+                            <input name="fserverkey" type="text" class="form-control" value="<?= set_value('company',get_setting()['fserverkey']); ?>" >
+                            <?= form_error('fserverkey') ?>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
