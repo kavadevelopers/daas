@@ -6,6 +6,25 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function order_support()
+	{
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('name') && $this->input->post('email') && $this->input->post('subject') && $this->input->post('message')){	
+			$data = [
+				'user'			=> $this->input->post('user_id'),
+				'orderid'		=> $this->input->post('order_id'),
+				'name'			=> $this->input->post('name'),
+				'email'			=> $this->input->post('email'),
+				'subject'		=> $this->input->post('subject'),
+				'message'		=> $this->input->post('message'),
+				'created_at'	=> date('Y-m-d H:i:s')
+			];
+			$this->db->insert('order_support',$data);
+			retJson(['_return' => true,'msg' => 'Request Sent.']);
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`,`name`,`email`,`subject`,`message` and `user_id` are Required']);
+		}
+	}
+
 	public function pay_alignment_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){	

@@ -12,26 +12,10 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
-                    <li class="<?= menu(1,["business_category"])[0]; ?>">
-                        <a href="<?= base_url('business_category') ?>">
-                            <span class="pcoded-micon"><i class="fa fa-briefcase"></i></span>
-                            <span class="pcoded-mtext">Business Categories</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="<?= menu(1,["profile"])[0]; ?>">
-                        <a href="<?= base_url('profile') ?>">
-                            <span class="pcoded-micon"><i class="feather icon-user"></i></span>
-                            <span class="pcoded-mtext">Profile</span>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="pcoded-item pcoded-left-item">
-                    <li class="<?= menu(1,["setting"])[0]; ?>">
-                        <a href="<?= base_url('setting') ?>">
-                            <span class="pcoded-micon"><i class="fa fa-cog"></i></span>
-                            <span class="pcoded-mtext">Setting</span>
+                    <li class="<?= menu(1,["ordersupport"])[0]; ?>">
+                        <a href="<?= base_url('ordersupport') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-ticket"></i></span>
+                            <span class="pcoded-mtext">Order Support</span>
                         </a>
                     </li>
                 </ul>
@@ -109,6 +93,14 @@
                     </li>
                 </ul>
                 <div class="pcoded-navigatio-lavel">App CMS</div>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["business_category"])[0]; ?>">
+                        <a href="<?= base_url('business_category') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-briefcase"></i></span>
+                            <span class="pcoded-mtext">Business Categories</span>
+                        </a>
+                    </li>
+                </ul>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["customercms"])[2]; ?>">
                         <a href="javascript:void(0)">
