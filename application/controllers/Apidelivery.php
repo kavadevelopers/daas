@@ -237,7 +237,7 @@ class Apidelivery extends CI_Controller
 			$user = $this->db->get_where('z_delivery',['mobile' => $this->input->post('mobile'),'df' => '']);
 			if($user->num_rows() > 0){
 				$user = $user->row_array();
-				if($user['verified'] == 'Verified'){
+				if($user['verified'] == 'Verified' && $user['approved'] == '1'){
 					if($user['block'] == ""){
 						$otp = mt_rand(100000, 999999);
 						$this->db->where('id',$user['id'])->update('z_delivery',['loginotp' => $otp]);
