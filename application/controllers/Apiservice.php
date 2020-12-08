@@ -177,7 +177,13 @@ class Apiservice extends CI_Controller
 					['price' => $this->input->post('price'),'service' => $this->input->post('user_id'),'status_desc' => 'Price Added','notes' => 'Waiting']
 				);
 
-				sendPush([get_customer(get_order($this->input->post('order_id'))['userid'])],"Order #".get_order($this->input->post('order_id'))['order_id'],"Order Accepted By Service Provicer","order",$this->input->post('order_id'));
+				sendPush(
+					[get_customer(get_order($this->input->post('order_id'))['userid'])],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Accepted By Service Provicer",
+					"order",
+					$this->input->post('order_id')
+				);
 
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
 			}else{
