@@ -12,6 +12,42 @@ class Apicustomer extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes']
 			);
+
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Payment Received.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Payment Received.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Payment Received.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			if(get_order($this->input->post('order_id'))['driver2'] != ""){
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver2'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Payment Received.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed']);
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
@@ -24,6 +60,16 @@ class Apicustomer extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Work In Progress','notes' => 'Work In Progress','status' => 'ongoing']
 			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Price Accepted By Customer. Now Start Work",
+				"order",
+				$this->input->post('order_id')
+			);
+
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
@@ -36,6 +82,23 @@ class Apicustomer extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Paid By Customer','notes' => 'Order completed','status' => 'completed']
 			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Payment Successful.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Payment Successful. Thankyou",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Order Completed.']);
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
@@ -49,8 +112,27 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status_desc' => 'Work In Progress','notes' => 'Price Accepted By Customer']
 				);
+
+				sendPush(
+					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Accepted By Customer",
+					"order",
+					$this->input->post('order_id')
+				);
+
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);
 			}else{
+
+
+				sendPush(
+					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Rejected By Customer",
+					"order",
+					""
+				);
+
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
 				);
@@ -69,6 +151,38 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'completed','status_desc' => 'Canceled By Customer.','cancel' => 'canceled','notes' => 'Canceled']
 				);
+
+				$order = get_order($this->input->post('order_id'));
+				if($order['service'] != ""){
+					sendPush(
+						[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Order Canceled By Customer.",
+						"order",
+						$this->input->post('order_id')
+					);
+				}
+
+				if($order['driver'] != ""){
+					sendPush(
+						[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Order Canceled By Customer.",
+						"order",
+						$this->input->post('order_id')
+					);
+				}
+
+				if($order['driver2'] != ""){
+					sendPush(
+						[get_delivery(get_order($this->input->post('order_id'))['driver2'])['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Order Canceled By Customer.",
+						"order",
+						$this->input->post('order_id')
+					);
+				}
+
 				retJson(['_return' => true,'msg' => 'Order Canceled.']);
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
@@ -107,14 +221,11 @@ class Apicustomer extends CI_Controller
 					"Order #".get_order($this->input->post('order_id'))['order_id'],
 					"Order Accepted By Customer",
 					"order",
-					""
+					$this->input->post('order_id')
 				);
 
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);	
 			}else if($this->input->post('type') == 'reject'){
-				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '','notes' => 'Pending']
-				);
 
 				sendPush(
 					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
@@ -124,6 +235,9 @@ class Apicustomer extends CI_Controller
 					""
 				);
 
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '','notes' => 'Pending']
+				);
 				retJson(['_return' => true,'msg' => 'Order Rejected.']);	
 			}else{
 				retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`) Please Enter Valid Type']);	

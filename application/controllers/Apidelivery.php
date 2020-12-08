@@ -12,6 +12,23 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Item Drop At Customer Waiting For Payment','notes' => 'Item Drop At Customer Waiting For Payment']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Dropped By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Dropped By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -24,6 +41,23 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Item Picked From Service','notes' => 'Item Collected By Driver']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Picked By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Picked By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -36,6 +70,23 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Item Drop At Store','notes' => 'Item Dropped At Service Provider']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Dropped By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Dropped By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -48,6 +99,23 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Item Picked From Customer','notes' => 'Item Collected By Driver']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Picked By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Picked By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -60,6 +128,15 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Completed','notes' => 'Delivered','status' => 'completed']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Delivered. Thankyou...",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Order Completed']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -72,6 +149,15 @@ class Apidelivery extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'On The Way','notes' => 'Out For Delivery']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Out For Delivery",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);

@@ -14,12 +14,27 @@ class Apiservice extends CI_Controller
 			);
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
 			if($order['done_driver1'] == 'yes'){
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1'])->row_array();
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver2' => $driver['id']]
 					);					
 				}
+				sendPush(
+					[get_delivery($driver['id'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}else{
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
 			}
 			retJson(['_return' => true,'msg' => 'Order Updated.']);		
 		}else{
@@ -33,6 +48,35 @@ class Apiservice extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Order Canceled By Service Provider','notes' => 'Order Canceled By Service Provider','status' => 'completed']
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Canceled By Alignment",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			$order = get_order($this->input->post('order_id'));
+
+			if($order['driver2'] != ""){
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver2'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Canceled By Alignment. Please Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}else{
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Canceled By Alignment. Please Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
+
 			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);
@@ -46,9 +90,33 @@ class Apiservice extends CI_Controller
 				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
 			);
 
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Price Added By Alignment. Please confirm.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			if($this->input->post('time') > 0.5){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['done_driver1' => 'yes']
+				);
+
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Completed.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}else{
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Wait For Alignment To do Work.",
+					"order",
+					$this->input->post('order_id')
 				);
 			}
 
@@ -67,11 +135,26 @@ class Apiservice extends CI_Controller
 					['service' => $this->input->post('user_id'),'status_desc' => 'Order Accepted By Service Provider','status' => 'ongoing','notes' => 'Driver Assigned']
 				);
 
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => ''])->row_array();
+				sendPush(
+					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Accepted By Alignment. Driver Assigned.",
+					"order",
+					$this->input->post('order_id')
+				);
+
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1'])->row_array();
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver' => $driver['id']]
-					);					
+					);	
+					sendPush(
+						[get_delivery($driver['id'])['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"New Alignment Request.",
+						"order",
+						$this->input->post('order_id')
+					);				
 				}	
 
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
@@ -89,6 +172,15 @@ class Apiservice extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Work Done Waiting for Payment','notes' => 'Work Done By Service Provider','price' => $this->input->post('price')]
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Work Done By Service Provider. Please Make Payment",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Order Updated.']);		
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`,`price` and `user_id` are Required']);
@@ -98,6 +190,15 @@ class Apiservice extends CI_Controller
 	public function cancel_service_order()
 	{
 		if($this->input->post('order_id')){
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Canceled By Service Provider",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
 			);
@@ -113,6 +214,15 @@ class Apiservice extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
 			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Price Added By Customer.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Order Updated.']);		
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`,`price`,`time` and `user_id` are Required']);
@@ -127,6 +237,15 @@ class Apiservice extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['service' => $this->input->post('user_id'),'status_desc' => 'Order Accepted By Service Provider','status' => 'ongoing','notes' => 'Coming For Visit']
 				);
+
+				sendPush(
+					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Accepted By Service Provider. Coming For Visit",
+					"order",
+					$this->input->post('order_id')
+				);
+
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
 			}else{
 				retJson(['_return' => false,'msg' => 'Order Already Accepted.']);
@@ -140,6 +259,23 @@ class Apiservice extends CI_Controller
 	{
 		if($this->input->post('user_id') && $this->input->post('order_id')){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',['notes' => 'Shipped']);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Packed Waiting For Driver",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			sendPush(
+				[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Packed Pickup your Order.",
+				"order",
+				$this->input->post('order_id')
+			);
+
 			retJson(['_return' => true,'msg' => 'Order Status Changed']);
 		}else{
 			retJson(['_return' => false,'msg' => '`user_id` and `order_id` is Required']);
