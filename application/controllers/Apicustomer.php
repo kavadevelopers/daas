@@ -280,7 +280,6 @@ class Apicustomer extends CI_Controller
 			foreach ($services as $key => $value) {
 				array_push($tokens, $value['token']);
 			}
-
 			sendPush($tokens,"New Order","New Delivery Order","order",$or_id);
 
 

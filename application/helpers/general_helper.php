@@ -92,6 +92,22 @@ function getCategoryThumb($file)
     }
 }
 
+function get_order($id){
+    return $this->db->get_where('corder',['id' => $id])->row_array();
+}
+
+function get_cuatomer($id){
+    return $this->db->get_where('z_customer',['id' => $id])->row_array();
+}
+
+function get_delivery($id){
+    return $this->db->get_where('z_delivery',['id' => $id])->row_array();
+}
+
+function get_service($id){
+    return $this->db->get_where('z_service',['id' => $id])->row_array();
+}
+
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
