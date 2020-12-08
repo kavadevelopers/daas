@@ -96,7 +96,7 @@ function get_order($id){
     return $this->db->get_where('corder',['id' => $id])->row_array();
 }
 
-function get_cuatomer($id){
+function get_customer($id){
     return $this->db->get_where('z_customer',['id' => $id])->row_array();
 }
 
