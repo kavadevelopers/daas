@@ -178,7 +178,7 @@ class Apiservice extends CI_Controller
 				);
 
 				sendPush(
-					[get_customer(get_order($this->input->post('order_id'))['userid'])],
+					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 					"Order #".get_order($this->input->post('order_id'))['order_id'],
 					"Order Accepted By Service Provicer",
 					"order",
