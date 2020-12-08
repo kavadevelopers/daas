@@ -92,11 +92,10 @@ function getCategoryThumb($file)
     }
 }
 
-function sendPush($tokens,$title,$body,$type,$dy = ""){
-
+function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
-    $arrayToSend = array('registration_ids' => $tokens,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
+    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high",'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';
@@ -110,7 +109,7 @@ function sendPush($tokens,$title,$body,$type,$dy = ""){
     curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 0); 
-    curl_exec($ch);
+    $result = curl_exec($ch);
     curl_close($ch);
 }
 ?>

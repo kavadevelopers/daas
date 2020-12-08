@@ -273,6 +273,17 @@ class Apicustomer extends CI_Controller
 		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
 		    	}
 			}
+
+
+			$services = $this->db->get_where('z_service',['category' => $this->input->post('category')])->result_array();
+			$tokens = [];
+			foreach ($services as $key => $value) {
+				array_push($tokens, $value['token']);
+			}
+
+			sendPush($tokens,"New Order","New Delivery Order","order",$or_id);
+
+
 			retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
 		}else{
 			retJson(['_return' => false,'msg' => '`userid`,`category` and `type` are Required']);
