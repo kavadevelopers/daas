@@ -275,7 +275,7 @@ class Apicustomer extends CI_Controller
 			}
 
 
-			$services = $this->db->get_where('z_service',['category' => $this->input->post('category')])->result_array();
+			$services = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => ''])->result_array();
 			$tokens = [];
 			foreach ($services as $key => $value) {
 				array_push($tokens, $value['token']);
