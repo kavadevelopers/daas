@@ -90,14 +90,40 @@ class Apicustomer extends CI_Controller
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver' => $driver['id']]
-					);					
-				}				
+					);		
+
+					sendPush(
+						[get_delivery($driver['id'])['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"New Delivery Request",
+						"order",
+						$this->input->post('order_id')
+					);
+
+				}
+
+				sendPush(
+					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Accepted By Customer",
+					"order",
+					""
+				);
 
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);	
 			}else if($this->input->post('type') == 'reject'){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'upcoming','status_desc' => 'Order Placed.','price' => '0.00','service' => '','notes' => 'Pending']
 				);
+
+				sendPush(
+					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Rejected By Customer",
+					"order",
+					""
+				);
+
 				retJson(['_return' => true,'msg' => 'Order Rejected.']);	
 			}else{
 				retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`) Please Enter Valid Type']);	
