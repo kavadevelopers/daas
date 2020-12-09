@@ -280,6 +280,14 @@ class Apicustomer extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$single['images']			=	$images;
+
+				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				if($service){
+					$service['service']		  	= $service['fname'].' '.$service['lname'];
+				}else{
+					$service['service'] 		= "";
+				}
+				
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
