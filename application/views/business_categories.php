@@ -32,6 +32,7 @@
                                         <option value="">-- Select --</option>
                                         <option value="supplier">Supplier</option>
                                         <option value="service">Service</option>
+                                        <option value="alignment">Alignment</option>
                                     </select>
                                     <?= form_error('type') ?>
                                 </div>
