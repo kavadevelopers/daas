@@ -175,6 +175,13 @@ class Apidelivery extends CI_Controller
 				$single['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
 				$single['pick']  			= $service;
 				$single['drop']		 	= $address;
+
+				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
+				foreach ($images as $imageskey => $imagesvalue) {
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
+				}
+				$single['images']			=	$images;
+				
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
@@ -202,6 +209,12 @@ class Apidelivery extends CI_Controller
 				$nlist[$key]['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['pick']  			= $service;
 				$nlist[$key]['drop']		 	= $address;
+
+				$images = $this->db->get_where('corder_images',['order_id' => $value['id']])->result_array();
+				foreach ($images as $imageskey => $imagesvalue) {
+					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
+				}
+				$nlist[$key]['images']			=	$images;
 			}
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
