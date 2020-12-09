@@ -219,7 +219,7 @@ class Apicustomer extends CI_Controller
 					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging']
 				);
 
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver' => $driver['id']]

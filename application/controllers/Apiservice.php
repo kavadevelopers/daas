@@ -14,7 +14,7 @@ class Apiservice extends CI_Controller
 			);
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
 			if($order['done_driver1'] == 'yes'){
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver2' => $driver['id']]
@@ -143,7 +143,7 @@ class Apiservice extends CI_Controller
 					$this->input->post('order_id')
 				);
 
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
 				if($driver){
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver' => $driver['id']]
