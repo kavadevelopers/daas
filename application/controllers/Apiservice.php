@@ -290,12 +290,20 @@ class Apiservice extends CI_Controller
 			$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
 			$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
 
+
+			$cashCollected = $this->db->select_sum('price')->from('requirement')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->get()->row()->price;
+
+			$cash = 0;
+			if($cashCollected){
+				$cash = $cashCollected;
+			}
+
 			$ret = [
 				'upcoming' 	=> $upcoming, 
 				'ongoing' 	=> $ongoing, 
 				'completed' => $compeleted, 
 				'canceled' 	=> $canceled, 
-				'cash' 		=> "0.00", 
+				'cash' 		=> $cash, 
 				'bank' 		=> "0.00"
 			];
 			retJson(['_return' => true,'data' => $ret]);	
