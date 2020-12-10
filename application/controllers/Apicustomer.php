@@ -28,8 +28,21 @@ class Apicustomer extends CI_Controller
 	public function pay_alignment_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){	
+			$tra_id = ""; $payment_gateway = ""; $payment_type = "";
+			if($this->input->post('tra_id')){
+				$tra_id = $this->input->post('tra_id');
+			}
+
+			if($this->input->post('payment_gateway')){
+				$payment_gateway = $this->input->post('payment_gateway');
+			}
+
+			if($this->input->post('payment_type')){
+				$payment_type = $this->input->post('payment_type');
+			}
+
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes']
+				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 			);
 
 
@@ -69,7 +82,7 @@ class Apicustomer extends CI_Controller
 
 			retJson(['_return' => true,'msg' => 'Status Changed']);
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+			retJson(['_return' => false,'msg' => '`order_id`,`tra_id`,`payment_gateway`,`payment_type` and `userid` are Required']);
 		}
 	}
 
@@ -98,8 +111,23 @@ class Apicustomer extends CI_Controller
 	public function pay_service_order()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){	
+
+			$tra_id = ""; $payment_gateway = ""; $payment_type = "";
+			if($this->input->post('tra_id')){
+				$tra_id = $this->input->post('tra_id');
+			}
+
+			if($this->input->post('payment_gateway')){
+				$payment_gateway = $this->input->post('payment_gateway');
+			}
+
+			if($this->input->post('payment_type')){
+				$payment_type = $this->input->post('payment_type');
+			}
+
+
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Paid By Customer','notes' => 'Order completed','status' => 'completed']
+				['status_desc' => 'Paid By Customer','notes' => 'Order completed','status' => 'completed','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 			);
 
 			sendPush(
@@ -120,7 +148,7 @@ class Apicustomer extends CI_Controller
 
 			retJson(['_return' => true,'msg' => 'Order Completed.']);
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+			retJson(['_return' => false,'msg' => '`order_id`,`tra_id`,`payment_gateway`,`payment_type` and `userid` are Required']);
 		}
 	}
 
@@ -215,8 +243,23 @@ class Apicustomer extends CI_Controller
 	{
 		if($this->input->post('type') && $this->input->post('order_id') && $this->input->post('userid')){
 			if($this->input->post('type') == 'accept'){
+
+
+				$tra_id = ""; $payment_gateway = ""; $payment_type = "";
+				if($this->input->post('tra_id')){
+					$tra_id = $this->input->post('tra_id');
+				}
+
+				if($this->input->post('payment_gateway')){
+					$payment_gateway = $this->input->post('payment_gateway');
+				}
+
+				if($this->input->post('payment_type')){
+					$payment_type = $this->input->post('payment_type');
+				}
+
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging']
+					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 				);
 				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
 				if($driver){
@@ -274,7 +317,7 @@ class Apicustomer extends CI_Controller
 				retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`) Please Enter Valid Type']);	
 			}
 		}else{
-			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id` and `userid` are Required']);
+			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id`,`tra_id`,`payment_gateway`,`payment_type` and `userid` are Required']);
 		}
 	}
 

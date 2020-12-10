@@ -27,8 +27,16 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label>Firebase Server Key <span class="-req">*</span></label>
-                            <input name="fserverkey" type="text" class="form-control" value="<?= set_value('company',get_setting()['fserverkey']); ?>" >
+                            <input name="fserverkey" type="text" class="form-control" value="<?= set_value('fserverkey',get_setting()['fserverkey']); ?>" >
                             <?= form_error('fserverkey') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Razorpay Key <span class="-req">*</span></label>
+                            <input name="razorpay_key" type="text" class="form-control" placeholder="Razorpay Key" value="<?= set_value('razorpay_key',get_setting()['razorpay_key']); ?>" >
+                            <?= form_error('razorpay_key') ?>
                         </div>
                     </div>
                     

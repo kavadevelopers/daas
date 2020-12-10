@@ -19,6 +19,7 @@ class Setting extends CI_Controller
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
 		$this->form_validation->set_rules('company', 'Company Name','trim|required');
 		$this->form_validation->set_rules('fserverkey', 'Firebase Server Key','trim|required');
+		$this->form_validation->set_rules('razorpay_key', 'Razorpay Key','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -29,7 +30,8 @@ class Setting extends CI_Controller
 		{ 
 			$data = [
 				'name'			=> $this->input->post('company'),
-				'fserverkey'	=> $this->input->post('fserverkey')
+				'fserverkey'	=> $this->input->post('fserverkey'),
+				'razorpay_key'	=> $this->input->post('razorpay_key')
 			];
 
 			$this->db->where('id','1');

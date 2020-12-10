@@ -21,4 +21,10 @@ class Apicommon extends CI_Controller
 		retJson(['_return' => true,'count' => $query->num_rows(),'list' => $list]);
 	}
 
+
+	public function getsettings()
+	{
+		retJson(['_return' => true,'razorepay_key' => get_setting()['razorpay_key']]);
+	}
+
 }
