@@ -79,6 +79,7 @@
                                         <option value="">-- Select --</option>
                                         <option value="supplier" <?= $single['type'] == "supplier"?'selected':''; ?>>Supplier</option>
                                         <option value="service" <?= $single['type'] == "service"?'selected':''; ?>>Service</option>
+                                        <option value="alignment" <?= $single['type'] == "alignment"?'selected':''; ?>>Alignment</option>
                                     </select>
                                     <?= form_error('type') ?>
                                 </div>
