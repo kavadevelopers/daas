@@ -14,19 +14,30 @@ class Apiservice extends CI_Controller
 			);
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
 			if($order['done_driver1'] == 'yes'){
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
 				if($driver){
+					$delivery_boy = "";
+					foreach ($driver as $dkey => $dvalue) {
+						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
+						if($dOrders == 0){
+							$delivery_boy = $dvalue['id'];
+							break;
+						}	
+					}
+					if ($delivery_boy == "") {
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+					}
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
-						['driver2' => $driver['id']]
-					);					
+						['driver2' => $delivery_boy]
+					);				
+					sendPush(
+						[get_delivery($delivery_boy)['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Drop Item At Customer Location.",
+						"order",
+						$this->input->post('order_id')
+					);		
 				}
-				sendPush(
-					[get_delivery($driver['id'])['token']],
-					"Order #".get_order($this->input->post('order_id'))['order_id'],
-					"Drop Item At Customer Location.",
-					"order",
-					$this->input->post('order_id')
-				);
 			}else{
 				sendPush(
 					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
@@ -143,13 +154,27 @@ class Apiservice extends CI_Controller
 					$this->input->post('order_id')
 				);
 
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
 				if($driver){
+					$delivery_boy = "";
+					foreach ($driver as $dkey => $dvalue) {
+						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
+						if($dOrders == 0){
+							$delivery_boy = $dvalue['id'];
+							break;
+						}	
+					}
+
+					if ($delivery_boy == "") {
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+					}
+
+
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
-						['driver' => $driver['id']]
+						['driver' => $delivery_boy]
 					);	
 					sendPush(
-						[get_delivery($driver['id'])['token']],
+						[get_delivery($delivery_boy)['token']],
 						"Order #".get_order($this->input->post('order_id'))['order_id'],
 						"New Alignment Request.",
 						"order",

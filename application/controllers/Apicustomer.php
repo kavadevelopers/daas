@@ -218,21 +218,33 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging']
 				);
-
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
 				if($driver){
+
+					$delivery_boy = "";
+					foreach ($driver as $dkey => $dvalue) {
+						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
+						if($dOrders == 0){
+							$delivery_boy = $dvalue['id'];
+							break;
+						}	
+					}
+
+					if ($delivery_boy == "") {
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+					}
+
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
-						['driver' => $driver['id']]
+						['driver' => $delivery_boy]
 					);		
 
 					sendPush(
-						[get_delivery($driver['id'])['token']],
+						[get_delivery($delivery_boy)['token']],
 						"Order #".get_order($this->input->post('order_id'))['order_id'],
 						"New Delivery Request",
 						"order",
 						$this->input->post('order_id')
 					);
-
 				}
 
 				sendPush(
@@ -699,6 +711,11 @@ class Apicustomer extends CI_Controller
 	{
 		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile') && $this->input->post('password') && $this->input->post('gender')){
 			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
+			if($this->input->post('gender') == "Male"){
+				$image = "male.png";
+			}else{
+				$image = "female.png";
+			}
 			if($old->num_rows() == 0){
 				$otp = mt_rand(100000, 999999);
 				$data = [
@@ -707,6 +724,7 @@ class Apicustomer extends CI_Controller
 					'mobile'		=> $this->input->post('mobile'),
 					'password'		=> md5($this->input->post('password')),
 					'gender'		=> $this->input->post('gender'),
+					'image'			=> $image,
 					'deviceid'		=> '',
 					'token'			=> '',
 					'df'			=> '',
@@ -727,6 +745,7 @@ class Apicustomer extends CI_Controller
 						'mobile'		=> $this->input->post('mobile'),
 						'password'		=> md5($this->input->post('password')),
 						'gender'		=> $this->input->post('gender'),
+						'image'			=> $image,
 						'deviceid'		=> '',
 						'token'			=> '',
 						'df'			=> '',
