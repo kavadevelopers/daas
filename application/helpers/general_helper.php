@@ -143,4 +143,23 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $result = curl_exec($ch);
     curl_close($ch);
 }
+
+function sendOtp($mobile,$otp){
+    $url    = "https://2factor.in/API/V1/";
+    $ApiKey = get_setting()['twofecturekey'];
+    $url    .= $ApiKey.'/SMS/'.$mobile.'/'.$otp.'/MrDaas';
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $ch = curl_init();
+    //pre_print($arrayToSend);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"GET");
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_VERBOSE, 0); 
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
 ?>

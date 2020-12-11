@@ -323,6 +323,8 @@ class Apidelivery extends CI_Controller
 		if($this->input->post('userid')){
 			$otp = mt_rand(100000, 999999);
 			$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['loginotp' => $otp]);
+			$user = $this->db->get_where('z_delivery',['id' => $this->input->post('userid')])->row_array();
+			@sendOtp($user['mobile'],$otp);
 			retJson(['_return' => true,'msg' => 'OTP Sent','otp' => $otp,'userid' => $this->input->post('userid')]);
 		}
 		else{
@@ -340,7 +342,8 @@ class Apidelivery extends CI_Controller
 					if($user['block'] == ""){
 						$otp = mt_rand(100000, 999999);
 						$this->db->where('id',$user['id'])->update('z_delivery',['loginotp' => $otp]);
-						retJson(['_return' => true,'msg' => 'Login Successful. Varify OTP.','otp' => $otp,'userid' => $user['id']]);
+						@sendOtp($this->input->post('mobile'),$otp);
+						retJson(['_return' => true,'msg' => 'Login Successful. Verify OTP.','otp' => $otp,'userid' => $user['id']]);
 					}else{
 						retJson(['_return' => false,'msg' => 'Account is Blocked.']);	
 					}	
@@ -360,6 +363,8 @@ class Apidelivery extends CI_Controller
 		if($this->input->post('userid')){
 			$otp = mt_rand(100000, 999999);
 			$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['otp' => $otp]);
+			$user = $this->db->get_where('z_delivery',['id' => $this->input->post('userid')])->row_array();
+			@sendOtp($user['mobile'],$otp);
 			retJson(['_return' => true,'msg' => 'OTP Sent','otp' => $otp,'userid' => $this->input->post('userid')]);
 		}
 		else{
@@ -403,6 +408,7 @@ class Apidelivery extends CI_Controller
 				];
 				$this->db->insert('z_delivery',$data);
 				$user = $this->db->insert_id();
+				@sendOtp($this->input->post('mobile'),$otp);
 				retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
@@ -421,6 +427,7 @@ class Apidelivery extends CI_Controller
 						'otp'			=> $otp
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_delivery',$data);
+					@sendOtp($this->input->post('mobile'),$otp);
 					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);

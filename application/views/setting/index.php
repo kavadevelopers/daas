@@ -39,6 +39,14 @@
                             <?= form_error('razorpay_key') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>2Factor API Key <span class="-req">*</span></label>
+                            <input name="twofecturekey" type="text" class="form-control" placeholder="Razorpay Key" value="<?= set_value('twofecturekey',get_setting()['twofecturekey']); ?>" >
+                            <?= form_error('twofecturekey') ?>
+                        </div>
+                    </div>
                     
                 </div>
             </div>

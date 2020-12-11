@@ -635,6 +635,7 @@ class Apicustomer extends CI_Controller
 				if($oldRow['verified'] == 'Verified'){
 					$otp = mt_rand(100000, 999999);
 					$this->db->where('id',$oldRow['id'])->update('z_customer',['otp' => $otp]);
+					@sendOtp($this->input->post('mobile'),$otp);
 					retJson(['_return' => true,'msg' => 'OTP Sent','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Not Verified.']);
@@ -727,6 +728,8 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('userid')){
 			$otp = mt_rand(100000, 999999);
 			$this->db->where('id',$this->input->post('userid'))->update('z_customer',['otp' => $otp]);
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			@sendOtp($user['mobile'],$otp);
 			retJson(['_return' => true,'msg' => 'OTP Sent','otp' => $otp,'userid' => $this->input->post('userid')]);
 		}
 		else{
@@ -777,6 +780,7 @@ class Apicustomer extends CI_Controller
 				];
 				$this->db->insert('z_customer',$data);
 				$user = $this->db->insert_id();
+				@sendOtp($this->input->post('mobile'),$otp);
 				retJson(['_return' => true,'msg' => 'Registration Successful. Please Verify OTP.','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
@@ -797,6 +801,7 @@ class Apicustomer extends CI_Controller
 						'otp'			=> $otp
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
+					@sendOtp($this->input->post('mobile'),$otp);
 					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
