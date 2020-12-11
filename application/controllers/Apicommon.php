@@ -24,7 +24,14 @@ class Apicommon extends CI_Controller
 
 	public function getsettings()
 	{
-		retJson(['_return' => true,'razorepay_key' => get_setting()['razorpay_key']]);
+		retJson(
+			[
+				'_return' => true,
+				'razorepay_key' => get_setting()['razorpay_key'],
+				'support_email' => get_setting()['support_email'],
+				'support_mobile' => get_setting()['support_mobile']
+			]
+		);
 	}
 
 }

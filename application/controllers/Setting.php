@@ -21,6 +21,8 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('fserverkey', 'Firebase Server Key','trim|required');
 		$this->form_validation->set_rules('razorpay_key', 'Razorpay Key','trim|required');
 		$this->form_validation->set_rules('twofecturekey', '2Factor API Key','trim|required');
+		$this->form_validation->set_rules('support_email', 'Support Email','trim|required');
+		$this->form_validation->set_rules('support_mobile', 'Support Mobile','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -30,10 +32,12 @@ class Setting extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'			=> $this->input->post('company'),
-				'fserverkey'	=> $this->input->post('fserverkey'),
-				'razorpay_key'	=> $this->input->post('razorpay_key'),
-				'twofecturekey'	=> $this->input->post('twofecturekey')
+				'name'				=> $this->input->post('company'),
+				'fserverkey'		=> $this->input->post('fserverkey'),
+				'razorpay_key'		=> $this->input->post('razorpay_key'),
+				'twofecturekey'		=> $this->input->post('twofecturekey'),
+				'support_email'		=> $this->input->post('support_email'),
+				'support_mobile'	=> $this->input->post('support_mobile'),
 			];
 
 			$this->db->where('id','1');

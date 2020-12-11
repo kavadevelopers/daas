@@ -26,6 +26,22 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label>Support Email <span class="-req">*</span></label>
+                            <input name="support_email" type="text" class="form-control" value="<?= set_value('support_email',get_setting()['support_email']); ?>" >
+                            <?= form_error('support_email') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Support Mobile <span class="-req">*</span></label>
+                            <input name="support_mobile" type="text" class="form-control" value="<?= set_value('support_mobile',get_setting()['support_mobile']); ?>" >
+                            <?= form_error('support_mobile') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label>Firebase Server Key <span class="-req">*</span></label>
                             <input name="fserverkey" type="text" class="form-control" value="<?= set_value('fserverkey',get_setting()['fserverkey']); ?>" >
                             <?= form_error('fserverkey') ?>
