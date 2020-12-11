@@ -371,6 +371,7 @@ class Apiservice extends CI_Controller
 				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
 				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
+				$single['customer_mobile'] = $customer['mobile'];
 				$single['address']	= $address;
 				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
 				foreach ($images as $imageskey => $imagesvalue) {
