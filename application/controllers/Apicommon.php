@@ -24,13 +24,23 @@ class Apicommon extends CI_Controller
 
 	public function getsettings()
 	{
+		$data = [
+			'_return' => true,
+			'razorepay_key' => get_setting()['razorpay_key'],
+			'support_email' => get_setting()['support_email'],
+			'support_mobile' => get_setting()['support_mobile']
+		];
+
+		if($this->input->post('type') && $this->input->post('userid')){
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			if($this->input->post('type') == "customer" && $user){
+				$data['subscription_status'] 	= checkSubscriptionExpiration($user['sub_expired_on']);
+				$data['sub_expired_on'] 		= $user['sub_expired_on'];
+			}
+		}
+
 		retJson(
-			[
-				'_return' => true,
-				'razorepay_key' => get_setting()['razorpay_key'],
-				'support_email' => get_setting()['support_email'],
-				'support_mobile' => get_setting()['support_mobile']
-			]
+			$data
 		);
 	}
 

@@ -6,6 +6,29 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function extend_subscription()
+	{
+		if($this->input->post('userid') && $this->input->post('price') && $this->input->post('plan_name') && $this->input->post('month') && $this->input->post('tra_id')){	
+			$data = [
+				'userid'		=> $this->input->post('userid'),
+				'price'			=> $this->input->post('price'),
+				'plan_name'		=> $this->input->post('plan_name'),
+				'month'			=> $this->input->post('month'),
+				'tra_id'		=> $this->input->post('tra_id'),
+				'created_at'	=> date('Y-m-d H:i:s')
+			];
+			$this->db->insert('extend_subscription',$data);
+			$expireDate = date('Y-m-d',strtotime("+".$this->input->post('month')." month",strtotime(date('Y-m-d'))));
+			$data = [
+				'sub_expired_on'	=> $expireDate
+			];
+			$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
+			retJson(['_return' => true,'msg' => 'Subscription Extended To '.vfd($expireDate)]);
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`price`,`plan_name`,`tra_id` and `month` are Required']);
+		}	
+	}
+
 	public function order_support()
 	{
 		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('name') && $this->input->post('email') && $this->input->post('subject') && $this->input->post('message')){	
@@ -175,15 +198,15 @@ class Apicustomer extends CI_Controller
 				sendPush(
 					[get_service(get_order($this->input->post('order_id'))['service'])['token']],
 					"Order #".get_order($this->input->post('order_id'))['order_id'],
-					"Order Rejected By Customer",
+					"Order Canceled By Customer",
 					"order",
-					""
+					$this->input->post('order_id')
 				);
 
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
-					['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+					['status' => 'completed','status_desc' => 'Canceled By Customer.','cancel' => 'canceled','notes' => 'Canceled']
 				);
-				retJson(['_return' => true,'msg' => 'Order Rejected.']);
+				retJson(['_return' => true,'msg' => 'Order Canceled.']);
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id` and `userid` are Required']);
@@ -261,7 +284,7 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 				);
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 				if($driver){
 
 					$delivery_boy = "";
@@ -274,7 +297,7 @@ class Apicustomer extends CI_Controller
 					}
 
 					if ($delivery_boy == "") {
-						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
 					}
 
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
@@ -337,8 +360,17 @@ class Apicustomer extends CI_Controller
 				$single['images']			=	$images;
 
 				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				$single['service_id']				=	$single['service'];
 				if($service){
-					$service['service']		  	= $service['fname'].' '.$service['lname'];
+					$single['service']		  	= $service['fname'].' '.$service['lname'];
+					$serviceLatLon = $this->db->get_where('service_latlon',['user' => $single['service']])->row_array();
+					if($serviceLatLon){
+						$single['service_lat']		= $serviceLatLon['lat'];
+						$single['service_lon']		= $serviceLatLon['lon'];
+					}else{
+						$single['service_lat']		= null;
+						$single['service_lon']		= null;
+					}
 				}else{
 					$service['service'] 		= "";
 				}
@@ -388,124 +420,136 @@ class Apicustomer extends CI_Controller
 	public function order()
 	{
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
-			$desc = "";
-			if($this->input->post('desc')){
-				$desc = $this->input->post('desc');
-			}
-			$last_id = $this->db->order_by('id','desc')->limit(1)->get('corder')->row_array();
-			if($last_id){
-				$order_id = mt_rand(10000000, 99999999).($last_id['id'] + 1);
+			$servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1'])->num_rows();
+			$deliveryCount = $this->db->get_where('z_delivery',["verified" => 'Verified','token !=' => '','approved' => '1','block' => '','active' => '1'])->num_rows();
+
+			if($this->input->post('type') == "delivery" && $servicesCount == 0){
+				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
+			}else if($this->input->post('type') == "delivery" && $deliveryCount == 0){
+				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
+			}else if($this->input->post('type') == "service" && $servicesCount == 0){
+				retJson(['_return' => false,'msg' => 'No Service Provider online at this time']);	
+			}else if($this->input->post('type') == "alignment" && $servicesCount == 0){
+				retJson(['_return' => false,'msg' => 'No Alignment online at this time']);	
+			}else if($this->input->post('type') == "alignment" && $deliveryCount == 0){
+				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
 			}else{
-				$order_id = mt_rand(10000000, 99999999).'1';
+				$desc = "";
+				if($this->input->post('desc')){
+					$desc = $this->input->post('desc');
+				}
+				$last_id = $this->db->order_by('id','desc')->limit(1)->get('corder')->row_array();
+				if($last_id){
+					$order_id = mt_rand(10000000, 99999999).($last_id['id'] + 1);
+				}else{
+					$order_id = mt_rand(10000000, 99999999).'1';
+				}
+				$data = [
+					'userid'		=> $this->input->post('userid'),
+					'order_id'		=> $order_id,
+					'type'			=> $this->input->post('type'),
+					'category'		=> $this->input->post('category'),
+					'descr'			=> $desc,
+					'status'		=> 'upcoming',
+					'status_desc'	=> 'Order Placed',
+					'notes'			=> 'Pending',
+					'created_at'	=> date('Y-m-d H:i:s')
+				];
+				$this->db->insert('corder',$data);
+				$or_id = $this->db->insert_id();
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img1']) && $_FILES['img1']['error'] == 0){
+					$img1 = microtime(true).".".pathinfo($_FILES['img1']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img1;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img1')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img1','image' => $img1]);
+			    	}
+				}
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img2']) && $_FILES['img2']['error'] == 0){
+					$img2 = microtime(true).".".pathinfo($_FILES['img2']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img2;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img2')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img2','image' => $img2]);
+			    	}
+				}
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img3']) && $_FILES['img3']['error'] == 0){
+					$img3 = microtime(true).".".pathinfo($_FILES['img3']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img3;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img3')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img3','image' => $img3]);
+			    	}
+				}
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img4']) && $_FILES['img4']['error'] == 0){
+					$img4 = microtime(true).".".pathinfo($_FILES['img4']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img4;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img4')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img4','image' => $img4]);
+			    	}
+				}
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img5']) && $_FILES['img5']['error'] == 0){
+					$img5 = microtime(true).".".pathinfo($_FILES['img5']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img5;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img5')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img5','image' => $img5]);
+			    	}
+				}
+
+				$config['upload_path'] = './uploads/order/';
+			    $config['allowed_types']	= '*';
+			    $config['max_size']      = '0';
+			    $config['overwrite']     = FALSE;
+			    $this->load->library('upload', $config);
+				if(isset($_FILES ['img6']) && $_FILES['img6']['error'] == 0){
+					$img6 = microtime(true).".".pathinfo($_FILES['img6']['name'], PATHINFO_EXTENSION);
+					$config['file_name'] = $img6;
+			    	$this->upload->initialize($config);
+			    	if($this->upload->do_upload('img6')){
+			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
+			    	}
+				}
+
+				$services = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1'])->result_array();
+				$tokens = [];
+				foreach ($services as $key => $value) {
+					array_push($tokens, $value['token']);
+				}
+				sendPush($tokens,"New Order","New Order","order",$or_id);
+				retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
 			}
-			$data = [
-				'userid'		=> $this->input->post('userid'),
-				'order_id'		=> $order_id,
-				'type'			=> $this->input->post('type'),
-				'category'		=> $this->input->post('category'),
-				'descr'			=> $desc,
-				'status'		=> 'upcoming',
-				'status_desc'	=> 'Order Placed',
-				'notes'			=> 'Pending',
-				'created_at'	=> date('Y-m-d H:i:s')
-			];
-			$this->db->insert('corder',$data);
-			$or_id = $this->db->insert_id();
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img1']) && $_FILES['img1']['error'] == 0){
-				$img1 = microtime(true).".".pathinfo($_FILES['img1']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img1;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img1')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img1','image' => $img1]);
-		    	}
-			}
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img2']) && $_FILES['img2']['error'] == 0){
-				$img2 = microtime(true).".".pathinfo($_FILES['img2']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img2;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img2')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img2','image' => $img2]);
-		    	}
-			}
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img3']) && $_FILES['img3']['error'] == 0){
-				$img3 = microtime(true).".".pathinfo($_FILES['img3']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img3;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img3')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img3','image' => $img3]);
-		    	}
-			}
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img4']) && $_FILES['img4']['error'] == 0){
-				$img4 = microtime(true).".".pathinfo($_FILES['img4']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img4;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img4')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img4','image' => $img4]);
-		    	}
-			}
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img5']) && $_FILES['img5']['error'] == 0){
-				$img5 = microtime(true).".".pathinfo($_FILES['img5']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img5;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img5')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img5','image' => $img5]);
-		    	}
-			}
-
-			$config['upload_path'] = './uploads/order/';
-		    $config['allowed_types']	= '*';
-		    $config['max_size']      = '0';
-		    $config['overwrite']     = FALSE;
-		    $this->load->library('upload', $config);
-			if(isset($_FILES ['img6']) && $_FILES['img6']['error'] == 0){
-				$img6 = microtime(true).".".pathinfo($_FILES['img6']['name'], PATHINFO_EXTENSION);
-				$config['file_name'] = $img6;
-		    	$this->upload->initialize($config);
-		    	if($this->upload->do_upload('img6')){
-		    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
-		    	}
-			}
-
-
-			$services = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => ''])->result_array();
-			$tokens = [];
-			foreach ($services as $key => $value) {
-				array_push($tokens, $value['token']);
-			}
-			sendPush($tokens,"New Order","New Delivery Order","order",$or_id);
-
-
-			retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
 		}else{
 			retJson(['_return' => false,'msg' => '`userid`,`category` and `type` are Required']);
 		}
@@ -705,6 +749,8 @@ class Apicustomer extends CI_Controller
 								$ad = 1;
 							}
 							$user['address']	= $ad;
+							$user['subscription_status'] = checkSubscriptionExpiration($user['sub_expired_on']);
+
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
 						}else{
 							retJson(['_return' => false,'msg' => 'Account is Blocked.']);	
@@ -776,6 +822,7 @@ class Apicustomer extends CI_Controller
 					'df'			=> '',
 					'block'			=> '',
 					'registered_at'	=> date('Y-m-d H:i:s'),
+					'sub_expired_on'=> getTommorrow(),
 					'otp'			=> $otp
 				];
 				$this->db->insert('z_customer',$data);
@@ -798,6 +845,7 @@ class Apicustomer extends CI_Controller
 						'df'			=> '',
 						'block'			=> '',
 						'registered_at'	=> date('Y-m-d H:i:s'),
+						'sub_expired_on'=> getTommorrow(),
 						'otp'			=> $otp
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);

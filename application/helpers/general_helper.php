@@ -28,9 +28,33 @@ function _sortdate($datetime)
     }
 }
 
+function checkSubscriptionExpiration($expireDate)
+{
+    if($expireDate == NULL){
+        return "expired";
+    }else{
+        $date1 = strtotime($expireDate);
+        if($date1 >= strtotime(date('Y-m-d'))){
+            return 'active';
+        }else{
+            return 'expired';
+        }
+    }
+}
+
+function getTommorrow()
+{
+    return date('Y-m-d',strtotime("-1 day",strtotime(date('Y-m-d'))));
+}
+
 function vd($date)
 {
     return date('d-m-Y',strtotime($date));
+}
+
+function vfd($date)
+{
+    return date('F d, Y',strtotime($date));
 }
 
 function dd($date)
@@ -125,7 +149,8 @@ function get_category($id){
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
-    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high",'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
+    $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';

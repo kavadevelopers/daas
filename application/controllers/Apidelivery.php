@@ -6,6 +6,20 @@ class Apidelivery extends CI_Controller
 		parent::__construct();
 	}
 
+	public function active()
+	{
+		if($this->input->post('userid') && $this->input->post('status')){
+			$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['active' => $this->input->post('status')]);
+			if($this->input->post('status') == "1"){
+				retJson(['_return' => true,'msg' => 'You are now Online.']);
+			}else{
+				retJson(['_return' => true,'msg' => 'You are now Offline.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid` and `status` = (`0` for inactive and `1` for active) is Required']);
+		}
+	}
+
 	public function item_dropped_at_customer()
 	{
 		if($this->input->post('order_id')){	
@@ -29,9 +43,23 @@ class Apidelivery extends CI_Controller
 				$this->input->post('order_id')
 			);
 
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Dropped At Customer','image' => $image]);
+		    	}
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
 		}
 	}
 
@@ -58,9 +86,23 @@ class Apidelivery extends CI_Controller
 				$this->input->post('order_id')
 			);
 
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Picked By Driver From Alignment','image' => $image]);
+		    	}
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
 		}
 	}
 
@@ -87,9 +129,23 @@ class Apidelivery extends CI_Controller
 				$this->input->post('order_id')
 			);
 
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Dropped At Alignment.','image' => $image]);
+		    	}
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
 		}
 	}
 
@@ -116,9 +172,23 @@ class Apidelivery extends CI_Controller
 				$this->input->post('order_id')
 			);
 
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Picked From Customer','image' => $image]);
+		    	}
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
 		}
 	}
 
@@ -137,9 +207,23 @@ class Apidelivery extends CI_Controller
 				$this->input->post('order_id')
 			);
 
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Order Delivered','image' => $image]);
+		    	}
+			}
+
 			retJson(['_return' => true,'msg' => 'Order Completed']);	
 		}else{
-			retJson(['_return' => false,'msg' => '`order_id` is Required']);
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
 		}
 	}
 
@@ -175,6 +259,25 @@ class Apidelivery extends CI_Controller
 				$single['customer_name'] 	= $customer['fname'].' '.$customer['lname'];
 				$single['pick']  			= $service;
 				$single['drop']		 	= $address;
+
+
+				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				$single['service_id']				=	$single['service'];
+				if($service){
+					$single['service']		  	= $service['fname'].' '.$service['lname'];
+					$serviceLatLon = $this->db->get_where('service_latlon',['user' => $single['service']])->row_array();
+					if($serviceLatLon){
+						$single['service_lat']		= $serviceLatLon['lat'];
+						$single['service_lon']		= $serviceLatLon['lon'];
+					}else{
+						$single['service_lat']		= null;
+						$single['service_lon']		= null;
+					}
+				}else{
+					$service['service'] 		= "";
+				}
+
+
 
 				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
 				foreach ($images as $imageskey => $imagesvalue) {

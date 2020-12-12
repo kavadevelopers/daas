@@ -6,6 +6,44 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function update_latlon()
+	{
+		if($this->input->post('userid') && $this->input->post('lat') && $this->input->post('lon')){
+			$old = $this->db->get_where('service_latlon',['user' => $this->input->post('userid')])->row_array();
+			if($old){
+				$data = [
+					'lat'		=> $this->input->post('lat'),
+					'lon'		=> $this->input->post('lon')
+				];
+				$this->db->where('id',$this->input->post('userid'))->update('service_latlon',$data);
+			}else{
+				$data = [
+					'user'		=> $this->input->post('userid'),
+					'lat'		=> $this->input->post('lat'),
+					'lon'		=> $this->input->post('lon')
+				];
+				$this->db->insert('service_latlon',$data);
+			}
+			retJson(['_return' => true,'msg' => 'Lat - Lon Saved']);
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`lat` and `lon` is Required']);
+		}
+	}
+
+	public function active()
+	{
+		if($this->input->post('userid') && $this->input->post('status')){
+			$this->db->where('id',$this->input->post('userid'))->update('z_service',['active' => $this->input->post('status')]);
+			if($this->input->post('status') == "1"){
+				retJson(['_return' => true,'msg' => 'You are now Online.']);
+			}else{
+				retJson(['_return' => true,'msg' => 'You are now Offline.']);
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`userid` and `status` = (`0` for inactive and `1` for active) is Required']);
+		}
+	}
+
 	public function alignment_work_done()
 	{
 		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
@@ -14,7 +52,7 @@ class Apiservice extends CI_Controller
 			);
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
 			if($order['done_driver1'] == 'yes'){
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 				if($driver){
 					$delivery_boy = "";
 					foreach ($driver as $dkey => $dvalue) {
@@ -25,7 +63,7 @@ class Apiservice extends CI_Controller
 						}	
 					}
 					if ($delivery_boy == "") {
-						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
 					}
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver2' => $delivery_boy]
@@ -154,7 +192,7 @@ class Apiservice extends CI_Controller
 					$this->input->post('order_id')
 				);
 
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->result_array();
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 				if($driver){
 					$delivery_boy = "";
 					foreach ($driver as $dkey => $dvalue) {
@@ -166,7 +204,7 @@ class Apiservice extends CI_Controller
 					}
 
 					if ($delivery_boy == "") {
-						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => ''])->row_array()['id'];
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
 					}
 
 
@@ -373,6 +411,25 @@ class Apiservice extends CI_Controller
 				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$single['customer_mobile'] = $customer['mobile'];
 				$single['address']	= $address;
+
+				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				$single['service_id']				=	$single['service'];
+				if($service){
+					$single['service']		  	= $service['fname'].' '.$service['lname'];
+					$serviceLatLon = $this->db->get_where('service_latlon',['user' => $single['service']])->row_array();
+					if($serviceLatLon){
+						$single['service_lat']		= $serviceLatLon['lat'];
+						$single['service_lon']		= $serviceLatLon['lon'];
+					}else{
+						$single['service_lat']		= null;
+						$single['service_lon']		= null;
+					}
+				}else{
+					$service['service'] 		= "";
+				}
+				
+
+				
 				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
 				foreach ($images as $imageskey => $imagesvalue) {
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
