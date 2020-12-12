@@ -861,6 +861,67 @@ class Apicustomer extends CI_Controller
 		}
 	}
 
+	public function newregister()
+	{
+		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile') && $this->input->post('password') && $this->input->post('gender')){
+			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
+			if($this->input->post('gender') == "Male"){
+				$image = "male.png";
+			}else{
+				$image = "female.png";
+			}
+			if($old->num_rows() == 0){
+				$otp = mt_rand(100000, 999999);
+				$data = [
+					'fname'			=> $this->input->post('fname'),
+					'lname'			=> $this->input->post('lname'),
+					'mobile'		=> $this->input->post('mobile'),
+					'password'		=> md5($this->input->post('password')),
+					'gender'		=> $this->input->post('gender'),
+					'image'			=> $image,
+					'deviceid'		=> '',
+					'token'			=> '',
+					'df'			=> '',
+					'block'			=> '',
+					'registered_at'	=> date('Y-m-d H:i:s'),
+					'sub_expired_on'=> getTommorrow(),
+					'otp'			=> $otp
+				];
+				$this->db->insert('z_customer',$data);
+				$user = $this->db->insert_id();
+				@sendOtp($this->input->post('mobile'),$otp);
+				retJson(['_return' => true,'msg' => 'Registration Successful. Please Verify OTP.','otp' => $otp,'userid' => $user]);
+			}else{
+				$oldRow = $old->row_array();
+				if($oldRow['verified'] == 'Not Verified'){
+					$otp = mt_rand(100000, 999999);
+					$data = [
+						'fname'			=> $this->input->post('fname'),
+						'lname'			=> $this->input->post('lname'),
+						'mobile'		=> $this->input->post('mobile'),
+						'password'		=> md5($this->input->post('password')),
+						'gender'		=> $this->input->post('gender'),
+						'image'			=> $image,
+						'deviceid'		=> '',
+						'token'			=> '',
+						'df'			=> '',
+						'block'			=> '',
+						'registered_at'	=> date('Y-m-d H:i:s'),
+						'sub_expired_on'=> getTommorrow(),
+						'otp'			=> $otp
+					];
+					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
+					@sendOtp($this->input->post('mobile'),$otp);
+					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
+				}else{
+					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
+				}
+			}
+		}else{
+			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required']);
+		}
+	}
+
 	public function index()
 	{
 		retJson(['No Script Found Here']);
