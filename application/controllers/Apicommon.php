@@ -6,6 +6,61 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
+	public function chatPush()
+	{
+		if($this->input->post('sender_id') && $this->input->post('receiver_id') && $this->input->post('sender_type') && $this->input->post('receiver_type') && $this->input->post('msg') && $this->input->post('order_id')){	
+			
+			if($this->input->post('sender_type') == "customer"){
+				if($this->input->post('receiver_type') == "delivery"){
+					$user = $this->db->get_where('z_delivery',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+
+				if($this->input->post('receiver_type') == "service"){
+					$user = $this->db->get_where('z_service',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+			}
+
+			if($this->input->post('sender_type') == "delivery"){
+				if($this->input->post('receiver_type') == "customer"){
+					$user = $this->db->get_where('z_customer',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+
+				if($this->input->post('receiver_type') == "delivery"){
+					$user = $this->db->get_where('z_delivery',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+
+				if($this->input->post('receiver_type') == "service"){
+					$user = $this->db->get_where('z_service',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+			}
+
+			if($this->input->post('sender_type') == "service"){
+				if($this->input->post('receiver_type') == "customer"){
+					$user = $this->db->get_where('z_customer',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+
+				if($this->input->post('receiver_type') == "delivery"){
+					$user = $this->db->get_where('z_delivery',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+
+				if($this->input->post('receiver_type') == "service"){
+					$user = $this->db->get_where('z_service',['id' => $this->input->post('receiver_id')])->row_array();
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+				}
+			}			
+
+		}else{
+			retJson(['_return' => false,'msg' => '`sender_id`,`receiver_id`,`sender_type`,`receiver_type`,`msg` and `order_id` are Required']);
+		}	
+	}
+
 
 	public function get_business_categories()
 	{

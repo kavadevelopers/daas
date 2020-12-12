@@ -187,4 +187,28 @@ function sendOtp($mobile,$otp){
     $result = curl_exec($ch);
     curl_close($ch);
 }
+
+
+function sendChatPush($tokon,$title,$body,$sender,$reciver,$sender_type,$receiver_type,$order_id){
+    $url = "https://fcm.googleapis.com/fcm/send";
+    $serverKey = get_setting()['fserverkey'];
+    $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
+    $json = json_encode($arrayToSend);
+    $headers = array();
+    $headers[] = 'Content-Type: application/json';
+    $headers[] = 'Authorization: key='. $serverKey;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_VERBOSE, 0); 
+    $result = curl_exec($ch);
+    curl_close($ch);
+}
+
 ?>
