@@ -749,7 +749,8 @@ class Apicustomer extends CI_Controller
 								$ad = 1;
 							}
 							$user['address']	= $ad;
-							$user['subscription_status'] = checkSubscriptionExpiration($user['sub_expired_on']);
+							$user['subscription_status'] 	= checkSubscriptionExpiration($user['sub_expired_on']);
+							$user['razorepay_key']  		= get_setting()['razorpay_key'];
 
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
 						}else{
