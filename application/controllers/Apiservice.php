@@ -33,14 +33,15 @@ class Apiservice extends CI_Controller
 	public function active()
 	{
 		if($this->input->post('userid') && $this->input->post('status')){
-			$this->db->where('id',$this->input->post('userid'))->update('z_service',['active' => $this->input->post('status')]);
-			if($this->input->post('status') == "1"){
+			if($this->input->post('status') == "active"){
+				$this->db->where('id',$this->input->post('userid'))->update('z_service',['active' => '1']);
 				retJson(['_return' => true,'msg' => 'You are now Online.']);
 			}else{
+				$this->db->where('id',$this->input->post('userid'))->update('z_service',['active' => '0']);
 				retJson(['_return' => true,'msg' => 'You are now Offline.']);
 			}
 		}else{
-			retJson(['_return' => false,'msg' => '`userid` and `status` = (`0` for inactive and `1` for active) is Required']);
+			retJson(['_return' => false,'msg' => '`userid` and `status` = (`inactive`and`active`) is Required']);
 		}
 	}
 
