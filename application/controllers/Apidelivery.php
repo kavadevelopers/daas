@@ -9,10 +9,11 @@ class Apidelivery extends CI_Controller
 	public function active()
 	{
 		if($this->input->post('userid') && $this->input->post('status')){
-			$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['active' => $this->input->post('status')]);
-			if($this->input->post('status') == "1"){
+			if($this->input->post('status') == "active"){
+				$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['active' => '1']);
 				retJson(['_return' => true,'msg' => 'You are now Online.']);
 			}else{
+				$this->db->where('id',$this->input->post('userid'))->update('z_delivery',['active' => '0']);
 				retJson(['_return' => true,'msg' => 'You are now Offline.']);
 			}
 		}else{
