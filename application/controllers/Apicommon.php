@@ -42,17 +42,17 @@ class Apicommon extends CI_Controller
 			if($this->input->post('sender_type') == "service"){
 				if($this->input->post('receiver_type') == "customer"){
 					$user = $this->db->get_where('z_customer',['id' => $this->input->post('receiver_id')])->row_array();
-					echo sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
 				}
 
 				if($this->input->post('receiver_type') == "delivery"){
 					$user = $this->db->get_where('z_delivery',['id' => $this->input->post('receiver_id')])->row_array();
-					echo sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
 				}
 
 				if($this->input->post('receiver_type') == "service"){
 					$user = $this->db->get_where('z_service',['id' => $this->input->post('receiver_id')])->row_array();
-					echo sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
+					sendChatPush($user['token'],"New Message",$this->input->post('msg'),$this->input->post('sender_id'),$this->input->post('receiver_id'),$this->input->post('sender_type'),$this->input->post('receiver_type'),$this->input->post('order_id'));
 				}
 			}			
 

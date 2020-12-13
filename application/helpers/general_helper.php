@@ -207,7 +207,7 @@ function sendChatPush($tokon,$title,$body,$sender,$reciver,$sender_type,$receive
     curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_VERBOSE, 0); 
-    return $result = curl_exec($ch);
+    $result = curl_exec($ch);
     curl_close($ch);
 }
 
