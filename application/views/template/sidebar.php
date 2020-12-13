@@ -215,6 +215,14 @@
                         </ul>
                     </li>
                 </ul>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["setting"])[0]; ?>">
+                        <a href="<?= base_url('setting') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-gear"></i></span>
+                            <span class="pcoded-mtext">Setting</span>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </nav>
         <div class="pcoded-content">
