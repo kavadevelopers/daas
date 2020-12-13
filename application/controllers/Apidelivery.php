@@ -298,13 +298,25 @@ class Apidelivery extends CI_Controller
 	public function getorders()
 	{
 		if($this->input->post('status') && $this->input->post('user_id')){
+			$this->db->select('*');
+			$this->db->order_by('id','desc');
 			if($this->input->post('status') == "ongoing"){
-				$where = ['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => ''];
+				$this->db->where('status','ongoing');
+				$this->db->where('df','');
+				$this->db->group_start()
+						->where('driver',$this->input->post('user_id'))
+						->or_where('driver2',$this->input->post('user_id'))
+					->group_end();
 			}
 			if($this->input->post('status') == "completed"){
-				$where = ['status' => "completed",'driver' => $this->input->post('user_id'),'df' => ''];
+				$this->db->where('status','completed');
+				$this->db->where('df','');
+				$this->db->group_start()
+						->where('driver',$this->input->post('user_id'))
+						->or_where('driver2',$this->input->post('user_id'))
+					->group_end();
 			}
-			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+			$list = $this->db->get('corder');
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
