@@ -2,8 +2,8 @@
 	$orderRow = get_order($order);
 ?>
 
-Hello
+Hello<br><br>
 
-New Order Placed : #<?= $orderRow['order_id'] ?>
+New Order Placed : #<?= $orderRow['order_id'] ?><br><br>
 
 Thankyou
