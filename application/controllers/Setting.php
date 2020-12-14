@@ -24,6 +24,12 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('support_email', 'Support Email','trim|required');
 		$this->form_validation->set_rules('support_mobile', 'Support Mobile','trim|required');
 
+		$this->form_validation->set_rules('admin_receive_email', 'Admin Email for Receive Order Details','trim|required');
+		$this->form_validation->set_rules('mail_host', 'SMTP Host','trim|required');
+		$this->form_validation->set_rules('mail_username', 'SMTP Username','trim|required');
+		$this->form_validation->set_rules('mail_pass', 'SMTP Password','trim|required');
+		$this->form_validation->set_rules('mail_port', 'SMTP Port','trim|required');
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['_title']	= 'Settings';
@@ -32,12 +38,17 @@ class Setting extends CI_Controller
 		else
 		{ 
 			$data = [
-				'name'				=> $this->input->post('company'),
-				'fserverkey'		=> $this->input->post('fserverkey'),
-				'razorpay_key'		=> $this->input->post('razorpay_key'),
-				'twofecturekey'		=> $this->input->post('twofecturekey'),
-				'support_email'		=> $this->input->post('support_email'),
-				'support_mobile'	=> $this->input->post('support_mobile'),
+				'name'						=> $this->input->post('company'),
+				'fserverkey'				=> $this->input->post('fserverkey'),
+				'razorpay_key'				=> $this->input->post('razorpay_key'),
+				'twofecturekey'				=> $this->input->post('twofecturekey'),
+				'support_email'				=> $this->input->post('support_email'),
+				'support_mobile'			=> $this->input->post('support_mobile'),
+				'admin_receive_email'		=> $this->input->post('admin_receive_email'),
+				'mail_host'					=> $this->input->post('mail_host'),
+				'mail_username'				=> $this->input->post('mail_username'),
+				'mail_pass'					=> $this->input->post('mail_pass'),
+				'mail_port'					=> $this->input->post('mail_port')
 			];
 
 			$this->db->where('id','1');

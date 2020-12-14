@@ -63,10 +63,49 @@
                             <?= form_error('twofecturekey') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Admin Email for Receive Order Details <span class="-req">*</span></label>
+                            <input name="admin_receive_email" type="text" class="form-control" placeholder="Admin Email for Receive Order Details" value="<?= set_value('admin_receive_email',get_setting()['admin_receive_email']); ?>" >
+                            <?= form_error('admin_receive_email') ?>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
-
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SMTP Host <span class="-req">*</span></label>
+                            <input name="mail_host" type="text" class="form-control" placeholder="" value="<?= set_value('mail_host',get_setting()['mail_host']); ?>" >
+                            <?= form_error('mail_host') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SMTP Username <span class="-req">*</span></label>
+                            <input name="mail_username" type="text" class="form-control" placeholder="" value="<?= set_value('mail_username',get_setting()['mail_username']); ?>" >
+                            <?= form_error('mail_username') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SMTP Password <span class="-req">*</span></label>
+                            <input name="mail_pass" type="text" class="form-control" placeholder="" value="<?= set_value('mail_pass',get_setting()['mail_pass']); ?>" >
+                            <?= form_error('mail_pass') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>SMTP Port <span class="-req">*</span></label>
+                            <input name="mail_port" type="text" class="form-control" placeholder="" value="<?= set_value('mail_port',get_setting()['mail_port']); ?>" >
+                            <?= form_error('mail_port') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card-footer text-right">
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-save"></i> Save
