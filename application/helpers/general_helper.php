@@ -71,6 +71,11 @@ function vt($time){
     return date('h:i A',strtotime($time));   
 }
 
+function getPretyDateTime($date)
+{
+    return date('d M Y h:i A',strtotime($date));
+}
+
 function rs()
 {
     return "₹ ";
@@ -146,6 +151,17 @@ function get_category($id){
     }
 }
 
+function _get_category($id){
+    $CI =& get_instance();
+    return $CI->db->get_where('business_categories',['id' => $id])->row_array();
+}
+
+function getServiceProviders()
+{
+    $CI =& get_instance();
+    return $CI->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
+}
+
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
@@ -209,6 +225,34 @@ function sendChatPush($tokon,$title,$body,$sender,$reciver,$sender_type,$receive
     curl_setopt($ch, CURLOPT_VERBOSE, 0); 
     $result = curl_exec($ch);
     curl_close($ch);
+}
+
+
+function sendEmail($to,$sub,$msg)
+{
+    $CI =& get_instance();
+    $CI->load->library('email');
+    $config = array(
+        'protocol'      => 'smtp',
+        'smtp_host' => get_setting()['mail_host'],
+        'smtp_port' => get_setting()['mail_port'],
+        'smtp_user' => get_setting()['mail_username'],
+        'smtp_pass' => get_setting()['mail_pass'],
+        'mailtype'      => 'html',
+        'charset'       => 'utf-8'
+    );
+    $CI->email->initialize($config);
+    $CI->email->set_mailtype("html");
+    $CI->email->set_newline("\r\n");
+    $CI->email->to($to);
+    $CI->email->from(get_setting()['mail_username']);
+    $CI->email->subject($sub);
+    $CI->email->message($msg);
+    if($CI->email->send()){
+        echo "ok";
+    }else{
+        echo $CI->email->print_debugger();
+    }
 }
 
 ?>

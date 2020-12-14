@@ -12,6 +12,34 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["orders"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-sort"></i></span>
+                            <span class="pcoded-mtext">Orders</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["new"])[0]; ?>">
+                                <a href="<?= base_url('orders/new') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">New</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["ongoing"])[0]; ?>">
+                                <a href="<?= base_url('orders/ongoing') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Ongoing</span>
+                                </a>
+                            </li>
+                            <!-- <li class="<?= menu(2,["rejected"])[0]; ?>">
+                                <a href="<?= base_url('orders/completed') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Completed</span>
+                                </a>
+                            </li> -->
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["ordersupport"])[0]; ?>">
                         <a href="<?= base_url('ordersupport') ?>">
                             <span class="pcoded-micon"><i class="fa fa-ticket"></i></span>

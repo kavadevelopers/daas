@@ -13,5 +13,10 @@ class Dashboard extends CI_Controller
 		$data['_title']		= "Dashboard";
 		$this->load->theme('dashboard',$data);
 	}
+
+	public function sendMail()
+	{
+		sendEmail('mehul9921@gmail.com',"Subject Test","My Message");
+	}
 }
 ?>
