@@ -494,7 +494,12 @@ class Apidelivery extends CI_Controller
 		if($this->input->post('userid') && $this->input->post('otp') && $this->input->post('token')){
 			$user = $this->db->get_where('z_delivery',['id' => $this->input->post('userid')])->row_array();
 			if($user && $user['loginotp'] == $this->input->post('otp')){
-				$this->db->where('id',$user['id'])->update('z_delivery',['token' => $this->input->post('token')]);
+				$deviceid = "android";
+				if($this->input->post('device')){
+					$deviceid = $this->input->post('device');
+				}
+				$this->db->where('id',$user['id'])->update('z_delivery',['token' => $this->input->post('token'),'deviceid' => $deviceid]);
+				$user = $this->db->get_where('z_delivery',['id' => $this->input->post('userid')])->row_array();
 				retJson(['_return' => true,'msg' => 'Login Successful.','data' => $user]);
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid OTP.']);

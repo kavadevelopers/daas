@@ -99,9 +99,20 @@ class Apicommon extends CI_Controller
 
 		if($this->input->post('type') && $this->input->post('userid')){
 			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			$service = $this->db->get_where('z_service',['id' => $this->input->post('userid')])->row_array();
+			$delivery = $this->db->get_where('z_delivery',['id' => $this->input->post('userid')])->row_array();
 			if($this->input->post('type') == "customer" && $user){
 				$data['subscription_status'] 	= checkSubscriptionExpiration($user['sub_expired_on']);
 				$data['sub_expired_on'] 		= $user['sub_expired_on'];
+				$data['token']					= $user['token'];
+			}
+
+			if($this->input->post('type') == "delivery" && $delivery){
+				$data['token']					= $delivery['token'];
+			}
+
+			if($this->input->post('type') == "service" && $service){
+				$data['token']					= $service['token'];
 			}
 		}
 
