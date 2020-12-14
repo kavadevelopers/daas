@@ -233,7 +233,7 @@ function sendEmail($to,$sub,$msg)
     $CI =& get_instance();
     $CI->load->library('email');
     $config = array(
-        'protocol'      => 'smtp',
+        'protocol'      => 'SMTP',
         'smtp_host' => get_setting()['mail_host'],
         'smtp_port' => get_setting()['mail_port'],
         'smtp_user' => get_setting()['mail_username'],
@@ -249,9 +249,9 @@ function sendEmail($to,$sub,$msg)
     $CI->email->subject($sub);
     $CI->email->message($msg);
     if($CI->email->send()){
-        echo "ok";
+        //echo "ok";
     }else{
-        echo $CI->email->print_debugger();
+        //echo $CI->email->print_debugger();
     }
 }
 
