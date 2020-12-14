@@ -6,6 +6,11 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
+	public function getPer()
+	{
+		echo 100 - (100 * 8 / 100);
+	}
+
 	public function testNot()
 	{
 		sendPush(

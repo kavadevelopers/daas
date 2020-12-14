@@ -88,16 +88,15 @@ function getFileExtension($filename){
 function getServicePrice($amount,$category)
 {
     $cutoff = get_category($category)['cutoff'];
-    $cutoffAmount = $amount - (($amount * $cutoff) / 100);
+    $cutoffAmount = $amount - ($amount * $cutoff / 100);
     return number_format((float)$cutoffAmount, 2, '.', '');
 }
 
 function getServiceCutOff($amount,$category)
 {
     $cutoff = get_category($category)['cutoff'];
-    $cutoffAmount = $amount - (($amount * $cutoff) / 100);
-    $fcutoffAmount = $amount - $cutoffAmount;
-    return number_format((float)$fcutoffAmount, 2, '.', '');
+    $cutoffAmount = ($amount * $cutoff / 100);
+    return number_format((float)$cutoffAmount, 2, '.', '');
 }
 
 function get_setting()
