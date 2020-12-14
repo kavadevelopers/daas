@@ -165,7 +165,12 @@ function getServiceProviders()
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
+    
     $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+    if($type == "order" && $type == "chat"){
+        $intentF = "OrderAct";
+    }
+    array_push($notification, 'click_action' => $intentF);
     $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
     $headers = array();
