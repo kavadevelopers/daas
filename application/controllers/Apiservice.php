@@ -437,7 +437,8 @@ class Apiservice extends CI_Controller
 				}
 				$single['images']			=	$images;
 
-				$single['price']			= getServicePrice($single['price'],$single['category']);
+				$single['originalprice']		= $single['price'];
+				$single['price']				= getServicePrice($single['price'],$single['category']);
 				$single['cutoffprice']			= getServiceCutOff($single['price'],$single['category']);
 
 				retJson(['_return' => true,'data' => $single]);				
@@ -475,7 +476,8 @@ class Apiservice extends CI_Controller
 				}
 				$nlist[$key]['images']			=	$images;
 
-				$nlist[$key]['price']			= getServicePrice($nlist[$key]['price'],$nlist[$key]['category']);
+				$nlist[$key]['originalprice']		= $nlist[$key]['price'];
+				$nlist[$key]['price']				= getServicePrice($nlist[$key]['price'],$nlist[$key]['category']);
 				$nlist[$key]['cutoffprice']			= getServiceCutOff($nlist[$key]['price'],$nlist[$key]['category']);
 			}
 
