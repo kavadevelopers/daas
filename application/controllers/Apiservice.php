@@ -436,6 +436,10 @@ class Apiservice extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$single['images']			=	$images;
+
+				$single['price']			= getServicePrice($single['price'],$single['category']);
+				$single['cutoffprice']			= getServiceCutOff($single['price'],$single['category']);
+
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
@@ -470,6 +474,9 @@ class Apiservice extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$nlist[$key]['images']			=	$images;
+
+				$nlist[$key]['price']			= getServicePrice($nlist[$key]['price'],$nlist[$key]['category']);
+				$nlist[$key]['cutoffprice']			= getServiceCutOff($nlist[$key]['price'],$nlist[$key]['category']);
 			}
 
 

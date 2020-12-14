@@ -85,6 +85,20 @@ function getFileExtension($filename){
     return pathinfo($filename, PATHINFO_EXTENSION);
 }
 
+function getServicePrice($amount,$category)
+{
+    $cutoff = get_category($category)['cutoff'];
+    $cutoffAmount = $amount - (($amount * $cutoff) / 100);
+    return $cutoffAmount;
+}
+
+function getServiceCutOff($amount,$category)
+{
+    $cutoff = get_category($category)['cutoff'];
+    $cutoffAmount = (($amount * $cutoff) / 100);
+    return $cutoffAmount;
+}
+
 function get_setting()
 {
 	$ci=& get_instance();
