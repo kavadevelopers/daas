@@ -89,14 +89,14 @@ function getServicePrice($amount,$category)
 {
     $cutoff = get_category($category)['cutoff'];
     $cutoffAmount = $amount - (($amount * $cutoff) / 100);
-    return $cutoffAmount;
+    return number_format((float)$cutoffAmount, 2, '.', '');
 }
 
 function getServiceCutOff($amount,$category)
 {
     $cutoff = get_category($category)['cutoff'];
-    $cutoffAmount = (($amount * $cutoff) / 100);
-    return $cutoffAmount;
+    $cutoffAmount = $amount - getServicePrice($amount,$category);
+    return number_format((float)$cutoffAmount, 2, '.', '');
 }
 
 function get_setting()
