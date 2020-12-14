@@ -822,7 +822,7 @@ class Apicustomer extends CI_Controller
 							retJson(['_return' => false,'msg' => 'Account is Blocked.']);	
 						}	
 					}else{
-						retJson(['_return' => false,'msg' => 'Mobile No. Not Varified.']);	
+						retJson(['_return' => false,'msg' => 'Mobile No. Not Verified.']);	
 					}
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. and Password Not Match.']);	
