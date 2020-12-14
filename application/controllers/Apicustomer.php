@@ -552,7 +552,7 @@ class Apicustomer extends CI_Controller
 
 
 				@sendEmail(
-					get_setting()['admin_receive_email'],
+					"mehul9921@gmail.com",
 					"Order Placed : #",
 					"Test"
 				);
