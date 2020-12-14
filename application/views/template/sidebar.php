@@ -16,7 +16,7 @@
                         <a href="javascript:void(0)">
                             <span class="pcoded-micon"><i class="fa fa-sort"></i></span>
                             <span class="pcoded-mtext">Orders</span>
-                         </a>   
+                        </a>   
                         <ul class="pcoded-submenu">
                             <li class="<?= menu(2,["new"])[0]; ?>">
                                 <a href="<?= base_url('orders/new') ?>">
@@ -30,12 +30,12 @@
                                     <span class="pcoded-mtext">Ongoing</span>
                                 </a>
                             </li>
-                            <!-- <li class="<?= menu(2,["rejected"])[0]; ?>">
+                            <li class="<?= menu(2,["completed"])[0]; ?>">
                                 <a href="<?= base_url('orders/completed') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-list"></i></span>
                                     <span class="pcoded-mtext">Completed</span>
                                 </a>
-                            </li> -->
+                            </li>
                         </ul>
                     </li>
                 </ul>

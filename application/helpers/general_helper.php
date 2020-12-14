@@ -166,7 +166,7 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
     $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
-    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
+    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high",'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';
