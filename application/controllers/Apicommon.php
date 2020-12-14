@@ -8,7 +8,7 @@ class Apicommon extends CI_Controller
 
 	public function testNot()
 	{
-		sendPushN(
+		sendPush(
 			[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 			"Order #".get_order($this->input->post('order_id'))['order_id'],
 			"Payment Received.",
