@@ -263,7 +263,7 @@ function sendEmail($to,$sub,$msg)
     }
 }
 
-public function getDeviceType($token)
+function getDeviceType($token)
 {
     $CI =& get_instance();
     $customer = $CI->db->get_where('z_customer',['token' => $token])->row_array();
