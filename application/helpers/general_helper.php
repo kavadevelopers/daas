@@ -165,32 +165,9 @@ function getServiceProviders()
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
-    $notification = array('alert' => ['title' => $title,'body' => $body],'sound' => 'default','badge' => '0');
-    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","aps" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
+    $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
-    $headers = array();
-    $headers[] = 'Content-Type: application/json';
-    $headers[] = 'Authorization: key='. $serverKey;
-    $ch = curl_init();
-    //pre_print($arrayToSend);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
-    curl_setopt($ch, CURLOPT_HTTPHEADER,$headers);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_VERBOSE, 0); 
-    $result = curl_exec($ch);
-    curl_close($ch);
-}
-
-function sendPushN($tokon,$title,$body,$type = '',$dy = ""){
-    $url = "https://fcm.googleapis.com/fcm/send";
-    $serverKey = get_setting()['fserverkey'];
-    $notification = array('notification' => ['title' => $title,'body' => $body],'sound' => 'default','badge' => '0');
-    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","aps" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
-    echo $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';
     $headers[] = 'Authorization: key='. $serverKey;
