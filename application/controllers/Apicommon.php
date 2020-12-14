@@ -8,7 +8,7 @@ class Apicommon extends CI_Controller
 
 	public function getPer()
 	{
-		echo 100 - (100 * 8 / 100);
+		echo getServicePrice(100,1).'-'.getServiceCutOff(100,1);
 	}
 
 	public function testNot()
