@@ -22,6 +22,7 @@
                                 <th class="text-center">#</th>
                                 <th>Customer</th>
                                 <th>Service Provider</th>
+                                <th>Driver</th>
                                 <th class="text-right">Price</th>
                                 <th class="text-center">Type</th>
                                 <th class="text-center">Category</th>
@@ -37,6 +38,10 @@
                                     <td class="text-center">#<?= $value['order_id'] ?></td>
                                     <th><?= get_customer($value['userid'])['fname'] ?> <?= get_customer($value['userid'])['lname'] ?></th>
                                     <th><?= get_service($value['service'])['fname'] ?> <?= get_service($value['service'])['lname'] ?></th>
+                                    <th>
+                                        <?= get_service($value['driver'])['fname'] ?> <?= get_service($value['driver'])['lname'] ?><br>
+                                        <?= get_service($value['drive2'])['fname'] ?> <?= get_service($value['drive2'])['lname'] ?>
+                                    </th>
                                     <td class="text-center"><?= rs().$value['price'] ?></td>
                                     <td class="text-center"><?= ucfirst($value['type']) ?></td>
                                     <td class="text-center"><?= _get_category($value['category'])['name'] ?></td>
