@@ -798,11 +798,13 @@ class Apicustomer extends CI_Controller
 				if($user['password'] === md5($this->input->post('password'))){
 					if($user['verified'] == "Verified"){
 						if($user['block'] == ""){
+
 							$deviceid = "android";
 							if($this->input->post('device')){
 								$deviceid = $this->input->post('device');
 							}
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token'),'deviceid' => $deviceid]);
+							$user = $this->db->get_where('z_customer',['id' => $user['id'])->row_array();
 							$user['image'] = base_url('uploads/user/').$user['image'];
 							$address = $this->db->get_where('address',['userid' => $user['id']])->row_array();
 							$ad = 0;
