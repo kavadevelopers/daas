@@ -733,7 +733,7 @@ class Apicustomer extends CI_Controller
 	public function logout()
 	{
 		if($this->input->post('userid')){
-			$this->db->where('id',$this->input->post('userid'))->update('z_customer',['token' => ""]);
+			$this->db->where('id',$this->input->post('userid'))->update('z_customer',['token' => "",'deviceid' => '']);
 			retJson(['_return' => true,'msg' => 'Logout Successful']);
 		}else{
 			retJson(['_return' => false,'msg' => '`userid` is Required']);
@@ -749,7 +749,11 @@ class Apicustomer extends CI_Controller
 				if($user['password'] === md5($this->input->post('password'))){
 					if($user['verified'] == "Verified"){
 						if($user['block'] == ""){
-							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token')]);
+							$deviceid = "android";
+							if($this->input->post('device')){
+								$deviceid = $this->input->post('device');
+							}
+							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token'),'deviceid' => $deviceid]);
 							$user['image'] = base_url('uploads/user/').$user['image'];
 							$address = $this->db->get_where('address',['userid' => $user['id']])->row_array();
 							$ad = 0;

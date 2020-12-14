@@ -165,13 +165,12 @@ function getServiceProviders()
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
-    
-    $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
-    if($type == "order" && $type == "chat"){
-        $intentF = "OrderDetailActivity";
-        $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0','click_action' => $intentF);
+    if(getDeviceType($tokon) == "ios"){
+        $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+        $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
+    }else{
+        $arrayToSend = array('registration_ids' => $tokon,"priority" => "high",'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     }
-    $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';
@@ -213,8 +212,12 @@ function sendOtp($mobile,$otp){
 function sendChatPush($tokon,$title,$body,$sender,$reciver,$sender_type,$receiver_type,$order_id){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
-    $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
-    $arrayToSend = array('registration_ids' => [$tokon],"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
+    if(getDeviceType($tokon) == "ios"){
+        $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
+        $arrayToSend = array('registration_ids' => [$tokon],"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
+    }else{
+        $arrayToSend = array('registration_ids' => [$tokon],"priority" => "high",'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
+    }
     $json = json_encode($arrayToSend);
     $headers = array();
     $headers[] = 'Content-Type: application/json';
@@ -257,6 +260,23 @@ function sendEmail($to,$sub,$msg)
         //echo "ok";
     }else{
         //echo $CI->email->print_debugger();
+    }
+}
+
+public function getDeviceType($token)
+{
+    $CI =& get_instance();
+    $customer = $CI->db->get_where('z_customer',['token' => $token])->row_array();
+    $delivery = $CI->db->get_where('z_delivery',['token' => $token])->row_array();
+    $service = $CI->db->get_where('z_service',['token' => $token])->row_array();
+    if($customer){
+        return $customer['deviceid'];
+    }else if($delivery){
+        return $delivery['deviceid'];
+    }else if($service){
+        return $service['deviceid'];
+    }else{
+        return "";
     }
 }
 
