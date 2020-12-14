@@ -804,7 +804,9 @@ class Apicustomer extends CI_Controller
 								$deviceid = $this->input->post('device');
 							}
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token'),'deviceid' => $deviceid]);
-							$user = $this->db->get_where('z_customer',['id' => $user['id'])->row_array();
+
+							$user = $this->db->get_where('z_customer',['id' => $user['id']])->row_array();
+
 							$user['image'] = base_url('uploads/user/').$user['image'];
 							$address = $this->db->get_where('address',['userid' => $user['id']])->row_array();
 							$ad = 0;
