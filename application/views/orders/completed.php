@@ -44,7 +44,7 @@
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('orders/delete/').$value['id'] ?>/ongoing" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                        <a href="<?= base_url('orders/delete/').$value['id'] ?>/completed" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

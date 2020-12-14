@@ -17,15 +17,22 @@ class Orders extends CI_Controller
 
 	public function ongoing()
 	{
-		$data['_title']		= "New Orders";
+		$data['_title']		= "Ongoing Orders";
 		$data['list']		= $this->db->get_where('corder',['status' => "ongoing",'df' => ''])->result_array();
 		$this->load->theme('orders/ongoing',$data);	
 	}	
 
 	public function completed()
 	{
-		
+		$data['_title']		= "Completed Orders";
+		$data['list']		= $this->db->get_where('corder',['status' => "completed",'df' => ''])->result_array();
+		$this->load->theme('orders/completed',$data);	
 	}	
+
+	public function view($order)
+	{
+		
+	}
 
 	public function assign_service()
 	{
