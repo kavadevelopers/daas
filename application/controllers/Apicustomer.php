@@ -6,6 +6,55 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function reject_alignment()
+	{
+		if($this->input->post('order_id') && $this->input->post('userid')){	
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Rejected By Customer','notes' => 'Rejected By Customer','status' => 'ongoing']
+			);
+
+			if($order['done_driver1'] == 'yes'){
+				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
+				if($driver){
+					$delivery_boy = "";
+					foreach ($driver as $dkey => $dvalue) {
+						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
+						if($dOrders == 0){
+							$delivery_boy = $dvalue['id'];
+							break;
+						}	
+					}
+					if ($delivery_boy == "") {
+						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
+					}
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver2' => $delivery_boy]
+					);				
+					sendPush(
+						[get_delivery($delivery_boy)['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Drop Item At Customer Location.",
+						"order",
+						$this->input->post('order_id')
+					);		
+				}
+			}else{
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
+
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `userid` are Required']);
+		}
+	}
+
 	public function extend_subscription()
 	{
 		if($this->input->post('userid') && $this->input->post('price') && $this->input->post('plan_name') && $this->input->post('month') && $this->input->post('tra_id')){	

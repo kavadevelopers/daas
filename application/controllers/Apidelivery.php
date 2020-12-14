@@ -21,6 +21,77 @@ class Apidelivery extends CI_Controller
 		}
 	}
 
+	public function rejected_item_dropped_at_customer()
+	{
+		if($this->input->post('order_id')){	
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Rejected Item Drop At Customer','notes' => 'Rejected Item Drop At Customer','status' => 'completed','cancel' => 'yes']
+			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Dropped By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Dropped At Customer','image' => $image]);
+		    	}
+			}
+
+			retJson(['_return' => true,'msg' => 'Status Changed.']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
+		}
+	}
+
+	public function rejected_item_picked_from_service()
+	{
+		if($this->input->post('order_id')){	
+
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['status_desc' => 'Rejected Item Picked From Service','notes' => 'Rejected Item Collected By Driver']
+			);
+
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Item Picked By Driver.",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			$config['upload_path'] = './uploads/order/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+			if(isset($_FILES ['image']) && $_FILES['image']['error'] == 0){
+				$image = microtime(true).".".pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $image;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('image')){
+		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Item Picked By Driver From Alignment','image' => $image]);
+		    	}
+			}
+
+			retJson(['_return' => true,'msg' => 'Status Changed.']);	
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
+		}
+	}
+
 	public function item_dropped_at_customer()
 	{
 		if($this->input->post('order_id')){	
