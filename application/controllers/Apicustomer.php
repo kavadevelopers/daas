@@ -554,7 +554,7 @@ class Apicustomer extends CI_Controller
 				@sendEmail(
 					get_setting()['admin_receive_email'],
 					"Order Placed : #".$order_id,
-					$this->load->view('mail/admin_new_order',['order' => $or_id],true)
+					"Test"
 				);
 				retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
 			}
