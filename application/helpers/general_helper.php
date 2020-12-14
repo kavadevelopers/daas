@@ -78,7 +78,7 @@ function getPretyDateTime($date)
 
 function rs()
 {
-    return "₹ ";
+    return "₹";
 }  
 
 function getFileExtension($filename){
