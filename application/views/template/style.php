@@ -5,7 +5,7 @@
 	/*th, td {
 	    white-space: normal;
 	}*/
-	.td-big{
+	.table-dt th,.table-dt td{
 		white-space: normal;
 	}
 	.notifyMy li{
