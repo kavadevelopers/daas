@@ -687,7 +687,12 @@ class Apicustomer extends CI_Controller
 				}
 
 				$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
-				$user['image'] = base_url('uploads/user/').$user['image'];
+				
+				if($user['image'] == "male.png" || $user['image'] == "female.png"){
+					$user['image'] = "";
+				}else{
+					$user['image'] = base_url('uploads/user/').$user['image'];
+				}
 				retJson(['_return' => true,'msg' => 'Profile Updated.','data' => $user]);
 			}else{
 				retJson(['_return' => false,'msg' => 'User Not Found']);
@@ -806,8 +811,11 @@ class Apicustomer extends CI_Controller
 							$this->db->where('id',$user['id'])->update('z_customer',['token' => $this->input->post('token'),'deviceid' => $deviceid]);
 
 							$user = $this->db->get_where('z_customer',['id' => $user['id']])->row_array();
-
-							$user['image'] = base_url('uploads/user/').$user['image'];
+							if($user['image'] == "male.png" || $user['image'] == "female.png"){
+								$user['image'] = "";
+							}else{
+								$user['image'] = base_url('uploads/user/').$user['image'];
+							}
 							$address = $this->db->get_where('address',['userid' => $user['id']])->row_array();
 							$ad = 0;
 							if($address){
@@ -816,6 +824,8 @@ class Apicustomer extends CI_Controller
 							$user['address']	= $ad;
 							$user['subscription_status'] 	= checkSubscriptionExpiration($user['sub_expired_on']);
 							$user['razorepay_key']  		= get_setting()['razorpay_key'];
+
+
 
 							retJson(['_return' => true,'msg' => 'Login Successful','data' => $user]);
 						}else{
