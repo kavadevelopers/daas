@@ -282,7 +282,7 @@ class Apiservice extends CI_Controller
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Price Added By Customer.",
+				"Price Added By Service Provider.",
 				"order",
 				$this->input->post('order_id')
 			);

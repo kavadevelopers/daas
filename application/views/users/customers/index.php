@@ -1,10 +1,15 @@
 <div class="page-header">
-    <div class="row align-items-end">
-        <div class="col-md-12">
-            <div class="page-header-title">
-                <div class="d-inline">
-                    <h4><?= $_title ?></h4>
+    <div class="align-items-end">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="page-header-title">
+                    <div class="d-inline">
+                        <h4><?= $_title ?></h4>
+                    </div>
                 </div>
+            </div>
+            <div class="col-md-6 text-right">
+                 <a href="<?= base_url('customers/add') ?>" class="btn btn-primary btn-mini"><i class="fa fa-plus"></i> Add</a>  
             </div>
         </div>
     </div>
@@ -46,7 +51,10 @@
                                     	<?php } ?>
                                     </td>
                                     <td class="text-center">
-                                        <a href="<?= base_url('customers/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
+                                        <a href="<?= base_url('customers/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="<?= base_url('customers/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

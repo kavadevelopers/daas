@@ -42,6 +42,9 @@
                                         <?php } ?>
                                     </td>
                                     <td class="text-center">
+                                        <a href="<?= base_url('delivery/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
                                         <a href="<?= base_url('delivery/areject/').$value['id'] ?>" class="btn btn-mini btn-warning btn-status">Reject</a>
                                         <a href="<?= base_url('delivery/adelete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
                                             <i class="fa fa-trash"></i>

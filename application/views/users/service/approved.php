@@ -50,6 +50,9 @@
                                         <?php } ?>
                                     </td>
                                     <td class="text-center">
+                                        <a href="<?= base_url('service/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
                                         <a href="<?= base_url('service/areject/').$value['id'] ?>" class="btn btn-mini btn-warning btn-status">Reject</a>
                                         <a href="<?= base_url('service/adelete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
                                             <i class="fa fa-trash"></i>

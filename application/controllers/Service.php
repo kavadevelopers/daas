@@ -15,6 +15,12 @@ class Service extends CI_Controller
 		$this->load->theme('users/service/new',$data);	
 	}
 
+	public function add()
+	{
+		$data['_title']		= "Service - Add";
+		$this->load->theme('users/service/add',$data);	
+	}
+
 	public function rejected()
 	{
 		$data['_title']		= "Service - Rejected";
@@ -27,6 +33,13 @@ class Service extends CI_Controller
 		$data['_title']		= "Service - Approved";
 		$data['list']		= $this->db->get_where('z_service',['df' => '','approved' => '1'])->result_array();
 		$this->load->theme('users/service/approved',$data);	
+	}
+
+	public function edit($id)
+	{
+		$data['_title']		= "Edit Service";
+		$data['user']		= get_service($id);
+		$this->load->theme('users/service/edit',$data);		
 	}
 
 	public function delete($id)
@@ -88,5 +101,98 @@ class Service extends CI_Controller
 		$this->db->where('id',$id)->update('z_service',['block' => $fg]);
 		$this->session->set_flashdata('msg', 'Service User Status Changed');
 		redirect(base_url('service/approved'));
+	}
+
+	public function save()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('fname', 'First Name','trim|required');
+		$this->form_validation->set_rules('lname', 'Last Name','trim|required');
+		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]|callback_check_mobile');
+		$this->form_validation->set_rules('gender', 'Gender','trim|required');
+		$this->form_validation->set_rules('address', 'Address','trim|required');
+		$this->form_validation->set_rules('category', 'Category','trim|required');
+		$this->form_validation->set_rules('business', 'Business','trim|required');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']		= "Service - Add";
+			$this->load->theme('users/service/add',$data);	
+		}
+		else
+		{ 
+			$data = [
+				'fname'			=> $this->input->post('fname'),
+				'lname'			=> $this->input->post('lname'),
+				'mobile'		=> $this->input->post('mobile'),
+				'address'		=> $this->input->post('address'),
+				'business'		=> $this->input->post('business'),
+				'category'		=> $this->input->post('category'),
+				'gender'		=> $this->input->post('gender'),
+				'deviceid'		=> '',
+				'token'			=> '',
+				'df'			=> '',
+				'block'			=> '',
+				'approved'		=> '0',
+				'registered_at'	=> date('Y-m-d H:i:s'),
+				'otp'			=> "",
+				'verified'		=> 'Verified'
+			];
+			$this->db->insert('z_service',$data);
+			$this->session->set_flashdata('msg', 'Service Provider Added');
+			redirect(base_url('service/new'));
+		}
+	}
+
+	public function update()
+	{
+		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
+		$this->form_validation->set_rules('fname', 'First Name','trim|required');
+		$this->form_validation->set_rules('lname', 'Last Name','trim|required');
+		$this->form_validation->set_rules('mobile', 'Mobile','trim|required|regex_match[/^[0-9]{10}$/]|min_length[10]|max_length[10]|callback_check_mobile_edit');
+		$this->form_validation->set_rules('gender', 'Gender','trim|required');
+		$this->form_validation->set_rules('address', 'Address','trim|required');
+		$this->form_validation->set_rules('category', 'Category','trim|required');
+		$this->form_validation->set_rules('business', 'Business','trim|required');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data['_title']		= "Service - Edit";
+			$data['user']		= get_service($this->input->post('id'));
+			$this->load->theme('users/service/edit',$data);	
+		}
+		else
+		{ 
+			$data = [
+				'fname'			=> $this->input->post('fname'),
+				'lname'			=> $this->input->post('lname'),
+				'mobile'		=> $this->input->post('mobile'),
+				'address'		=> $this->input->post('address'),
+				'business'		=> $this->input->post('business'),
+				'category'		=> $this->input->post('category'),
+				'gender'		=> $this->input->post('gender')
+			];
+			$this->db->where('id',$this->input->post('id'))->update('z_service',$data);
+			$this->session->set_flashdata('msg', 'Service Provider Updated');
+			redirect(base_url('service/approved'));
+		}
+	}
+
+	public function check_mobile()
+	{
+		if($this->db->get_where('z_service',['mobile' => $this->input->post('mobile'),'df' => ''])->row_array()){
+			$this->form_validation->set_message('check_mobile', 'Mobile Already Exists');	
+        	return false;
+		}else{
+			return true;
+		}
+	}
+
+	public function check_mobile_edit()
+	{
+		if($this->db->get_where('z_service',['mobile' => $this->input->post('mobile'),'id !=' => $this->input->post('id'),'df' => ''])->row_array()){
+			$this->form_validation->set_message('check_mobile_edit', 'Mobile Already Exists');
+        	return false;
+		}else{
+			return true;
+		}
 	}
 }
