@@ -243,6 +243,36 @@
                         </ul>
                     </li>
                 </ul>
+                <div class="pcoded-navigatio-lavel">Web</div>
+                <ul class="pcoded-item pcoded-left-item">
+                    <li class="pcoded-hasmenu <?= menu(1,["webcms"])[2]; ?>">
+                        <a href="javascript:void(0)">
+                            <span class="pcoded-micon"><i class="fa fa-wrench"></i></span>
+                            <span class="pcoded-mtext">CMS</span>
+                         </a>   
+                        <ul class="pcoded-submenu">
+                            <li class="<?= menu(2,["terms"])[0]; ?>">
+                                <a href="<?= base_url('webcms/terms') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Terms and Conditions</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["privacy"])[0]; ?>">
+                                <a href="<?= base_url('webcms/privacy') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Privacy Policy</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["refund"])[0]; ?>">
+                                <a href="<?= base_url('webcms/refund') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Refund and Cancellation</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="pcoded-navigatio-lavel">Others</div>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["setting"])[0]; ?>">
                         <a href="<?= base_url('setting') ?>">
