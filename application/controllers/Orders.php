@@ -34,6 +34,23 @@ class Orders extends CI_Controller
 		
 	}
 
+	public function assign_driver()
+	{
+		$this->db->where('id',$this->input->post('id'))->update('corder',
+			['driver' => $this->input->post('driver')]
+		);
+		sendPush(
+			[get_delivery($this->input->post('driver'))['token']],
+			"Order #".get_order($this->input->post('id'))['order_id'],
+			"New Delivery Request",
+			"order",
+			$this->input->post('id')
+		);
+
+		$this->session->set_flashdata('msg', 'Driver Assigned');
+		redirect(base_url('orders/ongoing'));	
+	}
+
 	public function assign_service()
 	{
 		$order = get_order($this->input->post('id'));

@@ -39,8 +39,8 @@
                                     <th><?= get_customer($value['userid'])['fname'] ?> <?= get_customer($value['userid'])['lname'] ?></th>
                                     <th><?= get_service($value['service'])['fname'] ?> <?= get_service($value['service'])['lname'] ?></th>
                                     <th>
-                                        <?= get_service($value['driver'])['fname'] ?> <?= get_service($value['driver'])['lname'] ?><br>
-                                        <?= get_service($value['driver2'])['fname'] ?> <?= get_service($value['driver2'])['lname'] ?>
+                                        <?= get_delivery($value['driver'])['fname'] ?> <?= get_delivery($value['driver'])['lname'] ?><br>
+                                        <?= get_delivery($value['driver2'])['fname'] ?> <?= get_delivery($value['driver2'])['lname'] ?>
                                     </th>
                                     <td class="text-center"><?= rs().$value['price'] ?></td>
                                     <td class="text-center"><?= ucfirst($value['type']) ?></td>

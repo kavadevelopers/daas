@@ -176,6 +176,12 @@ function getServiceProviders()
     return $CI->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 }
 
+function getDeliveryBoys()
+{
+    $CI =& get_instance();
+    return $CI->db->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
+}
+
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
