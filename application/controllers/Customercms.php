@@ -64,7 +64,7 @@ class Customercms extends CI_Controller
 
 	public function how()
 	{
-		$data['_title']		= "Customer App - How Does it Works ?";
+		$data['_title']		= "Customer App - Cancellation and Refund Policy ?";
 		$data['content']	= $this->db->get_where('pages',['id' => '4'])->row_array()['content'];
 		$this->load->theme('cms/customer/how',$data);
 	}
