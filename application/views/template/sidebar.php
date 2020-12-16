@@ -247,7 +247,7 @@
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="pcoded-hasmenu <?= menu(1,["webcms"])[2]; ?>">
                         <a href="javascript:void(0)">
-                            <span class="pcoded-micon"><i class="fa fa-wrench"></i></span>
+                            <span class="pcoded-micon"><i class="fa fa-globe fa-spin"></i></span>
                             <span class="pcoded-mtext">CMS</span>
                          </a>   
                         <ul class="pcoded-submenu">
@@ -276,7 +276,7 @@
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["setting"])[0]; ?>">
                         <a href="<?= base_url('setting') ?>">
-                            <span class="pcoded-micon"><i class="fa fa-gear"></i></span>
+                            <span class="pcoded-micon"><i class="fa fa-gear fa-spin"></i></span>
                             <span class="pcoded-mtext">Setting</span>
                         </a>
                     </li>
