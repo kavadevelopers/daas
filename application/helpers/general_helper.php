@@ -176,10 +176,48 @@ function getServiceProviders()
     return $CI->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 }
 
+function ordersCount($type)
+{
+    $CI =& get_instance();
+    return $CI->db->get_where('corder',['df' => '','status' => $type])->num_rows();
+}
+
+function userCount($table)
+{
+    $CI =& get_instance();
+    return $CI->db->get_where($table,['df' => ''])->num_rows();
+}
+
+function getServiceProvidersOnOff($type)
+{
+    $CI =& get_instance();
+    if($type == "online"){
+        return $CI->db->get_where('z_service',["verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
+    }else{
+        return $CI->db->get_where('z_service',["df" => '','active' => '0'])->num_rows();
+    }
+}
+
+function getDeliveryBoysOnOff($type)
+{
+    $CI =& get_instance();
+    if($type == "online"){
+        return $CI->db->get_where('z_delivery',["verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
+    }else{
+        return $CI->db->get_where('z_delivery',["df" => '','active' => '0'])->num_rows();
+    }
+}
+
 function getDeliveryBoys()
 {
     $CI =& get_instance();
     return $CI->db->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
+}
+
+function getRecentOrders()
+{
+    $CI =& get_instance();
+    return $CI->db->order_by('id','desc')->limit(10)->get_where('corder',['df' => ''])->result_array();
 }
 
 function sendPush($tokon,$title,$body,$type = '',$dy = ""){
