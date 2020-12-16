@@ -155,7 +155,7 @@
                                         <?php if(get_user()['user_type'] == '0'){ ?>
                                             <li style="padding: 0;">
                                                 <a href="<?= base_url('setting') ?>" class="dis-block" style="padding: 0.7em 20px;">
-                                                    <i class="feather icon-settings"></i> Settings
+                                                    <i class="fa fa-gear fa-spin"></i> Settings
                                                 </a>
                                             </li>
                                         <?php } ?>

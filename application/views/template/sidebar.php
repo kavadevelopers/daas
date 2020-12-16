@@ -248,7 +248,7 @@
                     <li class="pcoded-hasmenu <?= menu(1,["webcms"])[2]; ?>">
                         <a href="javascript:void(0)">
                             <span class="pcoded-micon"><i class="fa fa-globe fa-spin"></i></span>
-                            <span class="pcoded-mtext">CMS</span>
+                            <span class="pcoded-mtext">Web Cms</span>
                          </a>   
                         <ul class="pcoded-submenu">
                             <li class="<?= menu(2,["terms"])[0]; ?>">
