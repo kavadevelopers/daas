@@ -48,6 +48,14 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(2,["send_app_notification"])[0]; ?>">
+                        <a href="<?= base_url('other/send_app_notification') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-send"></i></span>
+                            <span class="pcoded-mtext">Send App Notifications</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
                     <li>
                         <a href="<?= base_url('login/logout') ?>">
                             <span class="pcoded-micon"><i class="feather icon-log-out"></i></span>
@@ -120,6 +128,7 @@
                         </ul>
                     </li>
                 </ul>
+
                 <div class="pcoded-navigatio-lavel">App CMS</div>
                 <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["business_category"])[0]; ?>">
