@@ -163,7 +163,7 @@
                             <li class="<?= menu(2,["how"])[0]; ?>">
                                 <a href="<?= base_url('customercms/how') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-list"></i></span>
-                                    <span class="pcoded-mtext">How Does it Work</span>
+                                    <span class="pcoded-mtext">Cancellation and Refund Policy</span>
                                 </a>
                             </li>
                             <li class="<?= menu(2,["faq"])[0]; ?>">
