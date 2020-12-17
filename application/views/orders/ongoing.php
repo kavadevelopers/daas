@@ -49,6 +49,9 @@
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
+                                        <a href="<?= base_url('orders/view/').$value['id'] ?>/ongoing" class="btn btn-success btn-mini" title="View">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
                                         <button class="btn btn-primary btn-mini" onclick="assignDriver('<?= $value["id"] ?>');" title="Assign Driver">
                                             <i class="fa fa-send"></i>
                                         </button>
