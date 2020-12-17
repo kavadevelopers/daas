@@ -78,7 +78,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Service Provider</label>
+                        <label>Driver</label>
                         <select class="form-control select2n" name="driver" required>
                             <option value="">-- Select --</option>
                             <?php foreach (getDeliveryBoys() as $skey => $svalue) { ?>
