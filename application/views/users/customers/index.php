@@ -24,10 +24,11 @@
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>
-                                <th class="text-center"></th>
+                                <!-- <th class="text-center"></th> -->
                                 <th>Name</th>
                                 <th class="text-center">Mobile</th>
                                 <th class="text-center">Gender</th>
+                                <th class="text-center">Subscription</th>
                                 <th class="text-center">Verified</th>
                                 <th class="text-center">Blocked</th>
                                 <th class="text-center">Action</th>
@@ -36,12 +37,15 @@
                         <tbody>
                             <?php foreach ($list as $key => $value) { ?>
                                 <tr>
-                                    <td class="text-center">
+                                    <!-- <td class="text-center">
                                         <img src="<?= base_url('uploads/user/').$value['image'] ?>" style="max-width: 50px;">
-                                    </td>
+                                    </td> -->
                                     <td><?= $value['fname'].' '.$value['lname'] ?></td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>
+                                    <td class="text-center">
+                                        <?= ucfirst(checkSubscriptionExpiration($value['sub_expired_on'])) ?>
+                                    </td>
                                     <td class="text-center"><?= $value['verified'] ?></td>
                                     <td class="text-center">
                                     	<?php if($value['block'] == "yes"){ ?>
