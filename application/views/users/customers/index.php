@@ -44,7 +44,7 @@
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>
                                     <td class="text-left">
-                                        <?= ucfirst(checkSubscriptionExpiration($value['sub_expired_on'])) ?>
+                                        <?= ucfirst(checkSubscriptionExpiration($value['sub_expired_on'])) ?><br>
                                         <b>Registered At</b>
                                         <p><?= vd($value['registered_at']) ?></p>
                                         <b>Expired On</b>
