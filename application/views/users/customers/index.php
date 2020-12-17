@@ -46,7 +46,7 @@
                                     <td class="text-left">
                                         <?= ucfirst(checkSubscriptionExpiration($value['sub_expired_on'])) ?>
                                         <b>Registered At</b>
-                                        <p><?= vd($value['created_at']) ?></p>
+                                        <p><?= vd($value['registered_at']) ?></p>
                                         <b>Expired On</b>
                                         <p><?= vd($value['sub_expired_on']) ?></p>
                                     </td>
