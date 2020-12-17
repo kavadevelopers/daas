@@ -22,25 +22,17 @@
     	<div class="col-md-6">
 		    <div class="card user-card-full">
 		        <div class="row m-l-0 m-r-0">
-		            <div class="col-sm-4 bg-c-lite-green user-profile">
-		                <div class="card-block text-center text-white">
-		                    <div class="m-b-25">
-		                        <img src="<?= base_url('uploads/user/').$customer['image'] ?>" class="img-radius" alt="User-Profile-Image">
-		                    </div>
-		                    <h6 class="f-w-600"><?= $customer['fname'].' '.$customer['lname'] ?></h6>
-		                </div>
-		            </div>
-		            <div class="col-sm-8">
+		            <div class="col-sm-12">
 		                <div class="card-block">
 		                    <h6 class="m-b-20 p-b-5 b-b-default f-w-600">Customer Information</h6>
 		                    <div class="row">
+		                    	<div class="col-sm-6">
+		                            <p class="m-b-10 f-w-600">Name</p>
+		                            <h6 class="text-muted f-w-400"><?= $customer['fname'].' '.$customer['lname'] ?></h6>
+		                        </div>
 		                        <div class="col-sm-6">
 		                            <p class="m-b-10 f-w-600">Mobile</p>
 		                            <h6 class="text-muted f-w-400"><?= $customer['mobile'] ?></h6>
-		                        </div>
-		                        <div class="col-sm-6">
-		                            <p class="m-b-10 f-w-600">Gender</p>
-		                            <h6 class="text-muted f-w-400"><?= $customer['gender'] ?></h6>
 		                        </div>
 		                    </div>
 		                    <div class="row">
@@ -52,11 +44,15 @@
 		                        </div>
 		                    </div>
 		                    <div class="row">
-		                        <div class="col-sm-12">
+		                        <div class="col-sm-6">
 		                            <p class="m-b-10 f-w-600">Subscription</p>
 		                            <h6 class="text-muted f-w-400">
 		                            	<?= ucfirst(checkSubscriptionExpiration($customer['sub_expired_on'])) ?>
 		                            </h6>
+		                        </div>
+		                        <div class="col-sm-6">
+		                            <p class="m-b-10 f-w-600">Gender</p>
+		                            <h6 class="text-muted f-w-400"><?= $customer['gender'] ?></h6>
 		                        </div>
 		                    </div>
 		                </div>
