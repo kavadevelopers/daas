@@ -42,7 +42,7 @@
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
-                                        <button class="btn btn-primary btn-mini" onclick="assignService('<?= $value["id"] ?>','<?= $value["type"] ?>');" title="Assign Service Provider">
+                                        <button class="btn btn-primary btn-mini assignServiceBtn" data-id="<?= $value["id"] ?>" data-category="<?= $value["category"] ?>" title="Assign Service Provider">
                                             <i class="fa fa-send"></i>
                                         </button>
                                         <a href="<?= base_url('orders/delete/').$value['id'] ?>/new" class="btn btn-danger btn-mini btn-delete" title="Delete">
@@ -72,7 +72,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Service Provider</label>
-                        <select class="form-control select2n" name="service" required>
+                        <select class="form-control select2n" name="service" id="modalServiceProvider" required>
                             <option value="">-- Select --</option>
                             <?php foreach (getServiceProviders() as $skey => $svalue) { ?>
                                 <option value="<?= $svalue['id'] ?>"><?= $svalue['fname'] ?> <?= $svalue['lname'] ?></option>
@@ -95,20 +95,42 @@
 </div>
 
 <script type="text/javascript">
-    function assignService(id,type){
-        $('.select2n').select2({
-            dropdownParent: $('#modalAssignService .modal-content')
+    serviceList = '<?= json_encode(getServiceProviders()) ?>';
+
+    $(function(){
+        $('.assignServiceBtn').click(function() {
+            _this = $(this);
+            _this.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+            _this.attr('disabled',true);
+            category    = _this.data('category');
+            id      = _this.data('id');
+            $('#modalServiceProvider').html('');
+            $.ajax({
+                type: "POST",
+                data : {id : id,category : category},
+                url : "<?= base_url('orders/get_service_provider'); ?>",
+                cache : false,
+                success: function(out)
+                {
+                    _this.html('<i class="fa fa-send"></i>');
+                    _this.removeAttr('disabled');
+                    $('#modalServiceProvider').html(out);
+                    $('.select2n').select2({
+                        dropdownParent: $('#modalAssignService .modal-content')
+                    });
+                    $('#modalAssignService').modal('show');
+                    $('#modalOrderId').val(id);
+                    if(type == 'delivery'){
+                        $('#modalPriceContainer').show(); 
+                        $('#modalPrice').val(''); 
+                        $('#modalPrice').prop('required',true); 
+                    }else{
+                        $('#modalPriceContainer').hide(); 
+                        $('#modalPrice').val(''); 
+                        $('#modalPrice').removeProp('required');
+                    }
+                }
+            });
         });
-        $('#modalAssignService').modal('show');
-        $('#modalOrderId').val(id);
-        if(type == 'delivery'){
-            $('#modalPriceContainer').show(); 
-            $('#modalPrice').val(''); 
-            $('#modalPrice').prop('required',true); 
-        }else{
-            $('#modalPriceContainer').hide(); 
-            $('#modalPrice').val(''); 
-            $('#modalPrice').removeProp('required');
-        }
-    }
+    });
 </script>

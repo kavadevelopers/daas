@@ -134,4 +134,15 @@ class Orders extends CI_Controller
 		$this->session->set_flashdata('msg', 'Order Deleted');
 		redirect(base_url('orders/').$route);
 	}
+
+	public function get_service_provider()
+	{
+    	$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1','category' => $this->input->post('category')])->result_array();
+
+    	$str = '<option value="">-- Select --</option>';
+    	foreach ($list as $key => $value) {
+    		$str .= '<option value="'.$value["id"].'">'.$value["fname"].' '.$value["lname"].'</option>';
+    	}
+    	echo $str;
+	}
 }
