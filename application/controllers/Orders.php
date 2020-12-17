@@ -29,9 +29,21 @@ class Orders extends CI_Controller
 		$this->load->theme('orders/completed',$data);	
 	}	
 
-	public function view($order)
+	public function view($order = false,$type = false)
 	{
-		
+		if($type && in_array($type, ['new','ongoing','completed'])){
+			if($order && get_order($order)){
+				$data['order']			= get_order($order);
+				$data['customer']		= get_customer($order);
+				$data['_title']			= "Order #".$data['order']['order_id'];
+				$data['type']			= $type;
+				$this->load->theme('orders/view',$data);	
+			}else{
+				redirect(base_url('orders/'.$type));	
+			}
+		}else{
+			redirect(base_url('orders/new'));	
+		}
 	}
 
 	public function assign_driver()

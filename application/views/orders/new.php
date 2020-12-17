@@ -42,6 +42,9 @@
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
+                                        <a href="<?= base_url('orders/view/').$value['id'] ?>/new" class="btn btn-success btn-mini" title="View">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
                                         <button class="btn btn-primary btn-mini assignServiceBtn" data-id="<?= $value["id"] ?>" data-type="<?= $value["type"] ?>" data-category="<?= $value["category"] ?>" title="Assign Service Provider">
                                             <i class="fa fa-send"></i>
                                         </button>
