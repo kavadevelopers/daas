@@ -38,7 +38,7 @@
                                     <th><?= get_service($value['service'])['fname'] ?> <?= get_service($value['service'])['lname'] ?></th>
                                     <td class="text-center"><?= ucfirst($value['type']) ?></td>
                                     <td class="text-center"><?= _get_category($value['category'])['name'] ?></td>
-                                    <td class="text-center"><?= nl2br($value['descr']) ?></td>
+                                    <td><?= nl2br($value['descr']) ?></td>
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
