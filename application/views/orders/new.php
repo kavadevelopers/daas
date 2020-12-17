@@ -95,8 +95,6 @@
 </div>
 
 <script type="text/javascript">
-    serviceList = '<?= json_encode(getServiceProviders()) ?>';
-
     $(function(){
         $('.assignServiceBtn').click(function() {
             _this = $(this);
