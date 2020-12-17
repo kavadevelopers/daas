@@ -43,8 +43,12 @@
                                     <td><?= $value['fname'].' '.$value['lname'] ?></td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>
-                                    <td class="text-center">
+                                    <td class="text-left">
                                         <?= ucfirst(checkSubscriptionExpiration($value['sub_expired_on'])) ?>
+                                        <b>Registered At</b>
+                                        <p><?= vd($value['created_at']) ?></p>
+                                        <b>Expired On</b>
+                                        <p><?= vd($value['sub_expired_on']) ?></p>
                                     </td>
                                     <td class="text-center"><?= $value['verified'] ?></td>
                                     <td class="text-center">
