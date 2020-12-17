@@ -47,7 +47,7 @@ class Apiservice extends CI_Controller
 
 	public function alignment_work_done()
 	{
-		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('price') > 0){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Work Done By Service Provicer','notes' => 'Work Done By Service Provider','price' => $this->input->post('price'),'return_order' => 'true']
 			);
@@ -135,7 +135,7 @@ class Apiservice extends CI_Controller
 
 	public function accept_alignment_with_price_time()
 	{
-		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time')){
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time') && $this->input->post('price') > 0){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
 			);
@@ -232,7 +232,7 @@ class Apiservice extends CI_Controller
 
 	public function service_work_done()
 	{
-		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')){
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price')  && $this->input->post('price') > 0){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Work Done Waiting for Payment','notes' => 'Work Done By Service Provider','price' => $this->input->post('price')]
 			);
@@ -274,7 +274,7 @@ class Apiservice extends CI_Controller
 
 	public function add_pricing_service_order()
 	{
-		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time')){
+		if($this->input->post('order_id') && $this->input->post('user_id') && $this->input->post('price') && $this->input->post('time') && $this->input->post('price') > 0){
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Price Added By Service Provider','notes' => 'Waiting For Price Confirmation','price' => $this->input->post('price'),'time' => $this->input->post('time')]
 			);
@@ -378,7 +378,7 @@ class Apiservice extends CI_Controller
 
 	public function accept_order()
 	{
-		if($this->input->post('order_id') && $this->input->post('price') && $this->input->post('user_id')){
+		if($this->input->post('order_id') && $this->input->post('price') && $this->input->post('user_id') && $this->input->post('price') > 0){
 			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id'),'status' => 'upcoming','df' => '','price' => '0.00'])->row_array();
 			if($order){
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
