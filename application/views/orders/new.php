@@ -21,6 +21,7 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th>Customer</th>
+                                <th>Service Provider</th>
                                 <th class="text-center">Type</th>
                                 <th class="text-center">Category</th>
                                 <th>Discription</th>
@@ -34,6 +35,7 @@
                                 <tr>
                                     <td class="text-center">#<?= $value['order_id'] ?></td>
                                     <th><?= get_customer($value['userid'])['fname'] ?> <?= get_customer($value['userid'])['lname'] ?></th>
+                                    <th><?= get_service($value['service'])['fname'] ?> <?= get_service($value['service'])['lname'] ?></th>
                                     <td class="text-center"><?= ucfirst($value['type']) ?></td>
                                     <td class="text-center"><?= _get_category($value['category'])['name'] ?></td>
                                     <td class="text-center"><?= nl2br($value['descr']) ?></td>
