@@ -79,15 +79,14 @@ function getPretyDateTime($date)
 function rs()
 {
     return "₹";
-}  
+} 
 
-function subStrr($str, $limit=100, $strip = false) {
-    $str = ($strip == true)?strip_tags($str):$str;
-    if (strlen ($str) > $limit) {
-        $str = substr ($str, 0, $limit - 3);
-        return (substr ($str, 0, strrpos ($str, ' ')).'...');
-    }
-    return trim($str);
+function subStrr($str, $length = 125, $append = '...') {
+    if (strlen($str) > $length) {
+        $delim = "~\n~";
+        $str = substr($str, 0, strpos(wordwrap($str, $length, $delim), $delim)) . $append;
+    } 
+    return $str;
 }
 
 function getFileExtension($filename){
