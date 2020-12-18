@@ -67,11 +67,25 @@ class Apicustomer extends CI_Controller
 				'created_at'	=> date('Y-m-d H:i:s')
 			];
 			$this->db->insert('extend_subscription',$data);
+			$subId = $this->db->insert_id();
 			$expireDate = date('Y-m-d',strtotime("+".$this->input->post('month')." month",strtotime(date('Y-m-d'))));
 			$data = [
 				'sub_expired_on'	=> $expireDate
 			];
 			$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
+
+
+			@addTransaction(
+				'subscription',
+				'razorpay',
+				$this->input->post('price'),
+				0.00,
+				0,
+				$this->input->post('userid'),
+				$subId,
+				date('Y-m-d')
+			);
+
 			retJson(['_return' => true,'msg' => 'Subscription Extended To '.vfd($expireDate)]);
 		}else{
 			retJson(['_return' => false,'msg' => '`userid`,`price`,`plan_name`,`tra_id` and `month` are Required']);
@@ -117,6 +131,17 @@ class Apicustomer extends CI_Controller
 				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 			);
 
+			$orderRow = get_order($this->input->post('order_id'));
+			@addTransaction(
+				'order',
+				$payment_gateway,
+				$orderRow['price'],
+				0.00,
+				0,
+				$this->input->post('userid'),
+				$this->input->post('order_id'),
+				date('Y-m-d')
+			);
 
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
@@ -200,6 +225,18 @@ class Apicustomer extends CI_Controller
 
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Paid By Customer','notes' => 'Order completed','status' => 'completed','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
+			);
+
+			$orderRow = get_order($this->input->post('order_id'));
+			@addTransaction(
+				'order',
+				$payment_gateway,
+				$orderRow['price'],
+				0.00,
+				0,
+				$this->input->post('userid'),
+				$this->input->post('order_id'),
+				date('Y-m-d')
 			);
 
 			sendPush(
@@ -333,6 +370,19 @@ class Apicustomer extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status' => 'ongoing','status_desc' => 'Accepted By Customer.','notes' => 'Packaging','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 				);
+
+				$orderRow = get_order($this->input->post('order_id'));
+				@addTransaction(
+					'order',
+					$payment_gateway,
+					$orderRow['price'],
+					0.00,
+					0,
+					$this->input->post('userid'),
+					$this->input->post('order_id'),
+					date('Y-m-d')
+				);
+				
 				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 				if($driver){
 

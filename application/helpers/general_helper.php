@@ -339,4 +339,21 @@ function getDeviceType($token)
     }
 }
 
+function addTransaction($type,$pay_type,$credit,$debit,$credit_by,$debit_by,$main,$date)
+{
+    $CI =& get_instance();
+    $data = [
+        'type'          => $type,
+        'pay_type'      => $pay_type,
+        'credit'        => $credit,
+        'debit'         => $debit,
+        'credit_by'     => $credit_by,
+        'debit_by'      => $debit_by,
+        'main'          => $main,
+        'tdate'         => $date
+    ];
+    $CI->db->insert('transactions',$data);
+    return $CI->db->insert_id();
+}
+
 ?>
