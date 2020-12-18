@@ -34,7 +34,7 @@ class Orders extends CI_Controller
 		if($type && in_array($type, ['new','ongoing','completed'])){
 			if($order && get_order($order)){
 				$data['order']			= get_order($order);
-				$data['customer']		= get_customer($order);
+				$data['customer']		= get_customer($order['customer']);
 				$data['_title']			= "Order #".$data['order']['order_id'];
 				$data['type']			= $type;
 				$this->load->theme('orders/view',$data);	
