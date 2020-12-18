@@ -29,6 +29,20 @@ class Orders extends CI_Controller
 		$this->load->theme('orders/completed',$data);	
 	}	
 
+	public function complete($id,$route)
+	{
+		$this->db->where('id',$id)->update('corder',['notes' => 'Order completed','status' => 'completed']);
+		$this->session->set_flashdata('msg', 'Order Completed');
+		redirect(base_url('orders/').$route);
+	}
+
+	public function cancel($id,$route)
+	{
+		$this->db->where('id',$id)->update('corder',['notes' => 'Order Canceled','status' => 'completed','cancel' => 'canceled']);
+		$this->session->set_flashdata('msg', 'Order Canceled');
+		redirect(base_url('orders/').$route);
+	}
+
 	public function view($order = false,$type = false)
 	{
 		if($type && in_array($type, ['new','ongoing','completed'])){

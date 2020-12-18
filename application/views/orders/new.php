@@ -45,6 +45,12 @@
                                         <a href="<?= base_url('orders/view/').$value['id'] ?>/new" class="btn btn-success btn-mini" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a>
+                                        <a href="<?= base_url('orders/complete/').$value['id'] ?>/new" class="btn btn-success btn-mini" title="Complete Order" onclick="return confirm('Are you sure want to Complete Order ?')">
+                                            <i class="fa fa-check"></i>
+                                        </a>
+                                        <a href="<?= base_url('orders/cancel/').$value['id'] ?>/new" class="btn btn-warning btn-mini" title="Cancel Order" onclick="return confirm('Are you sure want to Cancel Order ?')">
+                                            <i class="fa fa-times"></i>
+                                        </a>
                                         <button class="btn btn-primary btn-mini assignServiceBtn" data-id="<?= $value["id"] ?>" data-type="<?= $value["type"] ?>" data-category="<?= $value["category"] ?>" title="Assign Service Provider">
                                             <i class="fa fa-send"></i>
                                         </button>
