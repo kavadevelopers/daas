@@ -45,7 +45,7 @@
                                     <td class="text-center"><?= rs().$value['price'] ?></td>
                                     <td class="text-center"><?= ucfirst($value['type']) ?></td>
                                     <td class="text-center"><?= _get_category($value['category'])['name'] ?></td>
-                                    <td><?= nl2br($value['descr']) ?></td>
+                                    <td><?= subStrr($value['descr'],25) ?></td>
                                     <td><?= $value['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($value['created_at']) ?></td>
                                     <td class="text-center">
