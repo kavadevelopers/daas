@@ -149,7 +149,7 @@
                                     <th><?= get_customer($newOrdersListvalue['userid'])['fname'] ?> <?= get_customer($newOrdersListvalue['userid'])['lname'] ?></th>
                                     <td class="text-center"><?= ucfirst($newOrdersListvalue['type']) ?></td>
                                     <td class="text-center"><?= _get_category($newOrdersListvalue['category'])['name'] ?></td>
-                                    <td><?= subStrr($value['descr'],25) ?></td>
+                                    <td><?= subStrr($newOrdersListvalue['descr'],25) ?></td>
                                     <td><?= $newOrdersListvalue['notes'] ?></td>
                                     <td class="text-center"><?= getPretyDateTime($newOrdersListvalue['created_at']) ?></td>
                                 </tr>
