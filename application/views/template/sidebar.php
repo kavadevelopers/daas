@@ -40,6 +40,14 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["subscriptions"])[0]; ?>">
+                        <a href="<?= base_url('subscriptions') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-repeat"></i></span>
+                            <span class="pcoded-mtext">Subscriptions</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
                     <li class="<?= menu(1,["ordersupport"])[0]; ?>">
                         <a href="<?= base_url('ordersupport') ?>">
                             <span class="pcoded-micon"><i class="fa fa-ticket"></i></span>
