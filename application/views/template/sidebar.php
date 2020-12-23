@@ -99,6 +99,18 @@
                                     <span class="pcoded-mtext">Approved</span>
                                 </a>
                             </li>
+                            <li class="<?= menu(2,["online"])[0]; ?>">
+                                <a href="<?= base_url('delivery/online') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Online</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["offline"])[0]; ?>">
+                                <a href="<?= base_url('delivery/offline') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Offline</span>
+                                </a>
+                            </li>
                             <li class="<?= menu(2,["rejected"])[0]; ?>">
                                 <a href="<?= base_url('delivery/rejected') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-list"></i></span>
@@ -125,6 +137,18 @@
                                 <a href="<?= base_url('service/approved') ?>">
                                     <span class="pcoded-micon"><i class="fa fa-list"></i></span>
                                     <span class="pcoded-mtext">Approved</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["online"])[0]; ?>">
+                                <a href="<?= base_url('service/online') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Online</span>
+                                </a>
+                            </li>
+                            <li class="<?= menu(2,["offline"])[0]; ?>">
+                                <a href="<?= base_url('service/offline') ?>">
+                                    <span class="pcoded-micon"><i class="fa fa-list"></i></span>
+                                    <span class="pcoded-mtext">Offline</span>
                                 </a>
                             </li>
                             <li class="<?= menu(2,["rejected"])[0]; ?>">

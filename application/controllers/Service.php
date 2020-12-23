@@ -35,6 +35,20 @@ class Service extends CI_Controller
 		$this->load->theme('users/service/approved',$data);	
 	}
 
+	public function online()
+	{
+		$data['_title']		= "Service - Online";
+		$data['list']		= $this->db->get_where('z_service',['block' => '','active' => '1','token !=' => '','df' => ''])->result_array();
+		$this->load->theme('users/service/online',$data);	
+	}
+
+	public function offline()
+	{
+		$data['_title']		= "Service - Offline";
+		$data['list']		= $this->db->get_where('z_service',['block' => '','active' => '0','df' => ''])->result_array();
+		$this->load->theme('users/service/online',$data);	
+	}
+
 	public function edit($id)
 	{
 		$data['_title']		= "Edit Service";

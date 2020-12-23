@@ -52,6 +52,9 @@
                                         <a href="<?= base_url('orders/view/').$value['id'] ?>/ongoing" class="btn btn-success btn-mini" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a>
+                                        <button class="btn btn-secondary btn-mini" title="Edit Price" onclick="changePrice('<?= $value["id"] ?>','ongoing','<?= $value["price"]  ?>')">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
                                         <a href="<?= base_url('orders/complete/').$value['id'] ?>/ongoing" class="btn btn-info btn-mini" title="Complete Order" onclick="return confirm('Are you sure want to Complete Order ?')">
                                             <i class="fa fa-check"></i>
                                         </a>
@@ -106,6 +109,33 @@
     </form>
 </div>
 
+<div class="modal fade" id="modalChangePrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <form method="post" action="<?= base_url('orders/update_price') ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Change Amount</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <input type="text" name="price" id="priceModal" class="form-control decimal-num" placeholder="Amount">
+                    </div>
+                    <input type="hidden" name="id" id="modalEditOrderId">
+                    <input type="hidden" name="type" id="modalEditOrderType">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <script type="text/javascript">
     function assignDriver(id,type){
         $('.select2n').select2({
@@ -113,5 +143,12 @@
         });
         $('#modalassignDriver').modal('show');
         $('#modalOrderId').val(id);
+    }
+
+    function changePrice(id,type,price){
+        $('#modalEditOrderId').val(id);
+        $('#modalEditOrderType').val(type);
+        $('#priceModal').val(price);
+        $('#modalChangePrice').modal('show');
     }
 </script>

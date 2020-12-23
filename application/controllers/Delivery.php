@@ -35,6 +35,20 @@ class Delivery extends CI_Controller
 		$this->load->theme('users/delivery/approved',$data);	
 	}
 
+	public function online()
+	{
+		$data['_title']		= "Delivery - Online";
+		$data['list']		= $this->db->get_where('z_delivery',['block' => '','active' => '1','token !=' => '','df' => ''])->result_array();
+		$this->load->theme('users/delivery/online',$data);	
+	}
+
+	public function offline()
+	{
+		$data['_title']		= "Delivery - Offline";
+		$data['list']		= $this->db->get_where('z_delivery',['block' => '','active' => '0','df' => ''])->result_array();
+		$this->load->theme('users/delivery/online',$data);	
+	}
+
 	public function edit($id)
 	{
 		$data['_title']		= "Edit Delivery";

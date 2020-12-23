@@ -46,6 +46,19 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label>Add Shop Open Time Format-"hh:mm:ss" 24 hour format<span class="-req">*</span></label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input name="from" type="text" class="form-control" value="<?= set_value('from'); ?>" placeholder="From format-hh:mm:ss" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input name="to" type="text" class="form-control" value="<?= set_value('to'); ?>" placeholder="To format-hh:mm:ss" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label>Thumbnail <span class="-req">*</span></label>
                                     <input name="image" type="file" class="form-control" onchange="readFileImage(this)" value="<?= set_value('image'); ?>" required>
                                     <?= form_error('image') ?>
@@ -93,6 +106,19 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
+                                    <label>Add Shop Open Time Format-"hh:mm:ss" 24 hour format<span class="-req">*</span></label>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input name="from" type="text" class="form-control" value="<?= set_value('from',$single['start']); ?>" placeholder="From format-hh:mm:ss" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input name="to" type="text" class="form-control" value="<?= set_value('to',$single['end']); ?>" placeholder="To format-hh:mm:ss" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <label>Thumbnail</label>
                                     <input name="image" type="file" class="form-control" onchange="readFileImage(this)" value="<?= set_value('image'); ?>" >
                                     <?= form_error('image') ?>
@@ -127,6 +153,7 @@
                                 <th>Name</th>
                                 <th class="text-center">Type</th>
                                 <th class="text-center">Cutoff</th>
+                                <th class="text-center">Shop Timing</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -139,6 +166,7 @@
                                     <td><?= $value['name'] ?></td>
                                     <td class="text-center"><?= ucfirst($value['type'])  ?></td>
                                     <td class="text-center"><?= $value['cutoff']  ?>%</td>
+                                    <td class="text-center"><?= $value['start']  ?> to <?= $value['end']  ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('business_category/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>

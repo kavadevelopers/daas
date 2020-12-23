@@ -38,6 +38,8 @@ class Business_category extends CI_Controller
 			'name'		=> $this->input->post('name'),
 			'type'		=> $this->input->post('type'),
 			'cutoff'	=> $this->input->post('cutoff'),
+			'start'		=> date('H:i:s',strtotime($this->input->post('from'))),
+			'end'		=> date('H:i:s',strtotime($this->input->post('to'))),
 			'image'		=> $file_name
 		];
 		$this->db->insert('business_categories',$data);
@@ -60,7 +62,9 @@ class Business_category extends CI_Controller
 		$data = [
 			'name'		=> $this->input->post('name'),
 			'type'		=> $this->input->post('type'),
-			'cutoff'	=> $this->input->post('cutoff')
+			'cutoff'	=> $this->input->post('cutoff'),
+			'start'		=> date('H:i:s',strtotime($this->input->post('from'))),
+			'end'		=> date('H:i:s',strtotime($this->input->post('to')))
 		];
 		$this->db->where('id',$this->input->post('id'))->update('business_categories',$data);
 

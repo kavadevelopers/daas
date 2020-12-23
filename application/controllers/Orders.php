@@ -77,6 +77,16 @@ class Orders extends CI_Controller
 		redirect(base_url('orders/ongoing'));	
 	}
 
+	public function update_price()
+	{
+		$this->db->where('id',$this->input->post('id'))->update('corder',
+			['price' => $this->input->post('price')]
+		);
+
+		$this->session->set_flashdata('msg', 'Amount Changed');
+		redirect(base_url('orders/'.$this->input->post('type')));	
+	}
+
 	public function assign_service()
 	{
 		$order = get_order($this->input->post('id'));
