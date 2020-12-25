@@ -66,7 +66,7 @@ class Apicommon extends CI_Controller
 	{
 		$where = ['df' => ''];
 		if($this->input->post('type')){
-			$where = ['df' => '','type' => $this->input->post('type')];
+			$where = ['df' => '','type' => $this->input->post('type'),'start <=' => date('H:i:s'),'end >=' => date('H:i:s')];
 		}
 		$query = $this->db->get_where('business_categories',$where);
 		$list = $query->result_array();

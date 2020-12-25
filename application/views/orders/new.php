@@ -45,9 +45,9 @@
                                         <a href="<?= base_url('orders/view/').$value['id'] ?>/new" class="btn btn-success btn-mini" title="View">
                                             <i class="fa fa-eye"></i>
                                         </a>
-                                        <!-- <button class="btn btn-secondary btn-mini" title="Edit Price" onclick="changePrice('<?= $value["id"] ?>','new','<?= $value["price"]  ?>')">
+                                        <button class="btn btn-secondary btn-mini" title="Edit Price" onclick="changePrice('<?= $value["id"] ?>','new','<?= $value["price"]  ?>')">
                                             <i class="fa fa-pencil"></i>
-                                        </button> -->
+                                        </button>
                                         <a href="<?= base_url('orders/complete/').$value['id'] ?>/new" class="btn btn-info btn-mini" title="Complete Order" onclick="return confirm('Are you sure want to Complete Order ?')">
                                             <i class="fa fa-check"></i>
                                         </a>
