@@ -33,7 +33,7 @@
                                         <option value="supplier">Supplier</option>
                                         <option value="service">Service</option>
                                         <option value="alignment">Alignment</option>
-                                        <option value="outpartner">Our Partner</option>
+                                        <option value="ourpartner">Our Partner</option>
                                     </select>
                                     <?= form_error('type') ?>
                                 </div>
@@ -94,7 +94,7 @@
                                         <option value="supplier" <?= $single['type'] == "supplier"?'selected':''; ?>>Supplier</option>
                                         <option value="service" <?= $single['type'] == "service"?'selected':''; ?>>Service</option>
                                         <option value="alignment" <?= $single['type'] == "alignment"?'selected':''; ?>>Alignment</option>
-                                        <option value="alignment" <?= $single['type'] == "outpartner"?'selected':''; ?>>Our Partner</option>
+                                        <option value="ourpartner" <?= $single['type'] == "ourpartner"?'selected':''; ?>>Our Partner</option>
                                     </select>
                                     <?= form_error('type') ?>
                                 </div>
