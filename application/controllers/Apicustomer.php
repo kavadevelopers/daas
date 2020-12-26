@@ -6,6 +6,29 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function order_review()
+	{
+		if($this->input->post('userid') && $this->input->post('orderid') && $this->input->post('rating')){
+			$desc = "";
+			if($this->input->post('description')){
+				$desc = $this->input->post('description');
+			}
+			$data = [
+				'userid'		=> $this->input->post('description'),
+				'orderid'		=> $this->input->post('orderid'),
+				'rating'		=> $this->input->post('rating'),
+				'description'	=> $desc,
+				'created_at'	=> date('Y-m-d H:i:s')
+			];
+			$this->db->insert('corder_review',$data);
+			$this->db->where('id',$this->input->post('orderid'))->update('corder',['rating' => '1']);
+			retJson(['_return' => true,'msg' => 'Review has been submitted']);
+
+		}else{
+			retJson(['_return' => false,'msg' => '`userid`,`orderid` and `rating` are Required. `description`(optional)']);
+		}
+	}
+
 	public function reject_alignment()
 	{
 		if($this->input->post('order_id') && $this->input->post('userid')){	
@@ -450,6 +473,7 @@ class Apicustomer extends CI_Controller
 			if($single){
 				$customer = $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $single['userid']])->row_array();
+				$reviews = $this->db->get_where('corder_review',['orderid' => $single['id']])->row_array();
 				$single['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$single['address']	= $address;
 				$images = $this->db->get_where('corder_images',['order_id' => $single['id']])->result_array();
@@ -457,6 +481,7 @@ class Apicustomer extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$single['images']			=	$images;
+				$single['review']			=	$reviews;
 
 				$service = $this->db->get_where('z_service',['id' => $single['service']])->row_array();
 				$single['service_id']				=	$single['service'];
@@ -497,6 +522,7 @@ class Apicustomer extends CI_Controller
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
 				$service = $this->db->get_where('z_service',['id' => $value['service']])->row_array();
 				$address = $this->db->get_where('address',['userid' => $value['userid']])->row_array();
+				$reviews = $this->db->get_where('corder_review',['orderid' => $value['id']])->row_array();
 				$images = $this->db->get_where('corder_images',['order_id' => $value['id']])->result_array();
 				$nlist[$key]['customer_name'] = $customer['fname'].' '.$customer['lname'];
 				$nlist[$key]['address']		  = $address;
@@ -509,6 +535,7 @@ class Apicustomer extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$nlist[$key]['images']			=	$images;
+				$nlist[$key]['review']			=	$reviews;
 			}
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
