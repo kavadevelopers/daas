@@ -33,6 +33,7 @@
                                         <option value="supplier">Supplier</option>
                                         <option value="service">Service</option>
                                         <option value="alignment">Alignment</option>
+                                        <option value="restaurant">Restaurant</option>
                                     </select>
                                     <?= form_error('type') ?>
                                 </div>
