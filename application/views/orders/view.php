@@ -16,6 +16,7 @@
 </div>
 <?php $address = $this->db->get_where('address',['userid' => $customer['id']])->row_array(); ?>
 <?php $cus_images = $this->db->get_where('corder_images',['order_id' => $order['id']])->result_array(); ?>
+<?php $rating = $this->db->get_where('corder_review',['orderid' => $order['id']])->row_array(); ?>
 <?php $dri_images = $this->db->get_where('corder_delivery_images',['order_id' => $order['id']])->result_array(); ?>
 <div class="page-body">
     <div class="row">
@@ -55,6 +56,65 @@
 		                            <h6 class="text-muted f-w-400"><?= $customer['gender'] ?></h6>
 		                        </div>
 		                    </div>
+		                    <?php if($rating){ ?>
+			                    <div class="row">
+			                        <div class="col-sm-12">
+			                            <p class="m-b-10 f-w-600">Customer Ratings</p>
+			                            <div class="row">
+			                            	<table style="width: 100%;">
+			                            		<tr>
+			                            			<td class="text-center" style="width:33.33%;">
+			                            				<?php if($rating['rating'] == 1.00){ ?>
+			                            					<img src="<?= base_url('asset/images/review/1.png') ?>" style="width:70px;">		
+			                            				<?php }else{ ?>
+			                            					<img src="<?= base_url('asset/images/review/11.png') ?>" style="width:50px;">		
+			                            				<?php } ?>
+			                            			</td>
+			                            			<td class="text-center" style="width:33.33%;">
+			                            				<?php if($rating['rating'] == 2.00){ ?>
+			                            					<img src="<?= base_url('asset/images/review/2.png') ?>" style="width:70px;">		
+			                            				<?php }else{ ?>
+			                            					<img src="<?= base_url('asset/images/review/22.png') ?>" style="width:50px;">		
+			                            				<?php } ?>	
+			                            			</td>
+			                            			<td class="text-center" style="width:33.33%;">
+			                            				<?php if($rating['rating'] == 3.00){ ?>
+			                            					<img src="<?= base_url('asset/images/review/3.png') ?>" style="width:70px;">		
+			                            				<?php }else{ ?>
+			                            					<img src="<?= base_url('asset/images/review/33.png') ?>" style="width:50px;">		
+			                            				<?php } ?>		
+			                            			</td>
+			                            		</tr>
+			                            		<tr>
+			                            			<?php if($rating['rating'] == 1.00){ ?>
+		                            					<th class="text-center">Disappointed</th>
+		                            				<?php }else{ ?>
+		                            					<td class="text-center">Disappointed</td>
+		                            				<?php } ?>
+		                            				<?php if($rating['rating'] == 2.00){ ?>
+		                            					<th class="text-center">Happy</th>
+		                            				<?php }else{ ?>
+		                            					<td class="text-center">Happy</td>
+		                            				<?php } ?>
+		                            				<?php if($rating['rating'] == 3.00){ ?>
+		                            					<th class="text-center">Delighted</th>
+		                            				<?php }else{ ?>
+		                            					<td class="text-center">Delighted</td>
+		                            				<?php } ?>
+			                            		</tr>
+			                            	</table>
+			                            </div>
+			                        </div>
+			                    </div>
+			                    <div class="row">
+			                        <div class="col-sm-12">
+			                            <p class="m-b-10 f-w-600">Rating Description</p>
+			                            <h6 class="text-muted f-w-400">
+			                            	<?= nl2br($rating['description']) ?>
+			                            </h6>
+			                        </div>
+			                    </div>
+			                <?php } ?>
 		                </div>
 		            </div>
 		        </div>
