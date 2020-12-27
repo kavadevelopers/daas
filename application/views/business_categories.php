@@ -28,7 +28,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Type <span class="-req">*</span></label>
-                                    <select class="form-control" name="type" required>
+                                    <select class="form-control" name="type" id="typeCate" required>
                                         <option value="">-- Select --</option>
                                         <option value="supplier">Supplier</option>
                                         <option value="service">Service</option>
@@ -65,6 +65,13 @@
                                     <?= form_error('image') ?>
                                 </div>
                             </div> 
+                            <div class="col-md-12" style="display: none;" id="containerMenu">
+                                <div class="form-group">
+                                    <label>Menu <span class="-req">*</span></label>
+                                    <input name="menu" type="file" class="form-control" onchange="pdfImageAllowed(this)" value="<?= set_value('menu'); ?>" id="menuFile">
+                                    <?= form_error('menu') ?>
+                                </div>
+                            </div> 
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-success">
@@ -89,7 +96,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Type <span class="-req">*</span></label>
-                                    <select class="form-control" name="type" required>
+                                    <select class="form-control" name="type" id="typeCate" required>
                                         <option value="">-- Select --</option>
                                         <option value="supplier" <?= $single['type'] == "supplier"?'selected':''; ?>>Supplier</option>
                                         <option value="service" <?= $single['type'] == "service"?'selected':''; ?>>Service</option>
@@ -128,7 +135,17 @@
                             </div>
                             <div class="col-md-12 text-center">
                                 <img src="<?= getCategoryThumb($single['image']) ?>" style="max-width: 50px;">
-                            </div>      
+                            </div>
+                            <div class="col-md-12" style="display: none;" id="containerMenu">
+                                <div class="form-group">
+                                    <label>Menu</label>
+                                    <input name="menu" type="file" class="form-control" onchange="pdfImageAllowed(this)" value="<?= set_value('menu'); ?>" id="menuFile">
+                                    <?= form_error('menu') ?>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <a href="<?= getCategoryThumb($single['menu']) ?>" download>Download File</a>
+                                </div>
+                            </div>       
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('business_category') ?>" class="btn btn-danger">
@@ -186,3 +203,24 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        $('#typeCate').change(function() {
+            if($(this).val() == "ourpartner"){
+                $('#containerMenu').show();
+                $('#menuFile').attr('required','required');
+            }else{
+                $('#containerMenu').hide();
+                $('#menuFile').removeAttr('required');
+            }
+        });
+        if($('#typeCate').val() == "ourpartner"){
+            $('#containerMenu').show();
+            $('#menuFile').attr('required','required');
+        }else{
+            $('#containerMenu').hide();
+            $('#menuFile').removeAttr('required');
+        }
+    })
+</script>

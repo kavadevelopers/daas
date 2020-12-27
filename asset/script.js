@@ -189,6 +189,31 @@ function readFile(input) {
     }
 }
 
+function pdfImageAllowed(input) {
+    if (input.files && input.files[0]) {
+        
+        var FileSize = input.files[0].size / 1024 / 1024; // in MB
+        var extension = input.files[0].name.substring(input.files[0].name.lastIndexOf('.')+1);
+        
+        if (FileSize > 2) {
+            alert("Maxiumum File Size Is 2 Mb.");
+            input.value = '';
+            return false;
+        }
+        else{
+            if (extension == 'jpg' || extension == 'png' || extension == 'jpeg' || extension == 'pdf') {
+                
+            }
+            else
+            {
+                alert("Only Allowed '.jpg' OR '.png' OR '.jpeg' OR '.docx' OR '.pdf' OR '.csv' OR '.xlsx' Extension ");
+                input.value = '';
+                return false;
+            }
+        }
+    }
+}
+
 function excelAlowed(input) {
     if (input.files && input.files[0]) {
         

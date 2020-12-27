@@ -34,13 +34,33 @@ class Business_category extends CI_Controller
 	    		$file_name = "";
 	    	}
 		}
+
+		$config['upload_path'] = './uploads/category/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = TRUE;
+	    $pdfname = "";
+	    $this->load->library('upload', $config);
+	    if (isset($_FILES ['menu']) && $_FILES ['menu']['error'] == 0) {
+			$pdfname = microtime(true).".".pathinfo($_FILES['menu']['name'], PATHINFO_EXTENSION);
+			$config['file_name'] = $pdfname;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('menu')){
+	    		
+	    	}else{
+	    		$pdfname = "";
+	    	}
+		}
+
+
 		$data = [
 			'name'		=> $this->input->post('name'),
 			'type'		=> $this->input->post('type'),
 			'cutoff'	=> $this->input->post('cutoff'),
 			'start'		=> date('H:i:s',strtotime($this->input->post('from'))),
 			'end'		=> date('H:i:s',strtotime($this->input->post('to'))),
-			'image'		=> $file_name
+			'image'		=> $file_name,
+			'menu'		=> $pdfname
 		];
 		$this->db->insert('business_categories',$data);
 
@@ -83,6 +103,21 @@ class Business_category extends CI_Controller
 	    			@unlink(FCPATH.'/uploads/category/'.$old['image']);
 	    		}
 	    		$this->db->where('id',$this->input->post('id'))->update('business_categories',['image' => $file_name]);
+	    	}
+		}
+
+		$config['upload_path'] = './uploads/category/';
+	    $config['allowed_types']	= '*';
+	    $config['max_size']      = '0';
+	    $config['overwrite']     = TRUE;
+	    $pdfname = "";
+	    $this->load->library('upload', $config);
+	    if (isset($_FILES ['menu']) && $_FILES ['menu']['error'] == 0) {
+			$pdfname = microtime(true).".".pathinfo($_FILES['menu']['name'], PATHINFO_EXTENSION);
+			$config['file_name'] = $pdfname;
+	    	$this->upload->initialize($config);
+	    	if($this->upload->do_upload('menu')){
+	    		$this->db->where('id',$this->input->post('id'))->update('business_categories',['menu' => $pdfname]);
 	    	}
 		}
 
