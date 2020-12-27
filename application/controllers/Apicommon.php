@@ -72,6 +72,7 @@ class Apicommon extends CI_Controller
 		$list = $query->result_array();
 		foreach ($list as $key => $value) {
 			$list[$key]['image'] = getCategoryThumb($value['image']);
+			$list[$key]['menu'] = getCategoryThumb($value['menu']);
 		}
 		retJson(['_return' => true,'count' => $query->num_rows(),'list' => $list]);
 	}
