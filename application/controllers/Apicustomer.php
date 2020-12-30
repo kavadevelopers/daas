@@ -560,6 +560,17 @@ class Apicustomer extends CI_Controller
 			}else if($this->input->post('type') == "alignment" && $deliveryCount == 0){
 				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
 			}else{
+
+				$order_type = "";
+				if($this->input->post('order_type')){
+					$order_type = $this->input->post('order_type');
+				}
+
+				$delivery_date = "";
+				if($this->input->post('delivery_date')){
+					$delivery_date = $this->input->post('delivery_date');
+				}
+
 				$desc = "";
 				if($this->input->post('desc')){
 					$desc = $this->input->post('desc');
@@ -579,6 +590,8 @@ class Apicustomer extends CI_Controller
 					'status'		=> 'upcoming',
 					'status_desc'	=> 'Order Placed',
 					'notes'			=> 'Pending',
+					'order_type'	=> $order_type,
+					'delivery_date'	=> $delivery_date,
 					'created_at'	=> date('Y-m-d H:i:s')
 				];
 				$this->db->insert('corder',$data);
