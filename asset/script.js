@@ -195,8 +195,8 @@ function pdfImageAllowed(input) {
         var FileSize = input.files[0].size / 1024 / 1024; // in MB
         var extension = input.files[0].name.substring(input.files[0].name.lastIndexOf('.')+1);
         
-        if (FileSize > 2) {
-            alert("Maxiumum File Size Is 2 Mb.");
+        if (FileSize > 5) {
+            alert("Maxiumum File Size Is 4 Mb.");
             input.value = '';
             return false;
         }
