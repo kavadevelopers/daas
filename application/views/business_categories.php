@@ -72,6 +72,13 @@
                                     <?= form_error('menu') ?>
                                 </div>
                             </div> 
+                            <div class="col-md-12" style="display: none;" id="containerDiscl">
+                                <div class="form-group">
+                                    <label>Disclaimer</label>
+                                    <textarea name="disclaimer" rows="5" type="text" class="form-control" value="<?= set_value('disclaimer'); ?>" placeholder="Disclaimer"></textarea>
+                                    <?= form_error('disclaimer') ?>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-success">
@@ -145,7 +152,14 @@
                                 <div class="col-md-12 text-center">
                                     <a href="<?= getCategoryThumb($single['menu']) ?>" download>Download File</a>
                                 </div>
-                            </div>       
+                            </div>    
+                            <div class="col-md-12" style="display: none;" id="containerDiscl">
+                                <div class="form-group">
+                                    <label>Disclaimer</label>
+                                    <textarea name="disclaimer" rows="5" type="text" class="form-control" value="<?= set_value('disclaimer'); ?>" placeholder="Disclaimer"><?= set_value('disclaimer',$single['disclaimer']); ?></textarea>
+                                    <?= form_error('disclaimer') ?>
+                                </div>
+                            </div>   
                         </div>
                         <div class="card-footer text-right">
                             <a href="<?= base_url('business_category') ?>" class="btn btn-danger">
@@ -209,17 +223,21 @@
         $('#typeCate').change(function() {
             if($(this).val() == "ourpartner"){
                 $('#containerMenu').show();
+                $('#containerDiscl').show();
                 $('#menuFile').attr('required','required');
             }else{
                 $('#containerMenu').hide();
+                $('#containerDiscl').hide();
                 $('#menuFile').removeAttr('required');
             }
         });
         if($('#typeCate').val() == "ourpartner"){
             $('#containerMenu').show();
+            $('#containerDiscl').show();
             $('#menuFile').attr('required','required');
         }else{
             $('#containerMenu').hide();
+            $('#containerDiscl').hide();
             $('#menuFile').removeAttr('required');
         }
     })
