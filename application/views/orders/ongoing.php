@@ -43,11 +43,11 @@
                                         <?= get_delivery($value['driver2'])['fname'] ?> <?= get_delivery($value['driver2'])['lname'] ?>
                                     </th>
                                     <td class="text-center"><?= rs().$value['price'] ?></td>
-                                    <td class="text-center"><?= ucfirst($value['type']) ?><br><?= $value['order_type'] == "later"?"Later":"" ?></td>
+                                    <td class="text-center"><?= ucfirst($value['type']) ?><br><?= $value['order_type'] == "later"?"<b>Later</b>":"" ?></td>
                                     <td class="text-center"><?= _get_category($value['category'])['name'] ?></td>
                                     <td><?= subStrr($value['descr'],25) ?></td>
                                     <td><?= $value['notes'] ?></td>
-                                    <td class="text-center"><?= getPretyDateTime($value['created_at']) ?><br>Delivery Date<?= $value['order_type'] == "later"?$value['delivery_date']:"" ?></td>
+                                    <td class="text-center"><?= getPretyDateTime($value['created_at']) ?><br><?= $value['order_type'] == "later"?"Delivery Date : ".$value['delivery_date']:"" ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url('orders/view/').$value['id'] ?>/ongoing" class="btn btn-success btn-mini" title="View">
                                             <i class="fa fa-eye"></i>
