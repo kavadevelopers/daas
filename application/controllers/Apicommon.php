@@ -66,7 +66,7 @@ class Apicommon extends CI_Controller
 	{
 		$where = ['df' => ''];
 		if($this->input->post('type')){
-			$where = ['df' => '','type' => $this->input->post('type'),'start <=' => date('H:i:s'),'end >=' => date('H:i:s')];
+			$where = ['df' => '','type' => $this->input->post('type'),'disable' => ""];
 		}
 		$query = $this->db->get_where('business_categories',$where);
 		$list = $query->result_array();
@@ -95,6 +95,7 @@ class Apicommon extends CI_Controller
 				$data['subscription_status'] 	= checkSubscriptionExpiration($user['sub_expired_on']);
 				$data['sub_expired_on'] 		= $user['sub_expired_on'];
 				$data['token']					= $user['token'];
+				$data['free']					= $user['free'];
 			}
 
 			if($this->input->post('type') == "delivery" && $delivery){

@@ -30,7 +30,7 @@
                                 <th class="text-center">Gender</th>
                                 <th class="text-center">Subscription</th>
                                 <th class="text-center">Verified</th>
-                                <th class="text-center">Blocked</th>
+                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -57,6 +57,11 @@
                                     	<?php }else{ ?>
                                     		<a href="<?= base_url('customers/block/').$value['id'] ?>/yes" class="btn btn-mini btn-success btn-status">Active</a>
                                     	<?php } ?>
+                                        <?php if($value['free'] == "yes"){ ?>
+                                            <a href="<?= base_url('customers/paid/').$value['id'] ?>" class="btn btn-mini btn-danger btn-status">Free</a>
+                                        <?php }else{ ?>
+                                            <a href="<?= base_url('customers/paid/').$value['id'] ?>/yes" class="btn btn-mini btn-success btn-status">Paid</a>
+                                        <?php } ?>
                                     </td>
                                     <td class="text-center">
                                         <a href="<?= base_url('customers/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">

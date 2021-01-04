@@ -126,6 +126,17 @@ class Customers extends CI_Controller
 		redirect(base_url('customers'));
 	}
 
+	public function paid($id,$flag = false)
+	{
+		$fg = "";
+		if ($flag) {
+			$fg = "yes";
+		}
+		$this->db->where('id',$id)->update('z_customer',['free' => $fg]);
+		$this->session->set_flashdata('msg', 'Customer Status Changed');
+		redirect(base_url('customers'));
+	}
+
 	public function check_mobile()
 	{
 		if($this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => ''])->row_array()){

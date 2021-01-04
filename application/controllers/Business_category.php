@@ -78,6 +78,17 @@ class Business_category extends CI_Controller
 		$this->load->theme('business_categories',$data);
 	}
 
+	public function status($id,$status)
+	{
+		$sta = "";
+		if($status == "dis"){
+			$sta = "yes";
+		}
+		$this->db->where('id',$id)->update('business_categories',['disable' => $sta]);
+		$this->session->set_flashdata('msg', 'Status Changed');
+		redirect(base_url('business_category'));
+	}
+
 	public function update()
 	{
 		$data = [

@@ -201,6 +201,15 @@
                                     <td class="text-center"><?= $value['cutoff']  ?>%</td>
                                     <td class="text-center"><?= $value['start']  ?> to <?= $value['end']  ?></td>
                                     <td class="text-center">
+                                        <?php if($value['disable'] == ""){ ?>
+                                            <a href="<?= base_url('business_category/status/').$value['id'] ?>/dis" class="btn btn-success btn-mini" onclick="return confirm('Are you sure?')">
+                                                Enabled
+                                            </a>
+                                        <?php }else{ ?>
+                                            <a href="<?= base_url('business_category/status/').$value['id'] ?>/ena" class="btn btn-danger btn-mini" onclick="return confirm('Are you sure?')">
+                                                Disabled
+                                            </a>
+                                        <?php } ?>
                                         <a href="<?= base_url('business_category/edit/').$value['id'] ?>" class="btn btn-primary btn-mini">
                                             <i class="fa fa-pencil"></i>
                                         </a>
