@@ -549,15 +549,15 @@ class Apicustomer extends CI_Controller
 			$servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
 			$deliveryCount = $this->db->get_where('z_delivery',["verified" => 'Verified','token !=' => '','approved' => '1','block' => '','active' => '1','df' => ''])->num_rows();
 
-			if($this->input->post('type') == "delivery" && $servicesCount == 0){
+			if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
-			}else if($this->input->post('type') == "delivery" && $deliveryCount == 0){
+			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
 				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
-			}else if($this->input->post('type') == "service" && $servicesCount == 0){
+			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "service" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Service Provider online at this time']);	
-			}else if($this->input->post('type') == "alignment" && $servicesCount == 0){
+			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Alignment online at this time']);	
-			}else if($this->input->post('type') == "alignment" && $deliveryCount == 0){
+			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $deliveryCount == 0){
 				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
 			}else{
 
