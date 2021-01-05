@@ -364,4 +364,10 @@ function addTransaction($type,$pay_type,$credit,$debit,$credit_by,$debit_by,$mai
     return $CI->db->insert_id();
 }
 
+function getCustomerCurrentOrdersCount($user){
+    $where = ['status !=' => 'completed','userid' => $user,'df' => ''];
+    $list = $this->db->order_by('id','desc')->get_where('corder',$where);
+    return $list->num_rows();
+}
+
 ?>

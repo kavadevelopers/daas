@@ -96,6 +96,7 @@ class Apicommon extends CI_Controller
 				$data['sub_expired_on'] 		= $user['sub_expired_on'];
 				$data['token']					= $user['token'];
 				$data['free']					= $user['free'];
+				$data['current_order']			= getCustomerCurrentOrdersCount($this->input->post('userid'));
 			}
 
 			if($this->input->post('type') == "delivery" && $delivery){
