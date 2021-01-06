@@ -88,6 +88,30 @@
                     </form>
                 </div>
             </div>
+            <script type="text/javascript">
+                $(function(){
+                    $('#typeCate').change(function() {
+                        if($(this).val() == "ourpartner"){
+                            $('#containerMenu').show();
+                            $('#containerDiscl').show();
+                            $('#menuFile').attr('required','required');
+                        }else{
+                            $('#containerMenu').hide();
+                            $('#containerDiscl').hide();
+                            $('#menuFile').removeAttr('required');
+                        }
+                    });
+                    if($('#typeCate').val() == "ourpartner"){
+                        $('#containerMenu').show();
+                        $('#containerDiscl').show();
+                        $('#menuFile').attr('required','required');
+                    }else{
+                        $('#containerMenu').hide();
+                        $('#containerDiscl').hide();
+                        $('#menuFile').removeAttr('required');
+                    }
+                })
+            </script>
         <?php }else{ ?>
             <div class="col-md-4">
                 <div class="card">
@@ -173,6 +197,26 @@
                     </form>
                 </div>
             </div>
+            <script type="text/javascript">
+                $(function(){
+                    $('#typeCate').change(function() {
+                        if($(this).val() == "ourpartner"){
+                            $('#containerMenu').show();
+                            $('#containerDiscl').show();
+                        }else{
+                            $('#containerMenu').hide();
+                            $('#containerDiscl').hide();
+                        }
+                    });
+                    if($('#typeCate').val() == "ourpartner"){
+                        $('#containerMenu').show();
+                        $('#containerDiscl').show();
+                    }else{
+                        $('#containerMenu').hide();
+                        $('#containerDiscl').hide();
+                    }
+                })
+            </script>
         <?php } ?>
         
 
@@ -227,27 +271,3 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(function(){
-        $('#typeCate').change(function() {
-            if($(this).val() == "ourpartner"){
-                $('#containerMenu').show();
-                $('#containerDiscl').show();
-                $('#menuFile').attr('required','required');
-            }else{
-                $('#containerMenu').hide();
-                $('#containerDiscl').hide();
-                $('#menuFile').removeAttr('required');
-            }
-        });
-        if($('#typeCate').val() == "ourpartner"){
-            $('#containerMenu').show();
-            $('#containerDiscl').show();
-            $('#menuFile').attr('required','required');
-        }else{
-            $('#containerMenu').hide();
-            $('#containerDiscl').hide();
-            $('#menuFile').removeAttr('required');
-        }
-    })
-</script>
