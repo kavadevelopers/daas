@@ -6,6 +6,16 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
+	public function testpush($id)
+	{
+		sendPush(
+			[get_customer(get_order($id)['token']],
+			"Order #",
+			"Item Dropped By Driver.",
+			"order"
+		);
+	}
+
 	public function chatPush()
 	{
 		if($this->input->post('sender_id') && $this->input->post('receiver_id') && $this->input->post('sender_type') && $this->input->post('receiver_type') && $this->input->post('msg') && $this->input->post('order_id')){	
