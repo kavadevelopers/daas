@@ -9,7 +9,7 @@ class Apicommon extends CI_Controller
 	public function testpush($id)
 	{
 		sendPush(
-			[get_customer(get_order($id)['token']],
+			[get_customer($id)['token']],
 			"Order #",
 			"Item Dropped By Driver.",
 			"order"
