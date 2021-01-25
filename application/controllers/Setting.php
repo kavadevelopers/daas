@@ -23,7 +23,7 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('twofecturekey', '2Factor API Key','trim|required');
 		$this->form_validation->set_rules('support_email', 'Support Email','trim|required');
 		$this->form_validation->set_rules('support_mobile', 'Support Mobile','trim|required');
-		$this->form_validation->set_rules('gmap_api', 'Google Map Api Key','trim|required');
+		// $this->form_validation->set_rules('gmap_api', 'Google Map Api Key','trim|required');
 
 		$this->form_validation->set_rules('admin_receive_email', 'Admin Email for Receive Order Details','trim|required');
 		$this->form_validation->set_rules('mail_host', 'SMTP Host','trim|required');

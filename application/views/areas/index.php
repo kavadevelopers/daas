@@ -23,15 +23,25 @@
                     <table class="table table-striped table-bordered table-mini table-dt">
                         <thead>
                             <tr>
-                                <th class="text-center">#</th>
                                 <th>Area Name</th>
-                                <th>Services</th>
+                                <th>Service Partner</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($list as $key => $value) { ?>
-
+                            	<tr>
+                            		<td><?= $value['name'] ?></td>
+                            		<td><?= get_service($value['services'])['fname'] ?> <?= get_service($value['services'])['lname'] ?></td>
+                            		<td class="text-center">
+                            			<a href="<?= base_url('areas/edit/').$value['id'] ?>" class="btn btn-primary btn-mini" title="Edit">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                        <a href="<?= base_url('areas/delete/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete" title="Delete">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                            		</td>
+                            	</tr>
                         	<?php } ?>
                         </tbody>
                     </table>
