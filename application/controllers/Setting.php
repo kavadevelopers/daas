@@ -33,6 +33,10 @@ class Setting extends CI_Controller
 
 		$this->form_validation->set_rules('upi_id', 'Company UPI ID','trim|required');
 
+		$this->form_validation->set_rules('cust_ver', 'Customer App Version','trim|required');
+		$this->form_validation->set_rules('serv_ver', 'Service App Version','trim|required');
+		$this->form_validation->set_rules('deli_ver', 'Delivery App Version','trim|required');
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['_title']	= 'Settings';
@@ -53,7 +57,10 @@ class Setting extends CI_Controller
 				'mail_username'				=> $this->input->post('mail_username'),
 				'mail_pass'					=> $this->input->post('mail_pass'),
 				'mail_port'					=> $this->input->post('mail_port'),
-				'upi_id'					=> $this->input->post('upi_id')
+				'upi_id'					=> $this->input->post('upi_id'),
+				'cust_ver'					=> $this->input->post('cust_ver'),
+				'serv_ver'					=> $this->input->post('serv_ver'),
+				'deli_ver'					=> $this->input->post('deli_ver')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
