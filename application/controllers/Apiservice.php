@@ -441,6 +441,11 @@ class Apiservice extends CI_Controller
 				// $single['cutoffprice']			= getServiceCutOff($single['price'],$single['category']);
 				// $single['price']				= getServicePrice($single['price'],$single['category']);
 
+				$single['delivery1_data']			= $this->db->get_where('z_delivery',['id' => $single['driver']])->row_array();
+				$single['delivery2_data']			= $this->db->get_where('z_delivery',['id' => $single['driver2']])->row_array();
+				$single['service_data']				= $this->db->get_where('z_service',['id' => $single['service']])->row_array();
+				$single['customer_data']			= $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
+
 				retJson(['_return' => true,'data' => $single]);				
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);

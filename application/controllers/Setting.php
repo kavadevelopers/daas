@@ -23,12 +23,15 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('twofecturekey', '2Factor API Key','trim|required');
 		$this->form_validation->set_rules('support_email', 'Support Email','trim|required');
 		$this->form_validation->set_rules('support_mobile', 'Support Mobile','trim|required');
+		$this->form_validation->set_rules('gmap_api', 'Google Map Api Key','trim|required');
 
 		$this->form_validation->set_rules('admin_receive_email', 'Admin Email for Receive Order Details','trim|required');
 		$this->form_validation->set_rules('mail_host', 'SMTP Host','trim|required');
 		$this->form_validation->set_rules('mail_username', 'SMTP Username','trim|required');
 		$this->form_validation->set_rules('mail_pass', 'SMTP Password','trim|required');
 		$this->form_validation->set_rules('mail_port', 'SMTP Port','trim|required');
+
+		$this->form_validation->set_rules('upi_id', 'Company UPI ID','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -45,15 +48,33 @@ class Setting extends CI_Controller
 				'support_email'				=> $this->input->post('support_email'),
 				'support_mobile'			=> $this->input->post('support_mobile'),
 				'admin_receive_email'		=> $this->input->post('admin_receive_email'),
+				'gmap_api'					=> $this->input->post('gmap_api'),
 				'mail_host'					=> $this->input->post('mail_host'),
 				'mail_username'				=> $this->input->post('mail_username'),
 				'mail_pass'					=> $this->input->post('mail_pass'),
-				'mail_port'					=> $this->input->post('mail_port')
+				'mail_port'					=> $this->input->post('mail_port'),
+				'upi_id'					=> $this->input->post('upi_id')
 			];
-
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
 
+			$config['upload_path'] = './uploads/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+		    if (isset($_FILES ['upi_qr']) && $_FILES ['upi_qr']['error'] == 0) {
+				$file_name = microtime(true).".".pathinfo($_FILES['upi_qr']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $file_name;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('upi_qr')){
+		    		$old = $this->db->get_where('setting',['id' => '1'])->row_array();
+		    		if($old['upi_qr'] != "" && file_exists(FCPATH.'uploads/'.$old['upi_qr'])){
+		    			@unlink(FCPATH.'/uploads/'.$old['upi_qr']);
+		    		}
+		    		$this->db->where('id','1')->update('setting',['upi_qr' => $file_name]);
+		    	}
+			}
 			$this->session->set_flashdata('msg', 'Settings Saved');
 	        redirect(base_url('setting'));
 		}

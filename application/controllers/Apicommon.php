@@ -16,6 +16,18 @@ class Apicommon extends CI_Controller
 		);
 	}
 
+	public function change_order_price()
+	{
+		if($this->input->post('order_id') && $this->input->post('price')){
+			$this->db->where('id',$this->input->post('order_id'))->update('corder',
+				['price' => $this->input->post('price')]
+			);
+			retJson(['_return' => true,'msg' => 'Price Changed']);
+		}else{
+			retJson(['_return' => false,'msg' => '`order_id` and `price` are Required']);
+		}
+	}
+
 	public function chatPush()
 	{
 		if($this->input->post('sender_id') && $this->input->post('receiver_id') && $this->input->post('sender_type') && $this->input->post('receiver_type') && $this->input->post('msg') && $this->input->post('order_id')){	
@@ -94,7 +106,10 @@ class Apicommon extends CI_Controller
 			'_return' => true,
 			'razorepay_key' => get_setting()['razorpay_key'],
 			'support_email' => get_setting()['support_email'],
-			'support_mobile' => get_setting()['support_mobile']
+			'support_mobile' => get_setting()['support_mobile'],
+			'support_mobile' => get_setting()['support_mobile'],
+			'upi_id' 			=> get_setting()['upi_id'],
+			'upi_qr' 			=> base_url('uploads/').get_setting()['upi_id']
 		];
 
 		if($this->input->post('type') && $this->input->post('userid')){

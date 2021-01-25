@@ -12,7 +12,7 @@
 
 <div class="page-body">
     <div class="card">
-        <form method="post" action="<?= base_url('setting/save') ?>">
+        <form method="post" action="<?= base_url('setting/save') ?>" enctype="multipart/form-data">
             <div class="card-block">
                 <div class="row">
 
@@ -71,6 +71,14 @@
                             <?= form_error('admin_receive_email') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Google Map Api Key <span class="-req">*</span></label>
+                            <input name="gmap_api" type="text" class="form-control" placeholder="Google Map Api Key" value="<?= set_value('gmap_api',get_setting()['gmap_api']); ?>" >
+                            <?= form_error('gmap_api') ?>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
@@ -103,6 +111,27 @@
                             <input name="mail_port" type="text" class="form-control" placeholder="" value="<?= set_value('mail_port',get_setting()['mail_port']); ?>" >
                             <?= form_error('mail_port') ?>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Company UPI ID <span class="-req">*</span></label>
+                            <input name="upi_id" type="text" class="form-control" placeholder="" value="<?= set_value('upi_id',get_setting()['upi_id']); ?>" >
+                            <?= form_error('upi_id') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Company UPI QR CODE <span class="-req">*</span></label>
+                            <input name="upi_qr" type="file" onchange="readFileImage(this)" class="form-control" placeholder="">
+                            <?= form_error('upi_qr') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <img style="width: 100%;" src="<?= base_url('uploads/').get_setting()['upi_qr'] ?>">
                     </div>
                 </div>
             </div>
