@@ -72,6 +72,13 @@
                                     <?= form_error('menu') ?>
                                 </div>
                             </div> 
+                            <div class="col-md-12" id="btnContainer">
+                                <div class="form-group">
+                                    <label>Button Type <span class="-req">*</span></label><br>
+                                    <label><input type="radio" id="btnDef" name="btn" value="Order now" checked> Order now</label><br>
+                                    <label><input type="radio" name="btn" value="Book now"> Book now</label>
+                                </div>
+                            </div> 
                             <div class="col-md-12" style="display: none;" id="containerDiscl">
                                 <div class="form-group">
                                     <label>Disclaimer</label>
@@ -94,21 +101,27 @@
                         if($(this).val() == "ourpartner"){
                             $('#containerMenu').show();
                             $('#containerDiscl').show();
+                            $('#btnContainer').show();
                             $('#menuFile').attr('required','required');
                         }else{
                             $('#containerMenu').hide();
                             $('#containerDiscl').hide();
+                            $('#btnContainer').hide();
                             $('#menuFile').removeAttr('required');
+                            $('#btnDef').prop("checked", true);
                         }
                     });
                     if($('#typeCate').val() == "ourpartner"){
                         $('#containerMenu').show();
                         $('#containerDiscl').show();
+                        $('#btnContainer').show();
                         $('#menuFile').attr('required','required');
                     }else{
                         $('#containerMenu').hide();
                         $('#containerDiscl').hide();
+                        $('#btnContainer').hide();
                         $('#menuFile').removeAttr('required');
+                        $('#btnDef').prop("checked", true);
                     }
                 })
             </script>
@@ -177,6 +190,13 @@
                                     <a href="<?= getCategoryThumb($single['menu']) ?>" download>Download File</a>
                                 </div>
                             </div>    
+                            <div class="col-md-12" id="btnContainer">
+                                <div class="form-group">
+                                    <label>Button Type <span class="-req">*</span></label><br>
+                                    <label><input type="radio" name="btn" value="Order now" <?= $single['btn'] == "Order now"?'checked':'' ?>> Order now</label><br>
+                                    <label><input type="radio" name="btn" value="Book now" <?= $single['btn'] == "Book now"?'checked':'' ?>> Book now</label>
+                                </div>
+                            </div> 
                             <div class="col-md-12" style="display: none;" id="containerDiscl">
                                 <div class="form-group">
                                     <label>Disclaimer</label>
@@ -203,17 +223,23 @@
                         if($(this).val() == "ourpartner"){
                             $('#containerMenu').show();
                             $('#containerDiscl').show();
+                            $('#btnContainer').show();
                         }else{
                             $('#containerMenu').hide();
                             $('#containerDiscl').hide();
+                            $('#btnContainer').hide();
+                            $('#btnDef').prop("checked", true);
                         }
                     });
                     if($('#typeCate').val() == "ourpartner"){
                         $('#containerMenu').show();
                         $('#containerDiscl').show();
+                        $('#btnContainer').show();
                     }else{
                         $('#containerMenu').hide();
                         $('#containerDiscl').hide();
+                        $('#btnContainer').hide();
+                        $('#btnDef').prop("checked", true);
                     }
                 })
             </script>

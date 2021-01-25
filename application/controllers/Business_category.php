@@ -57,6 +57,7 @@ class Business_category extends CI_Controller
 			'name'		=> $this->input->post('name'),
 			'type'		=> $this->input->post('type'),
 			'cutoff'	=> $this->input->post('cutoff'),
+			'btn'		=> $this->input->post('btn'),
 			'disclaimer'	=> $this->input->post('disclaimer'),
 			'start'		=> date('H:i:s',strtotime($this->input->post('from'))),
 			'end'		=> date('H:i:s',strtotime($this->input->post('to'))),
@@ -95,6 +96,7 @@ class Business_category extends CI_Controller
 			'name'		=> $this->input->post('name'),
 			'type'		=> $this->input->post('type'),
 			'cutoff'	=> $this->input->post('cutoff'),
+			'btn'		=> $this->input->post('btn'),
 			'disclaimer'	=> $this->input->post('disclaimer'),
 			'start'		=> date('H:i:s',strtotime($this->input->post('from'))),
 			'end'		=> date('H:i:s',strtotime($this->input->post('to')))
