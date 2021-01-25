@@ -6,25 +6,6 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
-	public function cancel_order_with_reason()
-	{
-		if($this->input->post('order_id') && $this->input->post('reason')){
-			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => $this->input->post('reason'),'notes' => $this->input->post('reason'),'status' => 'completed']
-			);
-			sendPush(
-				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
-				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Order Canceled By Service Provider",
-				"order",
-				$this->input->post('order_id')
-			);
-			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
-		}else{
-			retJson(['_return' => false,'msg' => '`order_id` and `reason` is Required']);
-		}	
-	}
-
 	public function update_latlon()
 	{
 		if($this->input->post('userid') && $this->input->post('lat') && $this->input->post('lon')){
@@ -273,18 +254,29 @@ class Apiservice extends CI_Controller
 	public function cancel_service_order()
 	{
 		if($this->input->post('order_id')){
-
-			sendPush(
-				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
-				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Order Canceled By Service Provider",
-				"order",
-				$this->input->post('order_id')
-			);
-
-			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
-			);
+			if($this->input->post('reason')){
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status_desc' => $this->input->post('reason'),'notes' => $this->input->post('reason'),'status' => 'completed']
+				);
+				sendPush(
+					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Canceled By Service Provider",
+					"order",
+					$this->input->post('order_id')
+				);
+			}else{
+				$this->db->where('id',$this->input->post('order_id'))->update('corder',
+					['status_desc' => 'Order Placed','notes' => 'Pending','price' => "0.00",'time' => "",'service' => "",'status' => 'upcoming']
+				);	
+				sendPush(
+					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Canceled By Service Provider",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
 			retJson(['_return' => true,'msg' => 'Order Canceled.']);		
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id` is Required']);

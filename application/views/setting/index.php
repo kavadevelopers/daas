@@ -135,6 +135,31 @@
                     </div>
                 </div>
             </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Customer App Version <span class="-req">*</span></label>
+                            <input name="cust_ver" type="text" class="form-control" placeholder="" value="<?= set_value('cust_ver',get_setting()['cust_ver']); ?>" >
+                            <?= form_error('cust_ver') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Service App Version <span class="-req">*</span></label>
+                            <input name="serv_ver" type="text" class="form-control" placeholder="" value="<?= set_value('serv_ver',get_setting()['serv_ver']); ?>" >
+                            <?= form_error('serv_ver') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Delivery App Version <span class="-req">*</span></label>
+                            <input name="deli_ver" type="text" class="form-control" placeholder="" value="<?= set_value('deli_ver',get_setting()['deli_ver']); ?>" >
+                            <?= form_error('deli_ver') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="card-footer text-right">
                 <button class="btn btn-success" type="submit">
                     <i class="fa fa-save"></i> Save
