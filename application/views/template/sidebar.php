@@ -64,6 +64,14 @@
                     </li>
                 </ul>
                 <ul class="pcoded-item pcoded-left-item">
+                    <li class="<?= menu(1,["areas"])[0]; ?>">
+                        <a href="<?= base_url('areas') ?>">
+                            <span class="pcoded-micon"><i class="fa fa-map"></i></span>
+                            <span class="pcoded-mtext">Areas</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="pcoded-item pcoded-left-item">
                     <li>
                         <a href="<?= base_url('login/logout') ?>">
                             <span class="pcoded-micon"><i class="feather icon-log-out"></i></span>

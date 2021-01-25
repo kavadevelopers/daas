@@ -19,7 +19,7 @@
     font-weight: bold;
 }
 </style>
-<script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyCTaxvlW_8B1wgfyPl6tcDf31gNk2mmsKY&v=3.exp&amp;sensor=false&&libraries=drawing'></script>
+<script src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&&libraries=drawing'></script>
 <script type="text/javascript">
 	var bermudaTriangle;
 	initialize();
