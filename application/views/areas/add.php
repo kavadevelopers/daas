@@ -28,13 +28,18 @@
                             <?= form_error('name') ?>
                         </div>
                         <div class="form-group">
-                            <label>Service Provider<span class="-req">*</span></label>
-                            <select class="form-control" name="service_partner" required>
-                                <option value="">-- Select --</option>
+                            <label>Service Providers<span class="-req">*</span></label>
+                            <div class="form-control">
                                 <?php foreach ($service_partners as $key => $value) { ?>
-                                    <option value="<?= $value['id'] ?>"><?= $value['fname'] ?> <?= $value['lname'] ?></option>
+                                    <div class="checkbox-fade fade-in-primary d-">
+                                        <label>
+                                            <input type="checkbox" name="service[]" value="<?= $value['id'] ?>">
+                                            <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
+                                            <span class="text-inverse"><?= $value['fname'] ?> <?= $value['lname'] ?></span>
+                                        </label>
+                                    </div>
                                 <?php } ?>
-                            </select>
+                            </div>
                         </div>
                     </div> 
                     <div class="col-md-8">

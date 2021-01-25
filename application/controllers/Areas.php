@@ -34,7 +34,7 @@ class Areas extends CI_Controller
 	{
 		$data = [
 			'name'			=> $this->input->post('name'),
-			'services'		=> $this->input->post('service_partner'),
+			'services'		=> implode(',', $this->input->post('service')),
 			'latlon'		=> rtrim($this->input->post('latlon'),'-')
 		];
 		$this->db->insert('areas',$data);
@@ -46,7 +46,7 @@ class Areas extends CI_Controller
 	{
 		$data = [
 			'name'			=> $this->input->post('name'),
-			'services'		=> $this->input->post('service_partner'),
+			'services'		=> implode(',', $this->input->post('service')),
 			'latlon'		=> rtrim($this->input->post('latlon'),'-')
 		];
 		$this->db->where('id',$this->input->post('id'))->update('areas',$data);

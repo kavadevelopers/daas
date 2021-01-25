@@ -6,28 +6,6 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
-	public function get_paymets()
-	{
-		if($this->input->post('filter') && $this->input->post('userid')){
-			if($this->input->post('filter') == 'week'){
-				$this->db->where('created_at >=',week_range()[0]);
-				$this->db->where('created_at <=',week_range()[1]);
-				$this->db->where('service',$this->input->post('userid'));
-				$list = $this->db->get('corder')->result_array();
-			}
-
-			//print_r($list);
-
-			// $list = 
-			// foreach ($list-> as $key => $value) {
-					
-			// }
-
-		}else{
-			retJson(['_return' => false,'msg' => '`filter` and `userid` is Required']);
-		}
-	}
-
 	public function cancel_order_with_reason()
 	{
 		if($this->input->post('order_id') && $this->input->post('reason')){
