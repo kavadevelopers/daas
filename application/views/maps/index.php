@@ -9,15 +9,15 @@
 
 <style type="text/css">
 	#map-canvas {
-    width: auto;
-    height: 500px;
-}
-#info {
-    position: absolute;
-    font-family: arial, sans-serif;
-    font-size: 18px;
-    font-weight: bold;
-}
+        width: auto;
+        height: 500px;
+    }
+    #info {
+        position: absolute;
+        font-family: arial, sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+    }
 </style>
 <script src='https://maps.googleapis.com/maps/api/js?v=3.exp&amp;sensor=false&&libraries=drawing'></script>
 <script type="text/javascript">

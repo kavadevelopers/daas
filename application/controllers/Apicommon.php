@@ -109,7 +109,7 @@ class Apicommon extends CI_Controller
 			'support_mobile' => get_setting()['support_mobile'],
 			'support_mobile' => get_setting()['support_mobile'],
 			'upi_id' 			=> get_setting()['upi_id'],
-			'upi_qr' 			=> base_url('uploads/').get_setting()['upi_id']
+			'upi_qr' 			=> base_url('uploads/').get_setting()['upi_qr']
 		];
 
 		if($this->input->post('type') && $this->input->post('userid')){
