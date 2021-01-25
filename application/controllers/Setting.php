@@ -36,6 +36,9 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('cust_ver', 'Customer App Version','trim|required');
 		$this->form_validation->set_rules('serv_ver', 'Service App Version','trim|required');
 		$this->form_validation->set_rules('deli_ver', 'Delivery App Version','trim|required');
+		$this->form_validation->set_rules('icust_ver', 'Customer App Version','trim|required');
+		$this->form_validation->set_rules('iserv_ver', 'Service App Version','trim|required');
+		$this->form_validation->set_rules('ideli_ver', 'Delivery App Version','trim|required');
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -60,7 +63,10 @@ class Setting extends CI_Controller
 				'upi_id'					=> $this->input->post('upi_id'),
 				'cust_ver'					=> $this->input->post('cust_ver'),
 				'serv_ver'					=> $this->input->post('serv_ver'),
-				'deli_ver'					=> $this->input->post('deli_ver')
+				'deli_ver'					=> $this->input->post('deli_ver'),
+				'icust_ver'					=> $this->input->post('icust_ver'),
+				'iserv_ver'					=> $this->input->post('iserv_ver'),
+				'ideli_ver'					=> $this->input->post('ideli_ver')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);

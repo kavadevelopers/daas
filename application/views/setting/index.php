@@ -139,23 +139,44 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Customer App Version <span class="-req">*</span></label>
+                            <label>Android Customer App Version <span class="-req">*</span></label>
                             <input name="cust_ver" type="text" class="form-control" placeholder="" value="<?= set_value('cust_ver',get_setting()['cust_ver']); ?>" >
                             <?= form_error('cust_ver') ?>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Service App Version <span class="-req">*</span></label>
+                            <label>Android Service App Version <span class="-req">*</span></label>
                             <input name="serv_ver" type="text" class="form-control" placeholder="" value="<?= set_value('serv_ver',get_setting()['serv_ver']); ?>" >
                             <?= form_error('serv_ver') ?>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Delivery App Version <span class="-req">*</span></label>
+                            <label>Android Delivery App Version <span class="-req">*</span></label>
                             <input name="deli_ver" type="text" class="form-control" placeholder="" value="<?= set_value('deli_ver',get_setting()['deli_ver']); ?>" >
                             <?= form_error('deli_ver') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>iOS Customer App Version <span class="-req">*</span></label>
+                            <input name="icust_ver" type="text" class="form-control" placeholder="" value="<?= set_value('icust_ver',get_setting()['icust_ver']); ?>" >
+                            <?= form_error('icust_ver') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>iOS Service App Version <span class="-req">*</span></label>
+                            <input name="iserv_ver" type="text" class="form-control" placeholder="" value="<?= set_value('iserv_ver',get_setting()['iserv_ver']); ?>" >
+                            <?= form_error('iserv_ver') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>iOS Delivery App Version <span class="-req">*</span></label>
+                            <input name="ideli_ver" type="text" class="form-control" placeholder="" value="<?= set_value('ideli_ver',get_setting()['ideli_ver']); ?>" >
+                            <?= form_error('ideli_ver') ?>
                         </div>
                     </div>
                 </div>

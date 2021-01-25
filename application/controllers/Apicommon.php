@@ -6,6 +6,14 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
+	public function check_latlon()
+	{
+		//$coords = $this->db->get_where('areas',['id' => '2'])->result_array();
+		
+		
+		//print_r(is_in_polygon($coords,23.166631,72.064045));
+	}
+
 	public function testpush($id)
 	{
 		sendPush(
@@ -112,7 +120,10 @@ class Apicommon extends CI_Controller
 			'upi_qr' 			=> base_url('uploads/').get_setting()['upi_qr'],
 			'cust_ver' 			=> get_setting()['cust_ver'],
 			'serv_ver' 			=> get_setting()['serv_ver'],
-			'deli_ver' 			=> get_setting()['deli_ver']
+			'deli_ver' 			=> get_setting()['deli_ver'],
+			'icust_ver' 			=> get_setting()['icust_ver'],
+			'iserv_ver' 			=> get_setting()['iserv_ver'],
+			'ideli_ver' 			=> get_setting()['ideli_ver']
 		];
 
 		if($this->input->post('type') && $this->input->post('userid')){

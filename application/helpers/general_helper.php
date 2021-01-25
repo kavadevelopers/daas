@@ -371,4 +371,33 @@ function getCustomerCurrentOrdersCount($user){
     return $list->num_rows();
 }
 
+
+function formatCoords($coords)
+{
+    $px = [];
+    $py = [];
+    foreach ($coords as $ckey => $coord) {
+        $coord_single = explode('-', $coord['latlon']);
+        foreach ($coord_single as $skey => $svalue) {
+            array_push($px, explode(',', $svalue)[0]);
+            array_push($py, explode(',', $svalue)[1]);
+        }
+    }
+    return [$px,$py];
+}
+
+
+function is_in_polygon($coords, $longitude_x, $latitude_y)
+{
+    $vertices_x = formatCoords($coords)[0];
+    $vertices_y = formatCoords($coords)[1];
+
+    $i = $j = $c = 0;
+    for ($i = 0, $j = $points_polygon-1 ; $i < $points_polygon; $j = $i++) {
+        if ( (($vertices_y[$i] > $latitude_y != ($vertices_y[$j] > $latitude_y)) &&
+    ($longitude_x < ($vertices_x[$j] - $vertices_x[$i]) * ($latitude_y - $vertices_y[$i]) / ($vertices_y[$j] - $vertices_y[$i]) + $vertices_x[$i]) ) ) 
+        $c = !$c;
+    }
+    return $c;
+}
 ?>
