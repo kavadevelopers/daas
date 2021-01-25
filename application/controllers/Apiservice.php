@@ -6,6 +6,28 @@ class Apiservice extends CI_Controller
 		parent::__construct();
 	}
 
+	public function get_paymets()
+	{
+		if($this->input->post('filter') && $this->input->post('userid')){
+			if($this->input->post('filter') == 'week'){
+				$this->db->where('created_at >=',week_range()[0]);
+				$this->db->where('created_at <=',week_range()[1]);
+				$this->db->where('service',$this->input->post('userid'));
+				$list = $this->db->get('corder')->result_array();
+			}
+
+			//print_r($list);
+
+			// $list = 
+			// foreach ($list-> as $key => $value) {
+					
+			// }
+
+		}else{
+			retJson(['_return' => false,'msg' => '`filter` and `userid` is Required']);
+		}
+	}
+
 	public function cancel_order_with_reason()
 	{
 		if($this->input->post('order_id') && $this->input->post('reason')){
@@ -373,12 +395,25 @@ class Apiservice extends CI_Controller
 			$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
 			$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
 
-
+			$wstart = date("Y-m-d", strtotime("last week monday"));
+			$wend = date("Y-m-d", strtotime("last week sunday"));
+			$mstart = date("Y-m-d", strtotime("first day of previous month"));
+			$mend = date("Y-m-d", strtotime("last day of previous month"));
 			$cashCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->get()->row()->price;
+			$lastWeekCollection = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$wstart)->where('created_at <=',$wend)->get()->row()->price;
+			$lastMonthCollection = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$mstart)->where('created_at <=',$mend)->get()->row()->price;
 
 			$cash = 0;
 			if($cashCollected){
 				$cash = $cashCollected;
+			}
+			$lastWeek = 0;
+			if($lastWeekCollection){
+				$lastWeek = $lastWeekCollection;
+			}
+			$lastMonth = 0;
+			if($lastMonthCollection){
+				$lastMonth = $lastMonthCollection;
 			}
 
 			$ret = [
@@ -386,7 +421,9 @@ class Apiservice extends CI_Controller
 				'ongoing' 	=> $ongoing, 
 				'completed' => $compeleted, 
 				'canceled' 	=> $canceled, 
-				'cash' 		=> $cash, 
+				'cash' 		=> $cash,
+				'lastWeek'	=> $lastWeek, 
+				'lastMonth'	=> $lastMonth, 
 				'bank' 		=> "0.00"
 			];
 			retJson(['_return' => true,'data' => $ret]);	
