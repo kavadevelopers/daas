@@ -232,7 +232,11 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
     if(getDeviceType($tokon) == "ios"){
-        $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
+        if(getCustomerType($tokon) != "customer"){
+            $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
+        }else{
+            $notification = array('title' => $title, 'body' => $body,'badge' => '0');
+        }
         $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     }else{
         $arrayToSend = array('registration_ids' => $tokon,"priority" => "high",'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
@@ -344,6 +348,24 @@ function getDeviceType($token)
         return $service['deviceid'];
     }else{
         return "";
+    }
+}
+
+function getCustomerType($token)
+{
+    $token = $token[0];
+    $CI =& get_instance();
+    $customer = $CI->db->get_where('z_customer',['token' => $token])->row_array();
+    $delivery = $CI->db->get_where('z_delivery',['token' => $token])->row_array();
+    $service = $CI->db->get_where('z_service',['token' => $token])->row_array();
+    if($customer){
+        return "customer";
+    }else if($delivery){
+        return "delivery";
+    }else if($service){
+        return "service";
+    }else{
+        return "customer";
     }
 }
 
