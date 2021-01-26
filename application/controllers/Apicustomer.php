@@ -8,17 +8,29 @@ class Apicustomer extends CI_Controller
 
 	public function get_business_categories_by_location()
 	{	
-		if($this->input->post('userid')){
-
+		if($this->input->post('userid') && $this->input->post('type')){
 			$address = $this->db->get_where('address',['userid' => $this->input->post('userid')])->row_array();
 			if(checkMultiPoligon($address['latitude'], $address['longitude'])[0]){
-				print_r(checkMultiPoligon($address['latitude'], $address['longitude']));
-			}else{
-				print_r(checkMultiPoligon($address['latitude'], $address['longitude']));
-			}	
+				$services = explode(',',checkMultiPoligon($address['latitude'], $address['longitude'])[2]);
+				$this->db->distinct();
+				$this->db->select('category');
+				$this->db->where_in('id', $services);
+				$dis_cats = $this->db->get('z_service')->result_array();
+				$disCats = [];
+				foreach ($dis_cats as $key => $value) { array_push($disCats, $value['category']); } 
 
+				$bacats = $this->db->where('type',$this->input->post('type'))->where('df','')->where('disable','')->where_in('id',$disCats)->get('business_categories');
+				$list = $bacats->result_array();
+				foreach ($list as $key => $value) {
+					$list[$key]['image'] = getCategoryThumb($value['image']);
+					$list[$key]['menu'] = getCategoryThumb($value['menu']);
+				}
+				retJson(['_return' => true,'count' => $bacats->num_rows(),'list' => $list]);
+			}else{
+				retJson(['_return' => true,'count' => 0]);
+			}	
 		}else{
-			retJson(['_return' => false,'msg' => '`userid` is Required']);
+			retJson(['_return' => false,'msg' => '`userid` and `type` is Required']);
 		}
 	}
 
