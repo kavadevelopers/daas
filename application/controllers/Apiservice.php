@@ -360,22 +360,40 @@ class Apiservice extends CI_Controller
 	public function mydashboard()
 	{
 		if($this->input->post('user_id') && $this->input->post('category')){
-			$upcoming = $this->db->get_where('corder',['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''])->num_rows();
-			$ongoing = $this->db->get_where('corder',['status' => "ongoing",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
-			$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
-			$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
-
-			$wstart = date("Y-m-d", strtotime("last week monday"));
-			$wend = date("Y-m-d", strtotime("last week sunday"));
-			$mstart = date("Y-m-d", strtotime("first day of previous month"));
-			$mend = date("Y-m-d", strtotime("last day of previous month"));
-			$cashCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->get()->row()->price;
-			$lastWeekCollection = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$wstart)->where('created_at <=',$wend)->get()->row()->price;
-			$lastMonthCollection = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$mstart)->where('created_at <=',$mend)->get()->row()->price;
+			if($this->input->post('filter') == "week"){
+				$start = date("Y-m-d", strtotime("last week monday"));
+				$end = date("Y-m-d", strtotime("last week sunday"));
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'category' => $this->input->post('category'),'df' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'service' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();	
+				$cashCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type !=','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$start)->where('created_at <=',$end)->get()->row()->price;
+				$bankCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$start)->where('created_at <=',$end)->get()->row()->price;
+			}else if($this->input->post('filter') == "month"){
+				$start = date("Y-m-d", strtotime("first day of previous month"));
+				$end = date("Y-m-d", strtotime("last day of previous month"));
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'category' => $this->input->post('category'),'df' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'service' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();	
+				$cashCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type !=','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$start)->where('created_at <=',$end)->get()->row()->price;
+				$bankCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->where('created_at >=',$start)->where('created_at <=',$end)->get()->row()->price;
+			}else{
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'service' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();	
+				$cashCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type !=','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->get()->row()->price;
+				$bankCollected = $this->db->select_sum('price')->from('corder')->where('status','completed')->where('cancel','')->where('payment_type','payment_gateway')->where('df','')->where('service',$this->input->post('user_id'))->get()->row()->price;
+			}
 
 			$cash = 0;
 			if($cashCollected){
 				$cash = $cashCollected;
+			}
+			$bank = 0;
+			if($bankCollected){
+				$bank = $bankCollected;
 			}
 			$lastWeek = 0;
 			if($lastWeekCollection){
@@ -392,9 +410,7 @@ class Apiservice extends CI_Controller
 				'completed' => $compeleted, 
 				'canceled' 	=> $canceled, 
 				'cash' 		=> $cash,
-				'lastWeek'	=> $lastWeek, 
-				'lastMonth'	=> $lastMonth, 
-				'bank' 		=> "0.00"
+				'bank' 		=> $bank
 			];
 			retJson(['_return' => true,'data' => $ret]);	
 		}else{

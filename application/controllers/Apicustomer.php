@@ -6,6 +6,22 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function get_business_categories_by_location()
+	{	
+		if($this->input->post('userid')){
+
+			$address = $this->db->get_where('address',['userid' => $this->input->post('userid')])->row_array();
+			if(checkMultiPoligon($address['latitude'], $address['longitude'])[0]){
+				print_r(checkMultiPoligon($address['latitude'], $address['longitude']));
+			}else{
+				print_r(checkMultiPoligon($address['latitude'], $address['longitude']));
+			}	
+
+		}else{
+			retJson(['_return' => false,'msg' => '`userid` is Required']);
+		}
+	}
+
 	public function order_review()
 	{
 		if($this->input->post('userid') && $this->input->post('orderid') && $this->input->post('rating')){

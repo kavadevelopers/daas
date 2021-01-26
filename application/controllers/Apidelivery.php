@@ -417,10 +417,26 @@ class Apidelivery extends CI_Controller
 	public function mydashboard()
 	{
 		if($this->input->post('user_id')){
-			$upcoming = $this->db->get_where('corder',['status' => "upcoming",'df' => ''])->num_rows();
-			$ongoing = $this->db->get_where('corder',['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
-			$compeleted = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
-			$canceled = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
+			if($this->input->post('filter') == "week"){
+				$start = date("Y-m-d", strtotime("last week monday"));
+				$end = date("Y-m-d", strtotime("last week sunday"));
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'df' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel !=' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+			}else if($this->input->post('filter') == "month"){
+				$start = date("Y-m-d", strtotime("first day of previous month"));
+				$end = date("Y-m-d", strtotime("last day of previous month"));
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'df' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel !=' => '','created_at >=' => $start,'created_at <=' => $end])->num_rows();
+			}else{
+				$upcoming = $this->db->get_where('corder',['status' => "upcoming",'df' => ''])->num_rows();
+				$ongoing = $this->db->get_where('corder',['status' => "ongoing",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+				$compeleted = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel' => ''])->num_rows();
+				$canceled = $this->db->get_where('corder',['status' => "completed",'driver' => $this->input->post('user_id'),'df' => '','cancel !=' => ''])->num_rows();
+			}
 
 			$ret = [
 				'upcoming' 	=> $upcoming, 
