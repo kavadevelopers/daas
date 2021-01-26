@@ -8,10 +8,10 @@ class Apicommon extends CI_Controller
 
 	public function check_latlon()
 	{
-		//$coords = $this->db->get_where('areas',['id' => '2'])->result_array();
+    	$longitude_x = 18.554120;
+    	$latitude_y = 74.891017; 
 		
-		
-		//print_r(is_in_polygon($coords,23.166631,72.064045));
+		print_r(checkMultiPoligon($longitude_x, $latitude_y));
 	}
 
 	public function testpush($id)
@@ -136,6 +136,7 @@ class Apicommon extends CI_Controller
 				$data['token']					= $user['token'];
 				$data['free']					= $user['free'];
 				$data['current_order']			= getCustomerCurrentOrdersCount($this->input->post('userid'));
+				$data['address']				= $this->db->get_where('address',['userid' => $this->input->post('userid')])->row_array();
 			}
 
 			if($this->input->post('type') == "delivery" && $delivery){

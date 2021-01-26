@@ -376,28 +376,38 @@ function formatCoords($coords)
 {
     $px = [];
     $py = [];
-    foreach ($coords as $ckey => $coord) {
-        $coord_single = explode('-', $coord['latlon']);
-        foreach ($coord_single as $skey => $svalue) {
-            array_push($px, explode(',', $svalue)[0]);
-            array_push($py, explode(',', $svalue)[1]);
-        }
+    foreach (explode('-', $coords) as $skey => $svalue) {
+        array_push($px, explode(',', $svalue)[0]);
+        array_push($py, explode(',', $svalue)[1]);
     }
     return [$px,$py];
 }
 
-
-function is_in_polygon($coords, $longitude_x, $latitude_y)
-{
+function is_in_polygon($coords, $longitude_x, $latitude_y){
     $vertices_x = formatCoords($coords)[0];
     $vertices_y = formatCoords($coords)[1];
-
-    $i = $j = $c = 0;
-    for ($i = 0, $j = $points_polygon-1 ; $i < $points_polygon; $j = $i++) {
-        if ( (($vertices_y[$i] > $latitude_y != ($vertices_y[$j] > $latitude_y)) &&
-    ($longitude_x < ($vertices_x[$j] - $vertices_x[$i]) * ($latitude_y - $vertices_y[$i]) / ($vertices_y[$j] - $vertices_y[$i]) + $vertices_x[$i]) ) ) 
-        $c = !$c;
+    $points_polygon = count($vertices_x) - 1; 
+    $i = $j = $c = $point = 0;
+    for ($i = 0, $j = $points_polygon ; $i < $points_polygon; $j = $i++) {
+        $point = $i;
+        if( $point == $points_polygon )
+            $point = 0;
+        if ( (($vertices_y[$point]  >  $latitude_y != ($vertices_y[$j] > $latitude_y)) && ($longitude_x < ($vertices_x[$j] - $vertices_x[$point]) * ($latitude_y - $vertices_y[$point]) / ($vertices_y[$j] - $vertices_y[$point]) + $vertices_x[$point]) ) )
+            $c = !$c;
     }
     return $c;
+}
+
+function checkMultiPoligon($lat,$lon)
+{
+    $CI =& get_instance();
+    $coords = $CI->db->get_where('areas')->result_array();
+    foreach ($coords as $key => $value) {
+        if(is_in_polygon($value['latlon'],$lat,$lon)){
+            return [1,$value['id'],$value['services']];
+            break;
+        }
+    }
+    return [0];
 }
 ?>
