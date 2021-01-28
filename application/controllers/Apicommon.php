@@ -6,12 +6,9 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
-	public function check_latlon()
+	public function check_latlon($id)
 	{
-    	$longitude_x = 18.554120;
-    	$latitude_y = 74.891017; 
-		
-		print_r(checkMultiPoligon($longitude_x, $latitude_y));
+		print_r(getDeliveryNear($id));
 	}
 
 	public function testpush($id)
