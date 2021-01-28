@@ -258,6 +258,11 @@ class Apiservice extends CI_Controller
 				$this->db->where('id',$this->input->post('order_id'))->update('corder',
 					['status_desc' => $this->input->post('reason'),'notes' => 'Order Canceled Reason','status' => 'completed']
 				);
+				if($this->input->post('service')){
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['service' => $this->input->post('service')]
+					);	
+				}
 				sendPush(
 					[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 					"Order #".get_order($this->input->post('order_id'))['order_id'],
