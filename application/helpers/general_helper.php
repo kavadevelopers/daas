@@ -443,9 +443,9 @@ function checkSinglePoligon($lat,$lon,$area)
     $CI =& get_instance();
     $coords = $CI->db->get_where('areas',['id' => $area])->row_array();
     if(is_in_polygon($coords['latlon'],$lat,$lon)){
-        return true;
+        return 1;
     }else{
-        return false;
+        return 0;
     }
 }
 
@@ -463,23 +463,23 @@ function getDeliveryNear($customer)
                     $latLon = $CI->db->get_where('delivery_latlon',['user' => $value['id']])->row_array();
                     if($latLon){
                         if(checkSinglePoligon($latLon['lat'],$latLon['lon'],$area[1])){
-                            return [true,$value['id']];
+                            return [1,$value['id']];
                         }else{
-                            return [false];            
+                            return [0];            
                         }
                     }else{
-                        return [false];        
+                        return [0];        
                     }
                 }
-                return [false];
+                return [0];
             }else{
-                return [false];    
+                return [0];    
             }
         }else{
-            return [false];
+            return [0];
         }
     }else{
-        return [false];
+        return [0];
     }
 }
 ?>
