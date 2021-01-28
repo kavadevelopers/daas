@@ -438,7 +438,7 @@ function checkMultiPoligon($lat,$lon)
     return [0];
 }
 
-function checkSinglePoligon($lat,$lon,$aera)
+function checkSinglePoligon($lat,$lon,$area)
 {
     $CI =& get_instance();
     $coords = $CI->db->get_where('areas',['id' => $area])->row_array();
