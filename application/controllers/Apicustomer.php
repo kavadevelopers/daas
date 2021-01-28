@@ -67,29 +67,19 @@ class Apicustomer extends CI_Controller
 			);
 
 			if($order['done_driver1'] == 'yes'){
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
-				if($driver){
-					$delivery_boy = "";
-					foreach ($driver as $dkey => $dvalue) {
-						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
-						if($dOrders == 0){
-							$delivery_boy = $dvalue['id'];
-							break;
-						}	
-					}
-					if ($delivery_boy == "") {
-						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
-					}
+				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
+				if(getDeliveryNear($cus)[0]){
+					$delivery_boy = getDeliveryNear($cus)[1];
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver2' => $delivery_boy]
-					);				
+					);	
 					sendPush(
 						[get_delivery($delivery_boy)['token']],
 						"Order #".get_order($this->input->post('order_id'))['order_id'],
 						"Drop Item At Customer Location.",
 						"order",
 						$this->input->post('order_id')
-					);		
+					);	
 				}
 			}else{
 				sendPush(
@@ -434,33 +424,19 @@ class Apicustomer extends CI_Controller
 					date('Y-m-d')
 				);
 				
-				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
-				if($driver){
-
-					$delivery_boy = "";
-					foreach ($driver as $dkey => $dvalue) {
-						$dOrders = $this->db->get_where('corder',['driver' => $dvalue['id'],'status !=' => 'completed'])->num_rows();
-						if($dOrders == 0){
-							$delivery_boy = $dvalue['id'];
-							break;
-						}	
-					}
-
-					if ($delivery_boy == "") {
-						$delivery_boy = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->row_array()['id'];
-					}
-
+				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
+				if(getDeliveryNear($cus)[0]){
+					$delivery_boy = getDeliveryNear($cus)[1];
 					$this->db->where('id',$this->input->post('order_id'))->update('corder',
 						['driver' => $delivery_boy]
-					);		
-
+					);	
 					sendPush(
 						[get_delivery($delivery_boy)['token']],
 						"Order #".get_order($this->input->post('order_id'))['order_id'],
 						"New Delivery Request",
 						"order",
 						$this->input->post('order_id')
-					);
+					);	
 				}
 
 				sendPush(
@@ -579,8 +555,11 @@ class Apicustomer extends CI_Controller
 	{
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
 			$servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
-			$deliveryCount = $this->db->get_where('z_delivery',["verified" => 'Verified','token !=' => '','approved' => '1','block' => '','active' => '1','df' => ''])->num_rows();
-
+			$deliveryCount = 0;
+			if(getDeliveryNear($this->input->post('userid'))[0])
+			{
+				$deliveryCount = 1;
+			}
 			if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
 			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
