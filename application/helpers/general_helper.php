@@ -464,11 +464,8 @@ function getDeliveryNear($customer)
                     if($latLon){
                         if(checkSinglePoligon($latLon['lat'],$latLon['lon'],$area[1])){
                             return [1,$value['id']];
-                        }else{
-                            return [0];            
+                            break;
                         }
-                    }else{
-                        return [0];        
                     }
                 }
                 return [0];
