@@ -361,8 +361,26 @@ class Apidelivery extends CI_Controller
 				$single['delivery2_data']			= $this->db->get_where('z_delivery',['id' => $single['driver2']])->row_array();
 				$single['service_data']				= $this->db->get_where('z_service',['id' => $single['service']])->row_array();
 				$single['customer_data']			= $this->db->get_where('z_customer',['id' => $single['userid']])->row_array();
-				
-				retJson(['_return' => true,'data' => $single]);				
+					
+				if($this->input->post('userid') && $this->input->post('lat') && $this->input->post('lon')){
+					$old = $this->db->get_where('delivery_latlon',['user' => $this->input->post('userid')])->row_array();
+					if($old){
+						$data = [
+							'lat'		=> $this->input->post('lat'),
+							'lon'		=> $this->input->post('lon')
+						];
+						$this->db->where('id',$this->input->post('userid'))->update('delivery_latlon',$data);
+					}else{
+						$data = [
+							'user'		=> $this->input->post('userid'),
+							'lat'		=> $this->input->post('lat'),
+							'lon'		=> $this->input->post('lon')
+						];
+						$this->db->insert('delivery_latlon',$data);
+					}
+				}
+
+				retJson(['_return' => true,'data' => $single]);		
 			}else{
 				retJson(['_return' => false,'msg' => 'Please Enter Valid Order Id']);
 			}
