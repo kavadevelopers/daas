@@ -193,6 +193,22 @@ class Apiservice extends CI_Controller
 					$this->input->post('order_id')
 				);
 
+				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
+				if(getDeliveryNear($cus)[0]){
+					$delivery_boy = getDeliveryNear($cus)[1];
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver' => $delivery_boy]
+					);	
+					sendPush(
+						[get_delivery($delivery_boy)['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"New Alignment Request.",
+						"order",
+						$this->input->post('order_id')
+					);	
+				}
+
+				/*
 				$driver = $this->db->order_by('rand()')->limit(1)->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 				if($driver){
 					$delivery_boy = "";
@@ -219,7 +235,7 @@ class Apiservice extends CI_Controller
 						"order",
 						$this->input->post('order_id')
 					);				
-				}	
+				}	*/
 
 				retJson(['_return' => true,'msg' => 'Order Accepted.']);		
 			}else{

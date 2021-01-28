@@ -153,6 +153,11 @@ function get_customer($id){
     return $CI->db->get_where('z_customer',['id' => $id])->row_array();
 }
 
+function get_customer_address($customer){
+    $CI =& get_instance();
+    return $CI->db->get_where('address',['userid' => $customer])->row_array();
+}
+
 function get_delivery($id){
     $CI =& get_instance();
     return $CI->db->get_where('z_delivery',['id' => $id])->row_array();
@@ -431,5 +436,50 @@ function checkMultiPoligon($lat,$lon)
         }
     }
     return [0];
+}
+
+function checkSinglePoligon($lat,$lon,$aera)
+{
+    $CI =& get_instance();
+    $coords = $CI->db->get_where('areas',['id' => $area])->row_array();
+    if(is_in_polygon($coords['latlon'],$lat,$lon)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function getDeliveryNear($customer)
+{
+    $CI =& get_instance();
+    $customer = get_customer($customer);
+    $address = get_customer_address($customer);
+    if($address){
+        if(checkMultiPoligon($address['latitude'],$address['longitude'])){
+            $area = checkMultiPoligon($address['latitude'],$address['longitude']);
+            if($area[0] == "1"){
+                $delivery_boys = $CI->db->order_by('rand()')->get_where('z_delivery',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
+                foreach ($delivery_boys as $key => $value) {
+                    $latLon = $CI->db->get_where('delivery_latlon',['user' => $value['id']])->row_array();
+                    if($latLon){
+                        if(checkSinglePoligon($latLon['lat'],$latLon['lon'],$area[1])){
+                            return [true,$value['id']];
+                        }else{
+                            return [false];            
+                        }
+                    }else{
+                        return [false];        
+                    }
+                }
+                return [false];
+            }else{
+                return [false];    
+            }
+        }else{
+            return [false];
+        }
+    }else{
+        return [false];
+    }
 }
 ?>
