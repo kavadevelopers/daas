@@ -453,7 +453,7 @@ function getDeliveryNear($customer)
 {
     $CI =& get_instance();
     $customer = get_customer($customer);
-    $address = get_customer_address($customer);
+    $address = get_customer_address($customer['id']);
     if($address){
         if(checkMultiPoligon($address['latitude'],$address['longitude'])){
             $area = checkMultiPoligon($address['latitude'],$address['longitude']);
