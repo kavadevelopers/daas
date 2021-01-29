@@ -238,7 +238,7 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $serverKey = get_setting()['fserverkey'];
     if(getDeviceType($tokon) == "ios"){
         if(getCustomerType($tokon) != "customer"){
-            $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
+            $notification = array('title' => $title, 'body' => $body,'sound' => 'sound','badge' => '0');
         }else{
             $notification = array('title' => $title, 'body' => $body,'badge' => '0');
         }
@@ -288,7 +288,7 @@ function sendChatPush($tokon,$title,$body,$sender,$reciver,$sender_type,$receive
     $url = "https://fcm.googleapis.com/fcm/send";
     $serverKey = get_setting()['fserverkey'];
     if(getDeviceType($tokon) == "ios"){
-        $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
+        $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
         $arrayToSend = array('registration_ids' => [$tokon],"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
     }else{
         $arrayToSend = array('registration_ids' => [$tokon],"priority" => "high",'data' => ['title' => $title,'body' => $body,'sender' => $sender,'reciver' => $reciver,'sender_type' => $sender_type,'receiver_type' => $receiver_type,'order_id' => $order_id,'type' => 'chat','dy' => $order_id]);
