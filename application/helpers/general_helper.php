@@ -240,7 +240,7 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
         if(getCustomerType($tokon) != "customer"){
             $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
         }else{
-            $notification = array('title' => $title, 'body' => $body,'badge' => '0');
+            $notification = array('title' => $title, 'body' => $body,'sound' => 'default','badge' => '0');
         }
         $arrayToSend = array('registration_ids' => $tokon,"priority" => "high","notification" => $notification,'data' => ['title' => $title,'body' => $body,'type' => $type,'dy' => $dy]);
     }else{
