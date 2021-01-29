@@ -238,7 +238,7 @@ function sendPush($tokon,$title,$body,$type = '',$dy = ""){
     $serverKey = get_setting()['fserverkey'];
     if(getDeviceType($tokon) == "ios"){
         if(getCustomerType($tokon) != "customer"){
-            $notification = array('title' => $title, 'body' => $body,'sound' => 'sound','badge' => '0');
+            $notification = array('title' => $title, 'body' => $body,'sound' => 'sound.wav','badge' => '0');
         }else{
             $notification = array('title' => $title, 'body' => $body,'badge' => '0');
         }
