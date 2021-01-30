@@ -479,7 +479,7 @@ class Apidelivery extends CI_Controller
 					'lat'		=> $this->input->post('lat'),
 					'lon'		=> $this->input->post('lon')
 				];
-				$this->db->where('id',$this->input->post('userid'))->update('delivery_latlon',$data);
+				$this->db->where('user',$this->input->post('userid'))->update('delivery_latlon',$data);
 			}else{
 				$data = [
 					'user'		=> $this->input->post('userid'),
