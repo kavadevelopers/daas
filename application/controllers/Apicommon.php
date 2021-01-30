@@ -8,6 +8,7 @@ class Apicommon extends CI_Controller
 
 	public function check_latlon($id)
 	{
+		echo "<pre>";
 		print_r(getDeliveryNear($id));
 	}
 
