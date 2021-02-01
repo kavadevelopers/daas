@@ -479,4 +479,30 @@ function getDeliveryNear($customer)
         return [0];
     }
 }
+
+function serviceOnlineCount($customer,$category)
+{
+    $CI =& get_instance();
+    $customer = get_customer($customer);
+    $address = get_customer_address($customer['id']);
+    if(checkMultiPoligon($address['latitude'],$address['longitude'])){
+        $area = checkMultiPoligon($address['latitude'],$address['longitude']);
+        if($area[0] == "1"){
+            $servAr = explode(',', $area[2]);
+            $CI->db->where('category',$category);
+            $CI->db->where('verified','Verified');
+            $CI->db->where('approved','1');
+            $CI->db->where('block','');
+            $CI->db->where('active','1');
+            $CI->db->where('token !=','');
+            $CI->db->where('df','');
+            $CI->db->where_in('id',$servAr);
+            return $CI->db->get('z_service')->num_rows();
+        }else{
+            return 0;    
+        }
+    }else{
+        return 0;
+    }
+}
 ?>
