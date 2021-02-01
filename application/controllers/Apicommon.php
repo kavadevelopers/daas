@@ -12,6 +12,12 @@ class Apicommon extends CI_Controller
 		print_r(getDeliveryNear($id));
 	}
 
+	public function check_latlon_customer($lat,$lon)
+	{
+		echo "<pre>";
+		print_r(checkMultiPoligon($lat,$lon));
+	}
+
 	public function testpush($id)
 	{
 		sendPush(
