@@ -105,9 +105,14 @@
     function getPolygonCoords() {
         var len = bermudaTriangle.getPath().getLength();
         var htmlStr = "";
+        var htmlStrn = "";
+        console.log(bermudaTriangle);
         for (var i = 0; i < len; i++) {
             htmlStr += bermudaTriangle.getPath().getAt(i).toUrlValue(5) + "-";
+            htmlStrn += bermudaTriangle.getPath().getAt(i).lat() + ","+bermudaTriangle.getPath().getAt(i).lng()+"-";
+            //console.log(bermudaTriangle.getPath().getAt(i).toUrlValue(5));
         }
-        $('#latlon').val(htmlStr);
+        $('#latlon').val(htmlStrn);
+        console.log(htmlStrn);
     }
 </script>

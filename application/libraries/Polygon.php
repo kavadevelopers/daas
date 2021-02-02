@@ -96,7 +96,7 @@ class Polygon
         }
     }
 
-    public function checkSinglePoligon($lat,$lon,$polygon)
+    public function checkSinglePoligon1($lat,$lon,$polygon)
     {
         return $this->pointInPolygon($lat.' '.$lon, $this->formatPolygon($polygon));
     }
@@ -109,5 +109,55 @@ class Polygon
             array_push($nPolygon, $vl);
         }
         return $nPolygon;
+    }
+
+    //final
+
+    public function checkSinglePoligon($lat,$lon,$polygon)
+    {
+        if($this->pointInPolygon($lat.' '.$lon, $this->formatPolygon($polygon)) || $this->checkSinglePoligon2($lat,$lon,$polygon)){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+
+
+    // simple
+
+    function checkSinglePoligon2($lat,$lon,$polygon)
+    {
+        $vertices_x = $this->formatCoords($polygon)[0];
+        $vertices_y = $this->formatCoords($polygon)[1];
+        $points_polygon = count($vertices_x);
+        $longitude_x = $lat;
+        $latitude_y = $lon;
+        if ($this->is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y)){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
+
+    function formatCoords($coords)
+    {
+        $x = [];$y = [];
+        foreach (explode('-', $coords) as $key => $value) {
+            array_push($x, explode(',', $value)[0]);
+            array_push($y, explode(',', $value)[1]);
+        }
+        return [$x,$y];
+    }
+
+    function is_in_polygon($points_polygon, $vertices_x, $vertices_y, $longitude_x, $latitude_y)
+    {
+        $i = $j = $c = 0;
+        for ($i = 0, $j = $points_polygon-1 ; $i < $points_polygon; $j = $i++) {
+        if ( (($vertices_y[$i] > $latitude_y != ($vertices_y[$j] > $latitude_y)) &&
+        ($longitude_x < ($vertices_x[$j] - $vertices_x[$i]) * ($latitude_y - $vertices_y[$i]) / ($vertices_y[$j] - $vertices_y[$i]) + $vertices_x[$i]) ) ) 
+            $c = !$c;
+      }
+      return $c;
     }
 }

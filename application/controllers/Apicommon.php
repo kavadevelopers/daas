@@ -15,6 +15,9 @@ class Apicommon extends CI_Controller
 	public function check_latlon_customer($lat,$lon)
 	{
 		echo "<pre>";
+		$coords = $this->db->get_where('areas',['id' => '3'])->row_array();
+		print_r($this->polygon->checkSinglePoligon($lat,$lon,$coords['latlon']));
+		exit;
 		print_r(checkMultiPoligon($lat,$lon));
 	}
 
