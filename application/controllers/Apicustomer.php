@@ -561,8 +561,6 @@ class Apicustomer extends CI_Controller
 			{
 				$deliveryCount = 1;
 			}
-			$deliveryCount = 1;
-			$servicesCount = 1;
 			if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
 			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
@@ -744,30 +742,7 @@ class Apicustomer extends CI_Controller
 					retJson(['_return' => true,'msg' => 'Address Saved.']);
 				}
 			}else{
-				$old = $this->db->get_where('address',['userid' => $this->input->post('userid')])->num_rows();
-				if($old > 0){
-					$data = [
-						'flat_no'		=> $this->input->post('flat_no'),
-						'street_no'		=> $this->input->post('street_no'),
-						'address_line'	=> $this->input->post('address_line'),
-						'latitude'		=> $this->input->post('latitude'),
-						'longitude'		=> $this->input->post('longitude')
-					];	
-					$this->db->where('userid',$this->input->post('userid'))->update('address',$data);
-					retJson(['_return' => true,'msg' => 'Address Updated.']);
-				}else{
-					$data = [
-						'userid'		=> $this->input->post('userid'),
-						'flat_no'		=> $this->input->post('flat_no'),
-						'street_no'		=> $this->input->post('street_no'),
-						'address_line'	=> $this->input->post('address_line'),
-						'latitude'		=> $this->input->post('latitude'),
-						'longitude'		=> $this->input->post('longitude')
-					];	
-					$this->db->insert('address',$data);
-					retJson(['_return' => true,'msg' => 'Address Saved.']);
-				}
-				//retJson(['_return' => false,'msg' => 'We are not providing service in this area.']);	
+				retJson(['_return' => false,'msg' => 'We are not providing service in this area.']);	
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`userid`,`flat_no`,`street_no`,`address_line`,`latitude` and `longitude` are Required']);

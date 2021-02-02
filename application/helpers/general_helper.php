@@ -398,39 +398,12 @@ function getCustomerCurrentOrdersCount($user){
     return $list->num_rows();
 }
 
-
-function formatCoords($coords)
-{
-    $px = [];
-    $py = [];
-    foreach (explode('-', $coords) as $skey => $svalue) {
-        array_push($px, explode(',', $svalue)[0]);
-        array_push($py, explode(',', $svalue)[1]);
-    }
-    return [$px,$py];
-}
-
-function is_in_polygon($coords, $longitude_x, $latitude_y){
-    $vertices_x = formatCoords($coords)[0];
-    $vertices_y = formatCoords($coords)[1];
-    $points_polygon = count($vertices_x) - 1; 
-    $i = $j = $c = $point = 0;
-    for ($i = 0, $j = $points_polygon ; $i < $points_polygon; $j = $i++) {
-        $point = $i;
-        if( $point == $points_polygon )
-            $point = 0;
-        if ( (($vertices_y[$point]  >  $latitude_y != ($vertices_y[$j] > $latitude_y)) && ($longitude_x < ($vertices_x[$j] - $vertices_x[$point]) * ($latitude_y - $vertices_y[$point]) / ($vertices_y[$j] - $vertices_y[$point]) + $vertices_x[$point]) ) )
-            $c = !$c;
-    }
-    return $c;
-}
-
 function checkMultiPoligon($lat,$lon)
 {
     $CI =& get_instance();
     $coords = $CI->db->get_where('areas')->result_array();
     foreach ($coords as $key => $value) {
-        if(is_in_polygon($value['latlon'],$lat,$lon)){
+        if($CI->polygon->checkSinglePoligon($lat,$lon,$value['latlon'])){
             return [1,$value['id'],$value['services']];
             break;
         }
@@ -442,11 +415,7 @@ function checkSinglePoligon($lat,$lon,$area)
 {
     $CI =& get_instance();
     $coords = $CI->db->get_where('areas',['id' => $area])->row_array();
-    if(is_in_polygon($coords['latlon'],$lat,$lon)){
-        return 1;
-    }else{
-        return 0;
-    }
+    return $CI->polygon->checkSinglePoligon($lat,$lon,$coords['latlon']);
 }
 
 function getDeliveryNear($customer)
