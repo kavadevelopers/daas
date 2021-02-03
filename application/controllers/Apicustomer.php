@@ -724,8 +724,8 @@ class Apicustomer extends CI_Controller
 						'flat_no'		=> $this->input->post('flat_no'),
 						'street_no'		=> $this->input->post('street_no'),
 						'address_line'	=> $this->input->post('address_line'),
-						'latitude'		=> $this->input->post('latitude'),
-						'longitude'		=> $this->input->post('longitude')
+						'latitude'		=> roundLatLon($this->input->post('latitude')),
+						'longitude'		=> roundLatLon($this->input->post('longitude'))
 					];	
 					$this->db->where('userid',$this->input->post('userid'))->update('address',$data);
 					retJson(['_return' => true,'msg' => 'Address Updated.']);
@@ -735,8 +735,8 @@ class Apicustomer extends CI_Controller
 						'flat_no'		=> $this->input->post('flat_no'),
 						'street_no'		=> $this->input->post('street_no'),
 						'address_line'	=> $this->input->post('address_line'),
-						'latitude'		=> $this->input->post('latitude'),
-						'longitude'		=> $this->input->post('longitude')
+						'latitude'		=> roundLatLon($this->input->post('latitude')),
+						'longitude'		=> roundLatLon($this->input->post('longitude'))
 					];	
 					$this->db->insert('address',$data);
 					retJson(['_return' => true,'msg' => 'Address Saved.']);

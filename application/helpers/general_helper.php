@@ -474,4 +474,9 @@ function serviceOnlineCount($customer,$category)
         return 0;
     }
 }
+
+function roundLatLon($lat)
+{
+    return round($lat,6);
+}
 ?>

@@ -6,6 +6,11 @@ class Apicommon extends CI_Controller
 		parent::__construct();
 	}
 
+	public function roundLatLon($lat)
+	{
+		echo round($lat,6);
+	}
+
 	public function check_latlon($id)
 	{
 		echo "<pre>";
