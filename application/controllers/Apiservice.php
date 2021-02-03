@@ -511,6 +511,13 @@ class Apiservice extends CI_Controller
 				// $nlist[$key]['price']				= getServicePrice($nlist[$key]['price'],$nlist[$key]['category']);
 			}
 
+			if($this->input->post('test')){
+				$where = ['category' => $this->input->post('category')];
+				$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+				$nlist = $list->result_array();
+				retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+				exit;
+			}
 
 			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
 		}else{
