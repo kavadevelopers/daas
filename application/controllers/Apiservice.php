@@ -485,7 +485,7 @@ class Apiservice extends CI_Controller
 		if($this->input->post('status') && $this->input->post('category') && $this->input->post('user_id')){
 			$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			if($this->input->post('status') == "upcoming"){
-				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => '','order_type !=' => 'later'];
+				$where = ['status' => "upcoming",'category' => $this->input->post('category'),'df' => ''];
 			}
 			if($this->input->post('status') == "ongoing"){
 				$where = ['status' => "ongoing",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
