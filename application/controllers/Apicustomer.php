@@ -751,7 +751,17 @@ class Apicustomer extends CI_Controller
 
 	public function getbanner()
 	{
-		$query = $this->db->get_where('banner');
+		if($this->input->post('userid')){
+			$address = get_customer_address($this->input->post('userid'));
+			$area = checkMultiPoligon($address['latitude'],$address['longitude']);
+            if($area[0] == "1"){
+            	$query = $this->db->get_where('banner',['area' => $area[1]]);	
+			}else{
+				$query = $this->db->get_where('banner');	
+			}
+		}else{			
+			$query = $this->db->get_where('banner');
+		}
 		$list = $query->result_array();
 		foreach ($list as $key => $value) {
 			$list[$key]['image'] = base_url('uploads/banner/').$value['image'];

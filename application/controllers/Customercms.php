@@ -132,6 +132,7 @@ class Customercms extends CI_Controller
 	{
 		$data['_title']		= "Customer App - Banners";
 		$data['list']	= $this->db->get_where('banner')->result_array();
+		$data['areas']	= $this->db->get_where('areas')->result_array();
 		$this->load->theme('cms/customer/banner',$data);
 	}
 
@@ -149,11 +150,12 @@ class Customercms extends CI_Controller
 	    	$this->upload->initialize($config);
 	    	if($this->upload->do_upload('image')){
 	    		$data = [
-					'image'	=> $file_name
+					'image'	=> $file_name,
+					'area'	=> $this->input->post('area')
 				];
 				$this->db->insert('banner',$data);
 				$this->session->set_flashdata('msg', 'Banner Added');
-				redirect(base_url('customercms/banner'));
+				redirect(base_url('customercms/banner'));	
 	    	}else{
 	    		$this->session->set_flashdata('error', 'Please Select Valid Image');
 				redirect(base_url('customercms/banner'));

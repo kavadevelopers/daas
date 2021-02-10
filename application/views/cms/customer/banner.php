@@ -23,6 +23,18 @@
                                 <?= form_error('image') ?>
                             </div>
                         </div>                
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Area <span class="-req">*</span></label>
+                                <select class="form-control" name="area" required>
+                                    <option value="">-- Select --</option>
+                                    <?php foreach ($areas as $key => $area) { ?>
+                                        <option value="<?= $area['id'] ?>"><?= $area['name'] ?></option>
+                                    <?php } ?>
+                                </select>
+                                <?= form_error('area') ?>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-footer text-right">
                         <button class="btn btn-success">
@@ -42,6 +54,7 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th class="text-center">Image</th>
+                                <th class="text-center">Area</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -51,6 +64,10 @@
                                     <td class="text-center"><?= $key + 1 ?></td>
                                     <td class="text-center">
                                         <img src="<?= base_url('uploads/banner/').$value['image'] ?>" style="max-width: 80px;">
+                                    </td>
+                                    <td class="text-center">
+                                        <?php $area = $this->db->get_where('areas',['id' => $value['area']])->row_array(); ?>
+                                        <?= $area?$area['name']:'' ?>
                                     </td>
                                     <td class="text-center">
                                         <a href="<?= base_url('customercms/delete_banner/').$value['id'] ?>" class="btn btn-danger btn-mini btn-delete">
