@@ -6,11 +6,6 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
-	public function pay_alignment_order($value='')
-	{
-		# code...
-	}
-
 	public function get_business_categories_by_location()
 	{	
 		if($this->input->post('userid') && $this->input->post('type')){
