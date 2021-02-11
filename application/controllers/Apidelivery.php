@@ -96,13 +96,13 @@ class Apidelivery extends CI_Controller
 	{
 		if($this->input->post('order_id')){	
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Item Drop At Customer Waiting For Payment','notes' => 'Item Drop At Customer Waiting For Payment']
+				['status_desc' => 'Item Drop At Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes']
 			);
 
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Item Dropped By Driver.",
+				"Item Dropped By Driver. Order Completed",
 				"order",
 				$this->input->post('order_id')
 			);
@@ -110,10 +110,28 @@ class Apidelivery extends CI_Controller
 			sendPush(
 				[get_service(get_order($this->input->post('order_id'))['service'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Item Dropped By Driver.",
+				"Item Dropped By Driver. Order Completed",
 				"order",
 				$this->input->post('order_id')
 			);
+
+			sendPush(
+				[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Order Completed",
+				"order",
+				$this->input->post('order_id')
+			);
+
+			if(get_order($this->input->post('order_id'))['driver2'] != ""){
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver2'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Order Completed",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
 
 			$config['upload_path'] = './uploads/order/';
 		    $config['allowed_types']	= '*';

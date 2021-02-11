@@ -51,32 +51,15 @@ class Apiservice extends CI_Controller
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
 				['status_desc' => 'Work Done By Service Provicer','notes' => 'Work Done By Service Provider','price' => $this->input->post('price'),'return_order' => 'true']
 			);
-			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
-			if($order['done_driver1'] == 'yes'){
+			
+			sendPush(
+				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
+				"Order #".get_order($this->input->post('order_id'))['order_id'],
+				"Work Done By Service Provider. Make Payment To Complete this Order.",
+				"order",
+				$this->input->post('order_id')
+			);
 
-				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
-				if(getDeliveryNear($cus)[0]){
-					$delivery_boy = getDeliveryNear($cus)[1];
-					$this->db->where('id',$this->input->post('order_id'))->update('corder',
-						['driver2' => $delivery_boy]
-					);	
-					sendPush(
-						[get_delivery($delivery_boy)['token']],
-						"Order #".get_order($this->input->post('order_id'))['order_id'],
-						"Drop Item At Customer Location.",
-						"order",
-						$this->input->post('order_id')
-					);	
-				}
-			}else{
-				sendPush(
-					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
-					"Order #".get_order($this->input->post('order_id'))['order_id'],
-					"Drop Item At Customer Location.",
-					"order",
-					$this->input->post('order_id')
-				);
-			}
 			retJson(['_return' => true,'msg' => 'Order Updated.']);		
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`,`price` and `user_id` are Required']);

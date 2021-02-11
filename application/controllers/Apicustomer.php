@@ -6,6 +6,11 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function pay_alignment_order($value='')
+	{
+		# code...
+	}
+
 	public function get_business_categories_by_location()
 	{	
 		if($this->input->post('userid') && $this->input->post('type')){
@@ -169,8 +174,35 @@ class Apicustomer extends CI_Controller
 			}
 
 			$this->db->where('id',$this->input->post('order_id'))->update('corder',
-				['status_desc' => 'Paid By Customer','notes' => 'Completed','status' => 'completed','done_driver1' => 'yes','done_driver2' => 'yes','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
+				['status_desc' => 'Paid By Customer','notes' => 'Paid By Customer','tra_id' => $tra_id,'payment_gateway' => $payment_gateway,'payment_type' => $payment_type]
 			);
+
+			$order = $this->db->get_where('corder',['id' => $this->input->post('order_id')])->row_array();
+			if($order['done_driver1'] == 'yes'){
+
+				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
+				if(getDeliveryNear($cus)[0]){
+					$delivery_boy = getDeliveryNear($cus)[1];
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['driver2' => $delivery_boy]
+					);	
+					sendPush(
+						[get_delivery($delivery_boy)['token']],
+						"Order #".get_order($this->input->post('order_id'))['order_id'],
+						"Drop Item At Customer Location.",
+						"order",
+						$this->input->post('order_id')
+					);	
+				}
+			}else{
+				sendPush(
+					[get_delivery(get_order($this->input->post('order_id'))['driver'])['token']],
+					"Order #".get_order($this->input->post('order_id'))['order_id'],
+					"Drop Item At Customer Location.",
+					"order",
+					$this->input->post('order_id')
+				);
+			}
 
 			$orderRow = get_order($this->input->post('order_id'));
 			@addTransaction(
