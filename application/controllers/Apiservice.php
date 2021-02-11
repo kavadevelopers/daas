@@ -476,11 +476,11 @@ class Apiservice extends CI_Controller
 			if($this->input->post('status') == "completed"){
 				$where = ['status' => "completed",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
 			}
+			$total = $this->db->order_by('id','desc')->get_where('corder',$where);
 			if($this->input->post('limit') && $this->input->post('start')){
 				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
 			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
-			
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
@@ -498,15 +498,7 @@ class Apiservice extends CI_Controller
 				// $nlist[$key]['price']				= getServicePrice($nlist[$key]['price'],$nlist[$key]['category']);
 			}
 
-			if($this->input->post('test')){
-				$where = ['category' => $this->input->post('category')];
-				$list = $this->db->order_by('id','desc')->get_where('corder',$where);
-				$nlist = $list->result_array();
-				retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
-				exit;
-			}
-
-			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+			retJson(['_return' => true,'count' => $total->num_rows(),'list' => $nlist]);
 		}else{
 			retJson(['_return' => false,'msg' => '`status` = (`upcoming`,`ongoing`,`completed`),`user_id` and `category` are Required']);
 		}

@@ -551,10 +551,11 @@ class Apicustomer extends CI_Controller
 			}else{
 				$where = ['status' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
 			}
-			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+			$total = $this->db->order_by('id','desc')->get_where('corder',$where);
 			if($this->input->post('limit') && $this->input->post('start')){
 				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
 			}
+			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
@@ -575,7 +576,7 @@ class Apicustomer extends CI_Controller
 				$nlist[$key]['images']			=	$images;
 				$nlist[$key]['review']			=	$reviews;
 			}
-			retJson(['_return' => true,'count' => $list->num_rows(),'list' => $nlist]);
+			retJson(['_return' => true,'count' => $total->num_rows(),'list' => $nlist]);
 		}else{
 			retJson(['_return' => false,'msg' => '`status` = (`current`,`past`) and `userid` are Required']);
 		}
