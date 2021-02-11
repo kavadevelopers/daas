@@ -477,6 +477,9 @@ class Apiservice extends CI_Controller
 				$where = ['status' => "completed",'category' => $this->input->post('category'),'service' => $this->input->post('user_id'),'df' => ''];
 			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+			if($this->input->post('limit') && $this->input->post('start')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();

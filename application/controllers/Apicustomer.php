@@ -552,6 +552,9 @@ class Apicustomer extends CI_Controller
 				$where = ['status' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
 			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
+			if($this->input->post('limit') && $this->input->post('start')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();

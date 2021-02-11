@@ -429,6 +429,9 @@ class Apidelivery extends CI_Controller
 					->group_end();
 			}
 			$list = $this->db->get('corder');
+			if($this->input->post('limit') && $this->input->post('start')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
