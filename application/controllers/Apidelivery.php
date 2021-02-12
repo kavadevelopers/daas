@@ -411,6 +411,9 @@ class Apidelivery extends CI_Controller
 	{
 		if($this->input->post('status') && $this->input->post('user_id')){
 			$this->db->select('*');
+			if($this->input->post('limit') && $this->input->post('start')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
 			$this->db->order_by('id','desc');
 			if($this->input->post('status') == "ongoing"){
 				$this->db->where('status','ongoing');
@@ -429,9 +432,6 @@ class Apidelivery extends CI_Controller
 					->group_end();
 			}
 			$total = $this->db->get('corder');
-			if($this->input->post('limit') && $this->input->post('start')){
-				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
-			}
 			$list = $this->db->get('corder');
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
