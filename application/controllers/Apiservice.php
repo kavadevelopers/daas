@@ -361,14 +361,14 @@ class Apiservice extends CI_Controller
 			if($bankCollected){
 				$bank = $bankCollected;
 			}
-			$lastWeek = 0;
-			if($lastWeekCollection){
-				$lastWeek = $lastWeekCollection;
-			}
-			$lastMonth = 0;
-			if($lastMonthCollection){
-				$lastMonth = $lastMonthCollection;
-			}
+			// $lastWeek = 0;
+			// if($lastWeekCollection){
+			// 	$lastWeek = $lastWeekCollection;
+			// }
+			// $lastMonth = 0;
+			// if($lastMonthCollection){
+			// 	$lastMonth = $lastMonthCollection;
+			// }
 
 			$ret = [
 				'upcoming' 	=> $upcoming, 
