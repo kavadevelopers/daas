@@ -422,6 +422,7 @@ class Apidelivery extends CI_Controller
 						->where('driver',$this->input->post('user_id'))
 						->or_where('driver2',$this->input->post('user_id'))
 					->group_end();
+				$list = $this->db->get('corder');
 			}
 			if($this->input->post('status') == "completed"){
 				$this->db->where('status','completed');
@@ -430,9 +431,10 @@ class Apidelivery extends CI_Controller
 						->where('driver',$this->input->post('user_id'))
 						->or_where('driver2',$this->input->post('user_id'))
 					->group_end();
+				//$total = $this->db->get('corder');
+				$list = $this->db->get('corder');
 			}
-			$total = $this->db->get('corder');
-			$list = $this->db->get('corder');
+			
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
 				$customer = $this->db->get_where('z_customer',['id' => $value['userid']])->row_array();
@@ -448,7 +450,7 @@ class Apidelivery extends CI_Controller
 				}
 				$nlist[$key]['images']			=	$images;
 			}
-			retJson(['_return' => true,'count' => $total->num_rows(),'list' => $nlist]);
+			retJson(['_return' => true,'count' => 0,'list' => $nlist]);
 		}else{
 			retJson(['_return' => false,'msg' => '`status` = (`ongoing`,`completed`) and `user_id` are Required']);
 		}
