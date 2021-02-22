@@ -86,7 +86,7 @@
                         <label>Service Provider</label>
                         <select class="form-control select2n" name="service" id="modalServiceProvider" required>
                             <option value="">-- Select --</option>
-                            <?php foreach (getServiceProviders() as $skey => $svalue) { ?>
+                            <?php foreach (getServiceProvidersAll() as $skey => $svalue) { ?>
                                 <option value="<?= $svalue['id'] ?>"><?= $svalue['fname'] ?> <?= $svalue['lname'] ?></option>
                             <?php } ?>
                         </select>
