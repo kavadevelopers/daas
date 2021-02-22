@@ -189,12 +189,6 @@ function getServiceProviders()
     return $CI->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1'])->result_array();
 }
 
-function getServiceProvidersAll()
-{
-    $CI =& get_instance();
-    return $CI->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1'])->result_array();
-}
-
 function ordersCount($type)
 {
     $CI =& get_instance();

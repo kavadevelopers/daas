@@ -173,7 +173,8 @@ class Orders extends CI_Controller
 
 	public function get_service_provider()
 	{
-    	$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1','category' => $this->input->post('category')])->result_array();
+    	//$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1','category' => $this->input->post('category')])->result_array();
+    	$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1'])->result_array();
 
     	$str = '<option value="">-- Select --</option>';
     	foreach ($list as $key => $value) {
