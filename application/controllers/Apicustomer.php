@@ -587,11 +587,11 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
 			// $servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
 			$servicesCount = serviceOnlineCount($this->input->post('userid'),$this->input->post('category'));
-			$deliveryCount = 0;
-			if(getDeliveryNear($this->input->post('userid'))[0])
-			{
-				$deliveryCount = 1;
-			}
+			$deliveryCount = 1;
+			// if(getDeliveryNear($this->input->post('userid'))[0])
+			// {
+			// 	$deliveryCount = 1;
+			// }
 			if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
 				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
 			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
