@@ -42,7 +42,7 @@ class Apicustomer extends CI_Controller
 				$desc = $this->input->post('description');
 			}
 			$data = [
-				'userid'		=> $this->input->post('description'),
+				'userid'		=> $this->input->post('userid'),
 				'orderid'		=> $this->input->post('orderid'),
 				'rating'		=> $this->input->post('rating'),
 				'description'	=> $desc,
