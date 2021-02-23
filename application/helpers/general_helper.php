@@ -42,6 +42,13 @@ function checkSubscriptionExpiration($expireDate)
     }
 }
 
+function daysBeetweenDates($date){
+    $now = time();
+    $your_date = strtotime($date);
+    $datediff = $now - $your_date;
+    return round($datediff / (60 * 60 * 24)) - 1;
+}
+
 function getTommorrow()
 {
     return date('Y-m-d',strtotime("-1 day",strtotime(date('Y-m-d'))));

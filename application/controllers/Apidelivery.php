@@ -102,7 +102,7 @@ class Apidelivery extends CI_Controller
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Item Dropped By Driver. Order Completed",
+				"Thank you for ordering with us. We would love to have your suggestions and feedback. Rate your orders now!",
 				"order",
 				$this->input->post('order_id')
 			);
@@ -292,7 +292,7 @@ class Apidelivery extends CI_Controller
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Order Delivered. Thankyou...",
+				"Thank you for ordering with us. We would love to have your suggestions and feedback. Rate your orders now!",
 				"order",
 				$this->input->post('order_id')
 			);

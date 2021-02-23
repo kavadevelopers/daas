@@ -318,7 +318,7 @@ class Apicustomer extends CI_Controller
 			sendPush(
 				[get_customer(get_order($this->input->post('order_id'))['userid'])['token']],
 				"Order #".get_order($this->input->post('order_id'))['order_id'],
-				"Payment Successful. Thankyou",
+				"Payment Successful. Thank you for ordering with us. We would love to have your suggestions and feedback. Rate your orders now!",
 				"order",
 				$this->input->post('order_id')
 			);
