@@ -574,11 +574,7 @@ class Apicustomer extends CI_Controller
 					$images[$imageskey]['image']	= base_url('uploads/order/').$imagesvalue['image'];
 				}
 				$nlist[$key]['images']			=	$images;
-				if($reviews){
-					$nlist[$key]['review']			=	$reviews;
-				}else{
-					$nlist[$key]['review']			=	['id' => ''];
-				}
+				$nlist[$key]['review']			=	$reviews;
 			}
 			retJson(['_return' => true,'count' => $total->num_rows(),'list' => $nlist]);
 		}else{
