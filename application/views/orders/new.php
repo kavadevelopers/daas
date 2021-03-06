@@ -30,7 +30,7 @@
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbodyNewOrder">
                             <?php foreach ($list as $key => $value) { ?>
                                 <tr>
                                     <td class="text-center">#<?= $value['order_id'] ?></td>
@@ -176,5 +176,23 @@
         $('#modalEditOrderType').val(type);
         $('#priceModal').val(price);
         $('#modalChangePrice').modal('show');
+    }
+
+    setInterval(function() {
+        getNewOrder();     
+    }, 2000);
+    var _last = "<?= $last ?>";
+    function getNewOrder() {
+        $.ajax({
+            type: "POST",
+            data : {last : _last},
+            dataType: "json",
+            url : "<?= base_url('orders/get_new_order'); ?>",
+            cache : false,
+            success: function(out){
+                $('#tbodyNewOrder').prepend(out[0]);
+                _last = out[1];
+            }
+        });
     }
 </script>

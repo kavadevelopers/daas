@@ -12,7 +12,54 @@ class Orders extends CI_Controller
 	{
 		$data['_title']		= "New Orders";
 		$data['list']		= $this->db->get_where('corder',['status' => "upcoming",'df' => ''])->result_array();
+		$data['last']		= $this->db->order_by('id','desc')->get_where('corder',['df' => ''])->row_array()['id'];
 		$this->load->theme('orders/new',$data);	
+	}
+
+	public function get_new_order()
+	{
+		$this->db->where('status','upcoming');
+		$this->db->where('df','');
+		$this->db->where('id >',$this->input->post('last'));
+		$this->db->order_by('id','desc');
+		$list = $this->db->get('corder')->result_array();
+		$data = "";
+		foreach ($list as $key => $value) {
+			$orderType = $value["order_type"] == "later"?"<b>Later</b>":"";
+			$delievryDate = $value['order_type'] == "later"?"Delivery Date : ".$value['delivery_date']:"";
+			$data .= '<tr>';
+				$data .= '<td class="text-center">#'.$value["order_id"].'</td>';
+				$data .= "<th>".get_customer($value['userid'])['fname']." ".get_customer($value['userid'])['lname']."</th>";
+				$data .= "<th>".get_service($value['service'])['fname']." ".get_service($value['service'])['lname']."</th>";
+				$data .= '<td class="text-center">'.ucfirst($value["type"]).'<br>'.$orderType.'</td>';
+				$data .= '<td class="text-center">'._get_category($value["category"])["name"].'</td>';
+				$data .= '<td>'.subStrr($value['descr'],25).'</td>';
+				$data .= '<td>'.$value['notes'].'</td>';
+				$data .= '<td class="text-center">'.getPretyDateTime($value['created_at']).'<br>'.$delievryDate.'</td>';
+				$data .= '<td class="text-center">';
+					$data .= '<a href="'.base_url('orders/view/').$value['id'].'/new" class="btn btn-success btn-mini" title="View">';
+						$data .= '<i class="fa fa-eye"></i>';
+					$data .= '</a>';
+					$data .= ' <button class="btn btn-secondary btn-mini" title="Edit Price" onclick="changePrice('.$value["id"].',"new",'.$value["price"].')">';
+						$data .= '<i class="fa fa-pencil"></i>';
+					$data .= '</button>';
+					$data .= ' <a href="'.base_url('orders/complete/').$value['id'].'/new" class="btn btn-info btn-mini" title="Complete Order" onclick="return confirm("Are you sure want to Complete Order ?")">';
+						$data .= '<i class="fa fa-check"></i>';
+					$data .= '</a>';
+					$data .= ' <a href="'.base_url('orders/cancel/').$value['id'].'/new" class="btn btn-warning btn-mini" title="Cancel Order" onclick="return confirm("Are you sure want to Cancel Order ?")">';
+						$data .= '<i class="fa fa-times"></i>';
+					$data .= '</a>';
+					$data .= ' <button class="btn btn-primary btn-mini assignServiceBtn" data-id="'.$value["id"].'" data-type="'.$value["type"].'" data-category="'.$value["category"].'" title="Assign Service Provider">';
+						$data .= '<i class="fa fa-send"></i>';
+					$data .= '</button>';
+					$data .= ' <a href="'.base_url('orders/delete/').$value['id'].'/new" class="btn btn-danger btn-mini btn-delete" title="Delete">';
+						$data .= '<i class="fa fa-trash"></i>';
+					$data .= '</a>';
+				$data .= '</td>';
+			$data .= '</tr>';
+		}
+		
+		retJson([$data,$this->db->order_by('id','desc')->get_where('corder',['df' => ''])->row_array()['id']]);
 	}
 
 	public function ongoing()
