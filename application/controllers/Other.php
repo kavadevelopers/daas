@@ -21,12 +21,17 @@ class Other extends CI_Controller
 		if($this->input->post('user_type') == "customer"){
 			$users = $this->db->select('token')->where('df','')->where('token !=','')->get('z_customer')->result_array();
 			foreach ($users as $key => $value) {
-				array_push($tokens, $value['token']);
+				$address = $this->db->get_where('address',['userid' => $value['id']])->row_array();
+				$area = $this->db->get_where('areas',['id' => $this->input->post('area')])->row_array();	
+				if($address && $area && checkSinglePoligon($address['latitude'],$address['longitude'],$area['latlon'])){
+					array_push($tokens, $value['token']);
+				}
 			}
 		}
 
 		if($this->input->post('user_type') == "service"){
-			$users = $this->db->select('token')->where('df','')->where('token !=','')->get('z_service')->result_array();
+			$area = $this->db->get_where('areas',['id' => $this->input->post('area')])->row_array();
+			$users = $this->db->select('token')->where('df','')->where('token !=','')->where_in('id',explode(',', $area['services']))->get('z_service')->result_array();
 			foreach ($users as $key => $value) {
 				array_push($tokens, $value['token']);
 			}

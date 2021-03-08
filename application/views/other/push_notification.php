@@ -11,7 +11,7 @@
         </div>
     </div>
 </div>
-
+<?php $areas = $this->db->get_where('areas')->result_array(); ?>
 <div class="page-body">
     <div class="card">
         <form method="post" action="<?= base_url('other/send_pushnotification') ?>">
@@ -25,6 +25,17 @@
                                 <option value="customer">Customers</option>
                                 <option value="service">Service Providers</option>
                                 <option value="delivery">Drivers</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Area <span class="-req">*</span></label>
+                            <select class="form-control" name="area" required>
+                                <option value="">-- Select --</option>
+                                <?php foreach ($areas as $key => $value) { ?>
+                                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div> 
