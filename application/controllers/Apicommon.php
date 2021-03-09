@@ -149,7 +149,7 @@ class Apicommon extends CI_Controller
 				$data['free']					= $user['free'];
 				$data['current_order']			= getCustomerCurrentOrdersCount($this->input->post('userid'));
 				$data['address']				= $this->db->get_where('address',['userid' => $this->input->post('userid')])->row_array();
-				$data['orderWithoutReview'] 	= $this->db->order_by('id','asc')->get_where('corder',['created_at >=' => '2021-03-09'])->row_array();
+				$data['orderWithoutReview'] 	= $this->db->order_by('id','asc')->get_where('corder',['created_at >=' => '2021-03-09','rating' => '0'])->row_array();
 			}
 
 			if($this->input->post('type') == "delivery" && $delivery){
