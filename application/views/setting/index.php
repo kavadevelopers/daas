@@ -139,6 +139,38 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
+                            <label>Delivery Order Points <span class="-req">*</span></label>
+                            <input name="dpoints" type="text" class="form-control" placeholder="Delivery Order Points" value="<?= set_value('dpoints',get_setting()['dpoints']); ?>" >
+                            <?= form_error('dpoints') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Service Order Points <span class="-req">*</span></label>
+                            <input name="spoints" type="text" class="form-control" placeholder="Service Order Points" value="<?= set_value('spoints',get_setting()['spoints']); ?>" >
+                            <?= form_error('spoints') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Alignment Order Points <span class="-req">*</span></label>
+                            <input name="apoints" type="text" class="form-control" placeholder="Alignment Order Points" value="<?= set_value('apoints',get_setting()['apoints']); ?>" >
+                            <?= form_error('apoints') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Our Partner Order Points <span class="-req">*</span></label>
+                            <input name="ppoints" type="text" class="form-control" placeholder="Our Partner Order Points" value="<?= set_value('ppoints',get_setting()['ppoints']); ?>" >
+                            <?= form_error('ppoints') ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
                             <label>Android Customer App Version <span class="-req">*</span></label>
                             <input name="cust_ver" type="text" class="form-control" placeholder="" value="<?= set_value('cust_ver',get_setting()['cust_ver']); ?>" >
                             <?= form_error('cust_ver') ?>

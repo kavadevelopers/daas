@@ -546,7 +546,8 @@ class Apicustomer extends CI_Controller
 	public function getorders()
 	{
 		if($this->input->post('userid') && $this->input->post('status')){
-			if($this->input->post('limit') && $this->input->post('start')){
+		    //&& $this->input->post('start')
+			if($this->input->post('start') != "" && $this->input->post('limit')){
 				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
 			}
 			if($this->input->post('status') == 'current'){
@@ -554,7 +555,12 @@ class Apicustomer extends CI_Controller
 			}else{
 				$where = ['status' => 'completed','userid' => $this->input->post('userid'),'df' => ''];
 			}
+			
 			$total = $this->db->order_by('id','desc')->get_where('corder',$where);
+			
+			if($this->input->post('start') != "" && $this->input->post('limit')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
 			$list = $this->db->order_by('id','desc')->get_where('corder',$where);
 			$nlist = $list->result_array();
 			foreach ($list->result_array() as $key => $value) {
