@@ -54,6 +54,11 @@ function getTommorrow()
     return date('Y-m-d',strtotime("-1 day",strtotime(date('Y-m-d'))));
 }
 
+function minusMonth($month,$date)
+{
+    return strtotime("-".$month." months",strtotime($date));   
+}
+
 function vd($date)
 {
     return date('d-m-Y',strtotime($date));
