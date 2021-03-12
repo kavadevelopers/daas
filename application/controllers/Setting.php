@@ -80,7 +80,7 @@ class Setting extends CI_Controller
 				'dpoints'					=> $this->input->post('dpoints'),
 				'spoints'					=> $this->input->post('spoints'),
 				'apoints'					=> $this->input->post('apoints'),
-				'apoints'					=> $this->input->post('ppoints')
+				'ppoints'					=> $this->input->post('ppoints')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
