@@ -45,6 +45,7 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('spoints', 'Order Points','trim|required');
 		$this->form_validation->set_rules('apoints', 'Order Points','trim|required');
 		$this->form_validation->set_rules('apoints', 'Order Points','trim|required');
+		$this->form_validation->set_rules('referalamt', 'Referal Amount','trim|required');
 
 		$this->form_validation->set_rules('fivetoseven', 'Amount','trim|required');
 		$this->form_validation->set_rules('seventoone', 'Amount','trim|required');
@@ -80,7 +81,8 @@ class Setting extends CI_Controller
 				'dpoints'					=> $this->input->post('dpoints'),
 				'spoints'					=> $this->input->post('spoints'),
 				'apoints'					=> $this->input->post('apoints'),
-				'ppoints'					=> $this->input->post('ppoints')
+				'ppoints'					=> $this->input->post('ppoints'),
+				'referalamt'				=> $this->input->post('referalamt')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);

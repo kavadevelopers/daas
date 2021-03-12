@@ -194,6 +194,13 @@
                             </table>
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Referal Amount <span class="-req">*</span></label>
+                            <input name="referalamt" type="text" class="form-control decimal-num" placeholder="Referal Amount" value="<?= set_value('referalamt',get_setting()['referalamt']); ?>" >
+                            <?= form_error('referalamt') ?>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-block">

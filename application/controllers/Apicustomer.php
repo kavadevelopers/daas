@@ -143,7 +143,15 @@ class Apicustomer extends CI_Controller
 			);
 
 			if($this->input->post('discount') != 0){
-				$this->general_model->insertWalletTransactions($this->input->post('userid'),'amount',$this->input->post('discount'),'0.00','Debited by Subscription','',date('Y-m-d H:i:s'));
+				$this->general_model->insertWalletTransactions($this->input->post('userid'),'amount',$this->input->post('discount'),'0.00','Debited for Subscription','',date('Y-m-d H:i:s'));
+			}
+
+			$cus = get_customer($this->input->post('userid'));
+			if($cus['referfrom'] != '' && $cus['referalbonus'] == ""){
+				$referalUser = $this->db->get_where('z_customer',['referid' => $cus['referfrom']])->row_array();
+				if($referalUser && get_setting()['referalamt'] != 0){
+					$this->general_model->insertWalletTransactions($referalUser['id'],'amount','0.00',get_setting()['referalamt'],'Referal Bonus','',date('Y-m-d H:i:s'));		
+				}
 			}
 
 			retJson(['_return' => true,'msg' => 'Subscription Extended To '.vfd($expireDate)]);
