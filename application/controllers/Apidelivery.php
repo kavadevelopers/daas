@@ -317,7 +317,7 @@ class Apidelivery extends CI_Controller
 			}
 
 			$order = get_order($this->input->post('order_id'))['userid'];
-			$service = get_service(get_order($order['service']);
+			$service = get_service($order['service']);
 			$category = get_category($service['category']);
 			if($category['type'] == 'ourpartner'){
 				if(get_setting()['ppoints'] != 0){
