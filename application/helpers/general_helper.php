@@ -497,4 +497,10 @@ function getPointRangeToAmountById($id)
     $CI =& get_instance();
     return $CI->db->get_where('range_of_points',['id' => $id])->row_array();
 }
+
+function generateReferCodeUser($user) { 
+    $str_result = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'; 
+    $random = substr(str_shuffle($str_result),0,5);
+    return $random.$user;
+} 
 ?>

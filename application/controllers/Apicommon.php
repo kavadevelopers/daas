@@ -11,10 +11,12 @@ class Apicommon extends CI_Controller
 		echo round($lat,6);
 	}
 
-	public function check_latlon($id)
+	public function check_latlon2()
 	{
-		echo "<pre>";
-		print_r(getDeliveryNear($id));
+		$users = $this->db->get('z_customer')->result_array();
+		foreach ($users as $key => $value) {
+			$this->db->where('id',$value['id'])->update('z_customer',['referid' => generateReferCodeUser($value['id'])]);
+		}
 	}
 
 	public function check_latlon_customer($lat,$lon)

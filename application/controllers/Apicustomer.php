@@ -11,7 +11,7 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('userid')){
 			$total_rows = $this->db->get_where('points_transactions',['user' => $this->input->post('userid')])->num_rows();
 			$this->db->order_by('id','desc');
-			if($this->input->post('start') && $this->input->post('limit')){
+			if(isset($this->input->post('start')) && $this->input->post('limit')){
 				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
 			}
 			$this->db->where('user',$this->input->post('userid'));
@@ -1080,6 +1080,7 @@ class Apicustomer extends CI_Controller
 				$this->db->insert('z_customer',$data);
 				$user = $this->db->insert_id();
 				@sendOtp($this->input->post('mobile'),$otp);
+				$this->db->where('id',$user)->update('z_customer',['referid' => generateReferCodeUser($user)]);
 				retJson(['_return' => true,'msg' => 'Registration Successful. Please Verify OTP.','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
@@ -1102,6 +1103,7 @@ class Apicustomer extends CI_Controller
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
 					@sendOtp($this->input->post('mobile'),$otp);
+					$this->db->where('id',$oldRow['id'])->update('z_customer',['referid' => generateReferCodeUser($oldRow['id'])]);
 					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
@@ -1141,6 +1143,7 @@ class Apicustomer extends CI_Controller
 				$this->db->insert('z_customer',$data);
 				$user = $this->db->insert_id();
 				@sendOtp($this->input->post('mobile'),$otp);
+				$this->db->where('id',$user)->update('z_customer',['referid' => generateReferCodeUser($user)]);
 				retJson(['_return' => true,'msg' => 'Registration Successful. Please Verify OTP.','otp' => $otp,'userid' => $user]);
 			}else{
 				$oldRow = $old->row_array();
@@ -1163,6 +1166,7 @@ class Apicustomer extends CI_Controller
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
 					@sendOtp($this->input->post('mobile'),$otp);
+					$this->db->where('id',$oldRow['id'])->update('z_customer',['referid' => generateReferCodeUser($oldRow['id'])]);
 					retJson(['_return' => true,'msg' => 'Registration Successful','otp' => $otp,'userid' => $oldRow['id']]);
 				}else{
 					retJson(['_return' => false,'msg' => 'Mobile No. Already Exists.']);
