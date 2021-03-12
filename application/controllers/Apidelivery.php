@@ -321,11 +321,11 @@ class Apidelivery extends CI_Controller
 			$category = get_category($service['category']);
 			if($category['type'] == 'ourpartner'){
 				if(get_setting()['ppoints'] != 0){
-					$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['ppoints'],'Credited Partner Order',date('Y-m-d H:i:s'));
+					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['ppoints'],'Credited Partner Order',date('Y-m-d H:i:s'));
 				}
 			}else{
 				if(get_setting()['dpoints'] != 0){
-					$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',date('Y-m-d H:i:s'));
+					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',date('Y-m-d H:i:s'));
 				}
 			}
 
