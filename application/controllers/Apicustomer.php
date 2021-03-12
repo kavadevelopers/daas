@@ -481,6 +481,14 @@ class Apicustomer extends CI_Controller
 					$this->input->post('order_id'),
 					date('Y-m-d')
 				);
+
+				if($this->input->post('walletamt') != 0){
+					$this->db->where('id',$this->input->post('order_id'))->update('corder',
+						['walletamt' => $this->input->post('walletamt')]	
+					);
+
+					$this->general_model->insertWalletTransactions($this->input->post('userid'),'amount',$this->input->post('walletamt'),'0.00','Debited for Order',get_order($this->input->post('order_id'))['order_id'],date('Y-m-d H:i:s'));
+				}
 				
 				$cus = get_customer(get_order($this->input->post('order_id'))['userid'])['id'];
 				if(getDeliveryNear($cus)[0]){
@@ -524,7 +532,7 @@ class Apicustomer extends CI_Controller
 				retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`) Please Enter Valid Type']);	
 			}
 		}else{
-			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id`,`tra_id`,`payment_gateway`,`payment_type` and `userid` are Required']);
+			retJson(['_return' => false,'msg' => '`type` = (`accept`,`reject`),`order_id`,`tra_id`,`payment_gateway`,`payment_type`,`walletamt` and `userid` are Required']);
 		}
 	}
 
