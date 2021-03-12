@@ -1054,6 +1054,17 @@ class Apicustomer extends CI_Controller
 	public function register()
 	{
 		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile') && $this->input->post('password') && $this->input->post('gender')){
+			$referalCode = "";
+			if($this->input->post('referfrom')){
+				$referalCheck = $this->db->get_where('z_customer',['referid' => $this->input->post('referfrom')])->num_rows();
+				if($referalCheck == 0){
+					retJson(['_return' => false,'msg' => 'Please Enter valid Referal code.']);
+					exit;
+				}
+				else{
+					$referalCode = $this->input->post('referfrom');
+				}
+			}
 			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
 			if($this->input->post('gender') == "Male"){
 				$image = "male.png";
@@ -1075,6 +1086,7 @@ class Apicustomer extends CI_Controller
 					'block'			=> '',
 					'registered_at'	=> date('Y-m-d H:i:s'),
 					'sub_expired_on'=> getTommorrow(),
+					'referfrom'		=> $referalCode,
 					'otp'			=> $otp
 				];
 				$this->db->insert('z_customer',$data);
@@ -1099,6 +1111,7 @@ class Apicustomer extends CI_Controller
 						'block'			=> '',
 						'registered_at'	=> date('Y-m-d H:i:s'),
 						'sub_expired_on'=> getTommorrow(),
+						'referfrom'		=> $referalCode,
 						'otp'			=> $otp
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
@@ -1110,13 +1123,24 @@ class Apicustomer extends CI_Controller
 				}
 			}
 		}else{
-			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required']);
+			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required,referfrom is optional']);
 		}
 	}
 
 	public function newregister()
 	{
 		if($this->input->post('fname') && $this->input->post('lname') && $this->input->post('mobile') && $this->input->post('password') && $this->input->post('gender')){
+			$referalCode = "";
+			if($this->input->post('referfrom')){
+				$referalCheck = $this->db->get_where('z_customer',['referid' => $this->input->post('referfrom')])->num_rows();
+				if($referalCheck == 0){
+					retJson(['_return' => false,'msg' => 'Please Enter valid Referal code.']);
+					exit;
+				}
+				else{
+					$referalCode = $this->input->post('referfrom');
+				}
+			}
 			$old = $this->db->get_where('z_customer',['mobile' => $this->input->post('mobile'),'df' => '']);
 			if($this->input->post('gender') == "Male"){
 				$image = "male.png";
@@ -1138,6 +1162,7 @@ class Apicustomer extends CI_Controller
 					'block'			=> '',
 					'registered_at'	=> date('Y-m-d H:i:s'),
 					'sub_expired_on'=> getTommorrow(),
+					'referfrom'		=> $referalCode,
 					'otp'			=> $otp
 				];
 				$this->db->insert('z_customer',$data);
@@ -1162,6 +1187,7 @@ class Apicustomer extends CI_Controller
 						'block'			=> '',
 						'registered_at'	=> date('Y-m-d H:i:s'),
 						'sub_expired_on'=> getTommorrow(),
+						'referfrom'		=> $referalCode,
 						'otp'			=> $otp
 					];
 					$this->db->where('id',$oldRow['id'])->update('z_customer',$data);
@@ -1173,7 +1199,7 @@ class Apicustomer extends CI_Controller
 				}
 			}
 		}else{
-			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required']);
+			retJson(['_return' => false,'msg' => '`fname`,`lname`,`mobile`,`password` and `gender` are Required,referfrom is optional']);
 		}
 	}
 
