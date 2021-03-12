@@ -21,7 +21,7 @@ class WalletCron extends CI_Controller
 						else if(minusMonth('2',$user['sub_expired_on']) == strtotime(date('d-m-Y'))){
 							$setedMonth = true;	
 						}
-						else if(minusMonth('3',$user['sub_expired_on']) == strtotime(date('d-m-Y'))){
+						else if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-Y'))){
 							$setedMonth = true;
 						}
 						if($setedMonth){
