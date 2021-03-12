@@ -150,7 +150,11 @@ class Apicustomer extends CI_Controller
 			if($cus['referfrom'] != '' && $cus['referalbonus'] == ""){
 				$referalUser = $this->db->get_where('z_customer',['referid' => $cus['referfrom']])->row_array();
 				if($referalUser && get_setting()['referalamt'] != 0){
-					$this->general_model->insertWalletTransactions($referalUser['id'],'amount','0.00',get_setting()['referalamt'],'Referal Bonus','',date('Y-m-d H:i:s'));		
+					$this->general_model->insertWalletTransactions($referalUser['id'],'amount','0.00',get_setting()['referalamt'],'Referal Bonus','',date('Y-m-d H:i:s'));
+
+					$this->db->where('id',$this->input->post('userid'))->update('z_customer',
+						['referalbonus' => 'paid']
+					);			
 				}
 			}
 
