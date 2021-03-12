@@ -340,7 +340,7 @@ class Apicustomer extends CI_Controller
 			);
 
 			if(get_setting()['spoints'] != 0){
-				$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['spoints'],'Credited Service Order',date('Y-m-d H:i:s'));
+				$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['spoints'],'Credited Service Order',get_order($this->input->post('order_id'))['order_id'],date('Y-m-d H:i:s'));
 			}
 
 			retJson(['_return' => true,'msg' => 'Order Completed.']);

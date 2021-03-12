@@ -12,7 +12,7 @@ class General_model extends CI_Model
 		return $this->db->get_where('setting',['id' => '1'])->row_array();
 	}
 
-	public function insertWalletTransactions($user,$type,$debit,$credit,$desc,$cat)
+	public function insertWalletTransactions($user,$type,$debit,$credit,$desc,$dy,$cat)
 	{
 		$this->db->insert('points_transactions',[
 			'user'		=> $user,
@@ -20,6 +20,7 @@ class General_model extends CI_Model
 			'debit'		=> $debit,
 			'credit'	=> $credit,
 			'descr'		=> $desc,
+			'dy'		=> $dy,
 			'cat'		=> $cat
 		]);
 	}

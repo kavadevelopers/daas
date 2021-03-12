@@ -28,16 +28,16 @@ class WalletCron extends CI_Controller
 							$points = $this->general_model->getTotalPoints($user['id'],'point');
 							if($points >= 500 && $points < 750){
 								$amount = $this->db->get_where('range_of_points',['id' => '1'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}else if($points >= 750 && $points < 1000){
 								$amount = $this->db->get_where('range_of_points',['id' => '2'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}else if($points >= 1000){
 								$amount = $this->db->get_where('range_of_points',['id' => '3'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}
 						}
 					}else{
@@ -45,16 +45,16 @@ class WalletCron extends CI_Controller
 							$points = $this->general_model->getTotalPoints($user['id'],'point');
 							if($points >= 500 && $points < 750){
 								$amount = $this->db->get_where('range_of_points',['id' => '1'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}else if($points >= 750 && $points < 1000){
 								$amount = $this->db->get_where('range_of_points',['id' => '2'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}else if($points >= 1000){
 								$amount = $this->db->get_where('range_of_points',['id' => '3'])->row_array()['amount'];
-								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited','',date('Y-m-d H:i:s'));
+								$this->general_model->insertWalletTransactions($user['id'],'point',$points,'0.00','Points to wallet balance','',date('Y-m-d H:i:s'));
 							}
 						}
 					}
@@ -63,24 +63,3 @@ class WalletCron extends CI_Controller
 		}
 	}
 }
-
-
-
-// }else{
-// 	if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-Y'))){
-// 		$points = $this->general_model->getTotalPoints($user['id'],'point');
-// 		if($points >= 500 && $points < 750){
-// 			$amount = $this->db->get_where('range_of_points',['id' => '1'])->row_array()['amount'];
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
-// 		}else if($points >= 750 && $points < 1000){
-// 			$amount = $this->db->get_where('range_of_points',['id' => '2'])->row_array()['amount'];
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
-// 		}else if($points >= 1000){
-// 			$amount = $this->db->get_where('range_of_points',['id' => '3'])->row_array()['amount'];
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount','0.00',$amount,'Wallet balance credited',date('Y-m-d H:i:s'));
-// 			$this->general_model->insertWalletTransactions($user['id'],'amount',$points,'0.00','Points to wallet balance',date('Y-m-d H:i:s'));
-// 		}
-// 	}
-// }	

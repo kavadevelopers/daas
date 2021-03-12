@@ -149,7 +149,7 @@ class Apidelivery extends CI_Controller
 			}
 
 			if(get_setting()['apoints'] != 0){
-				$this->general_model->insertWalletTransactions(get_order($this->input->post('order_id'))['userid'],'point','0.00',get_setting()['apoints'],'Credited Alignment Order',date('Y-m-d H:i:s'));
+				$this->general_model->insertWalletTransactions(get_order($this->input->post('order_id'))['userid'],'point','0.00',get_setting()['apoints'],'Credited Alignment Order',get_order($this->input->post('order_id'))['order_id'],date('Y-m-d H:i:s'));
 			}
 
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
@@ -321,11 +321,11 @@ class Apidelivery extends CI_Controller
 			$category = get_category($service['category']);
 			if($category['type'] == 'ourpartner'){
 				if(get_setting()['ppoints'] != 0){
-					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['ppoints'],'Credited Partner Order',date('Y-m-d H:i:s'));
+					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['ppoints'],'Credited Partner Order',get_order($this->input->post('order_id'))['order_id'],date('Y-m-d H:i:s'));
 				}
 			}else{
 				if(get_setting()['dpoints'] != 0){
-					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',date('Y-m-d H:i:s'));
+					$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',get_order($this->input->post('order_id'))['order_id'],date('Y-m-d H:i:s'));
 				}
 			}
 
