@@ -148,6 +148,10 @@ class Apidelivery extends CI_Controller
 		    	}
 			}
 
+			if(get_setting()['apoints'] != 0){
+				$this->general_model->insertWalletTransactions(get_order($this->input->post('order_id'))['userid'],'point','0.00',get_setting()['apoints'],'Credited Alignment Order',date('Y-m-d H:i:s'));
+			}
+
 			retJson(['_return' => true,'msg' => 'Status Changed.']);	
 		}else{
 			retJson(['_return' => false,'msg' => '`order_id`, add `image` if has image is Required']);
@@ -310,6 +314,19 @@ class Apidelivery extends CI_Controller
 		    	if($this->upload->do_upload('image')){
 		    		$this->db->insert('corder_delivery_images',['order_id' => $this->input->post('order_id'),'imgtype' => 'Order Delivered','image' => $image]);
 		    	}
+			}
+
+			$order = get_order($this->input->post('order_id'))['userid'];
+			$service = get_service(get_order($order['service']);
+			$category = get_category($service['category']);
+			if($category['type'] == 'ourpartner'){
+				if(get_setting()['ppoints'] != 0){
+					$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['ppoints'],'Credited Partner Order',date('Y-m-d H:i:s'));
+				}
+			}else{
+				if(get_setting()['dpoints'] != 0){
+					$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',date('Y-m-d H:i:s'));
+				}
 			}
 
 			retJson(['_return' => true,'msg' => 'Order Completed']);	

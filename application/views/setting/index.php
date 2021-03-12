@@ -140,29 +140,58 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Delivery Order Points <span class="-req">*</span></label>
-                            <input name="dpoints" type="text" class="form-control" placeholder="Delivery Order Points" value="<?= set_value('dpoints',get_setting()['dpoints']); ?>" >
+                            <input name="dpoints" type="text" class="form-control numbers" placeholder="Delivery Order Points" value="<?= set_value('dpoints',get_setting()['dpoints']); ?>" >
                             <?= form_error('dpoints') ?>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Service Order Points <span class="-req">*</span></label>
-                            <input name="spoints" type="text" class="form-control" placeholder="Service Order Points" value="<?= set_value('spoints',get_setting()['spoints']); ?>" >
+                            <input name="spoints" type="text" class="form-control numbers" placeholder="Service Order Points" value="<?= set_value('spoints',get_setting()['spoints']); ?>" >
                             <?= form_error('spoints') ?>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Alignment Order Points <span class="-req">*</span></label>
-                            <input name="apoints" type="text" class="form-control" placeholder="Alignment Order Points" value="<?= set_value('apoints',get_setting()['apoints']); ?>" >
+                            <input name="apoints" type="text" class="form-control numbers" placeholder="Alignment Order Points" value="<?= set_value('apoints',get_setting()['apoints']); ?>" >
                             <?= form_error('apoints') ?>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
                             <label>Our Partner Order Points <span class="-req">*</span></label>
-                            <input name="ppoints" type="text" class="form-control" placeholder="Our Partner Order Points" value="<?= set_value('ppoints',get_setting()['ppoints']); ?>" >
+                            <input name="ppoints" type="text" class="form-control numbers" placeholder="Our Partner Order Points" value="<?= set_value('ppoints',get_setting()['ppoints']); ?>" >
                             <?= form_error('ppoints') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Points Range to wallet amount<span class="-req">*</span></label>
+                            <table class="table table-sm table-bordered">
+                                <tr>
+                                    <td>More than 500 and less than 750 points</td>
+                                    <td>
+                                        <input name="fivetoseven" type="text" class="form-control decimal-num" placeholder="500 to 750" value="<?= set_value('fivetoseven',getPointRangeToAmountById('1')['amount']); ?>" >
+                                        <?= form_error('fivetoseven') ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>More than 750 and less than 1000 points</td>
+                                    <td>
+                                        <input name="seventoone" type="text" class="form-control decimal-num" placeholder="750 to 1000" value="<?= set_value('seventoone',getPointRangeToAmountById('2')['amount']); ?>" >
+                                        <?= form_error('seventoone') ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>More than 1000 points</td>
+                                    <td>
+                                        <input name="morethanone" type="text" class="form-control decimal-num" placeholder="750 to 1000" value="<?= set_value('morethanone',getPointRangeToAmountById('3')['amount']); ?>" >
+                                        <?= form_error('morethanone') ?>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>

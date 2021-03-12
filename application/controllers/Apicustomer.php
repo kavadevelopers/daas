@@ -6,6 +6,22 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
+	public function get_wallet_transactions()
+	{
+		if($this->input->post('userid')){
+			$total_rows = $this->db->get_where('points_transactions',['user' => $this->input->post('userid')])->num_rows();
+			$this->db->order_by('id','desc');
+			if($this->input->post('start') && $this->input->post('limit')){
+				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
+			}
+			$this->db->where('user',$this->input->post('userid'));
+			$list = $this->db->get('points_transactions')->result_array();
+			retJson(['_return' => true,'total' => $total_rows,'list' => $list,'points' => $this->general_model->getTotalPoints($this->input->post('userid'),'point'),'wallet' => $this->general_model->getTotalPoints($this->input->post('userid'),'amount')]);
+		}else{
+			retJson(['_return' => false,'msg' => '`userid` is Required,`start` and `limit` are optional']);
+		}
+	}
+
 	public function get_business_categories_by_location()
 	{	
 		if($this->input->post('userid') && $this->input->post('type')){
@@ -322,6 +338,10 @@ class Apicustomer extends CI_Controller
 				"order",
 				$this->input->post('order_id')
 			);
+
+			if(get_setting()['spoints'] != 0){
+				$this->general_model->insertWalletTransactions($this->input->post('userid'),'point','0.00',get_setting()['spoints'],'Credited Service Order',date('Y-m-d H:i:s'));
+			}
 
 			retJson(['_return' => true,'msg' => 'Order Completed.']);
 		}else{

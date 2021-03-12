@@ -40,6 +40,16 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('iserv_ver', 'Service App Version','trim|required');
 		$this->form_validation->set_rules('ideli_ver', 'Delivery App Version','trim|required');
 
+
+		$this->form_validation->set_rules('dpoints', 'Order Points','trim|required');
+		$this->form_validation->set_rules('spoints', 'Order Points','trim|required');
+		$this->form_validation->set_rules('apoints', 'Order Points','trim|required');
+		$this->form_validation->set_rules('apoints', 'Order Points','trim|required');
+
+		$this->form_validation->set_rules('fivetoseven', 'Amount','trim|required');
+		$this->form_validation->set_rules('seventoone', 'Amount','trim|required');
+		$this->form_validation->set_rules('morethanone', 'Amount','trim|required');
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['_title']	= 'Settings';
@@ -66,10 +76,18 @@ class Setting extends CI_Controller
 				'deli_ver'					=> $this->input->post('deli_ver'),
 				'icust_ver'					=> $this->input->post('icust_ver'),
 				'iserv_ver'					=> $this->input->post('iserv_ver'),
-				'ideli_ver'					=> $this->input->post('ideli_ver')
+				'ideli_ver'					=> $this->input->post('ideli_ver'),
+				'dpoints'					=> $this->input->post('dpoints'),
+				'spoints'					=> $this->input->post('spoints'),
+				'apoints'					=> $this->input->post('apoints'),
+				'apoints'					=> $this->input->post('ppoints')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
+
+			$this->db->where('id','1')->update('range_of_points',['amount' => $this->input->post('fivetoseven')]);
+			$this->db->where('id','2')->update('range_of_points',['amount' => $this->input->post('seventoone')]);
+			$this->db->where('id','3')->update('range_of_points',['amount' => $this->input->post('morethanone')]);
 
 			$config['upload_path'] = './uploads/';
 		    $config['allowed_types']	= '*';

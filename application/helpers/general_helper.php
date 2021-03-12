@@ -486,4 +486,10 @@ function roundLatLon($lat)
 {
     return round($lat,6);
 }
+
+function getPointRangeToAmountById($id)
+{
+    $CI =& get_instance();
+    return $CI->db->get_where('range_of_points',['id' => $id])->row_array();
+}
 ?>
