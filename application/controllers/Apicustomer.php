@@ -114,7 +114,7 @@ class Apicustomer extends CI_Controller
 
 	public function extend_subscription()
 	{
-		if($this->input->post('userid') && $this->input->post('price') && $this->input->post('plan_name') && $this->input->post('month') && $this->input->post('tra_id')){	
+		if( ($this->input->post('discount')  == 0 || $this->input->post('discount')  > 0) && $this->input->post('userid') && $this->input->post('price') && $this->input->post('plan_name') && $this->input->post('month') && $this->input->post('tra_id')){	
 			$data = [
 				'userid'		=> $this->input->post('userid'),
 				'price'			=> $this->input->post('price'),
@@ -131,11 +131,10 @@ class Apicustomer extends CI_Controller
 			];
 			$this->db->where('id',$this->input->post('userid'))->update('z_customer',$data);
 
-
 			@addTransaction(
 				'subscription',
 				'razorpay',
-				$this->input->post('price'),
+				$this->input->post('price') - $this->input->post('discount'),
 				0.00,
 				0,
 				$this->input->post('userid'),
@@ -143,9 +142,13 @@ class Apicustomer extends CI_Controller
 				date('Y-m-d')
 			);
 
+			if($this->input->post('discount') != 0){
+				$this->general_model->insertWalletTransactions($this->input->post('userid'),'amount',$this->input->post('discount'),'0.00','Debited by Subscription','',date('Y-m-d H:i:s'));
+			}
+
 			retJson(['_return' => true,'msg' => 'Subscription Extended To '.vfd($expireDate)]);
 		}else{
-			retJson(['_return' => false,'msg' => '`userid`,`price`,`plan_name`,`tra_id` and `month` are Required']);
+			retJson(['_return' => false,'msg' => '`userid`,`price`,`plan_name`,`tra_id`,`discount` and `month` are Required']);
 		}	
 	}
 
