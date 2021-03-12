@@ -11,7 +11,7 @@ class Apicustomer extends CI_Controller
 		if($this->input->post('userid')){
 			$total_rows = $this->db->get_where('points_transactions',['user' => $this->input->post('userid')])->num_rows();
 			$this->db->order_by('id','desc');
-			if(isset($this->input->post('start')) && $this->input->post('limit')){
+			if($this->input->post('start') !== null && $this->input->post('limit')){
 				$this->db->limit($this->input->post('limit'), $this->input->post('start'));
 			}
 			$this->db->where('user',$this->input->post('userid'));
