@@ -12,7 +12,7 @@ class WalletCron extends CI_Controller
 		foreach ($users as $key => $user) {
 			$sub = $this->db->order_by('id','desc')->get_where('extend_subscription',['userid' => $user['id']])->row_array();
 			if ($sub) {
-				if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-y')){
+				if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-y'))){
 					$points = $this->general_model->getTotalPoints($user['id'],'point');
 					if($points >= 500 && $points < 750){
 						$amount = $this->db->get_where('range_of_points',['id' => '1'])->row_array()['amount'];
