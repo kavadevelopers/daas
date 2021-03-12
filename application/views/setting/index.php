@@ -187,7 +187,7 @@
                                 <tr>
                                     <td>More than 1000 points</td>
                                     <td>
-                                        <input name="morethanone" type="text" class="form-control decimal-num" placeholder="750 to 1000" value="<?= set_value('morethanone',getPointRangeToAmountById('3')['amount']); ?>" >
+                                        <input name="morethanone" type="text" class="form-control decimal-num" placeholder="more than 1000" value="<?= set_value('morethanone',getPointRangeToAmountById('3')['amount']); ?>" >
                                         <?= form_error('morethanone') ?>
                                     </td>
                                 </tr>
