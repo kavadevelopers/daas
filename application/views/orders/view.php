@@ -165,6 +165,33 @@
 		                    </div>
 		                    <div class="row">
 		                        <div class="col-sm-6">
+		                            <p class="m-b-10 f-w-600">Payment Description</p>
+		                            <h6 class="text-muted f-w-400">
+		                            	<?php 
+		                            		if($order['walletamt'] != "0.00"){
+		                            			echo rs().$order['walletamt'].' used from wallet and '.rs().($order['price'] - $order['walletamt']).' Paid from COD';
+		                            		}else{
+		                            			echo 'Total Amount paid';
+		                            		}
+		                            	?>		
+		                            </h6>
+		                        </div>
+		                        <div class="col-sm-6">
+		                            <p class="m-b-10 f-w-600">Points Credited</p>
+		                            <h6 class="text-muted f-w-400">
+		                            	<?php 
+		                            		$creditedPoints = $this->db->get_where('points_transactions',['dy' => $order['order_id'],'credit !=' => '0.00','type' => 'point' ])->row_array();
+		                            		if($creditedPoints){
+		                            			echo $creditedPoints['credit'];
+		                            		}else{
+		                            			echo '0';
+		                            		}
+		                            	?>		
+		                            </h6>
+		                        </div>
+		                    </div>
+		                    <div class="row">
+		                        <div class="col-sm-6">
 		                            <p class="m-b-10 f-w-600">Driver 1</p>
 		                            <h6 class="text-muted f-w-400"><?= get_delivery($order['driver'])['fname'] ?> <?= get_delivery($order['driver'])['lname'] ?></h6>
 		                        </div>

@@ -28,6 +28,14 @@ class Customers extends CI_Controller
 		$this->load->theme('users/customers/edit',$data);		
 	}
 
+	public function add_balance()
+	{
+		$this->general_model->insertWalletTransactions($this->input->post('id'),'amount','0.00',$this->input->post('amount'),$this->input->post('desc'),'',date('Y-m-d H:i:s'));
+
+		$this->session->set_flashdata('msg', 'Wallet Balance Added');
+		redirect(base_url('customers'));
+	}
+
 	public function save()
 	{
 		$this->form_validation->set_error_delimiters('<div class="val-error">', '</div>');
