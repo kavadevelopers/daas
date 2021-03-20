@@ -79,6 +79,23 @@ class Orders extends CI_Controller
 	public function complete($id,$route)
 	{
 		$this->db->where('id',$id)->update('corder',['notes' => 'Order completed','status' => 'completed']);
+		$order = get_order($id);
+		if($order['type'] == 'delivery'){
+			$service = get_service($order['service']);
+			$category = get_category($service['category']);
+			if($category['type'] == 'ourpartner' && get_setting()['ppoints'] != 0){
+				$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['ppoints'],'Credited Delivery Order',$order['order_id'],date('Y-m-d H:i:s'));
+			}
+			if($category['type'] != 'ourpartner' && get_setting()['dpoints'] != 0){
+				$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['dpoints'],'Credited Delivery Order',$order['order_id'],date('Y-m-d H:i:s'));
+			}
+		}
+		if($order['type'] == 'service' && get_setting()['spoints'] != 0){
+			$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['spoints'],'Credited Service Order',$order['order_id'],date('Y-m-d H:i:s'));
+		}
+		if($order['type'] == 'alignment' && get_setting()['apoints'] != 0){
+			$this->general_model->insertWalletTransactions($order['userid'],'point','0.00',get_setting()['apoints'],'Credited Alignment Order',$order['order_id'],date('Y-m-d H:i:s'));
+		}
 		$this->session->set_flashdata('msg', 'Order Completed');
 		redirect(base_url('orders/').$route);
 	}
