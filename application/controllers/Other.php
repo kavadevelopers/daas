@@ -23,7 +23,7 @@ class Other extends CI_Controller
 			foreach ($users as $key => $value) {
 				$address = $this->db->get_where('address',['userid' => $value['id']])->row_array();
 				$area = $this->db->get_where('areas',['id' => $this->input->post('area')])->row_array();	
-				if($address && $area && checkSinglePoligon($address['latitude'],$address['longitude'],$area['latlon'])){
+				if($address && $area && checkSinglePoligon($address['latitude'],$address['longitude'],$this->input->post('area'))){
 					array_push($tokens, $value['token']);
 				}
 			}
