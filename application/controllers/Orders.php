@@ -238,23 +238,8 @@ class Orders extends CI_Controller
 	public function get_service_provider()
 	{
     	//$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1','category' => $this->input->post('category')])->result_array();
-    	$order = get_order($this->input->post('id'));
-    	$address = $this->db->get_where('address',['userid' => $order['userid']])->row_array();
-    	//$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','category' => $this->input->post('category')])->result_array();
-    	$services = explode(',',checkMultiPoligon($address['latitude'], $address['longitude'])[2]);
-		$this->db->distinct();
-		$this->db->select('category');
-		$this->db->where_in('id', $services);
-		$dis_cats = $this->db->get('z_service')->result_array();
-		$disCats = [];
-		foreach ($dis_cats as $key => $value) { array_push($disCats, $value['category']); } 
+    	$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','category' => $this->input->post('category')])->result_array();
 
-		$bacats = $this->db->where('type',$this->input->post('type'))->where('df','')->where('disable','')->where_in('id',$disCats)->get('business_categories');
-		$list = $bacats->result_array();
-		// foreach ($list as $key => $value) {
-		// 	$list[$key]['image'] = getCategoryThumb($value['image']);
-		// 	$list[$key]['menu'] = getCategoryThumb($value['menu']);
-		// }
     	$str = '<option value="">-- Select --</option>';
     	foreach ($list as $key => $value) {
     		$str .= '<option value="'.$value["id"].'">'.$value["fname"].' '.$value["lname"].'</option>';
