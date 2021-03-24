@@ -239,7 +239,7 @@ class Orders extends CI_Controller
 	{
     	//$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','token !=' => '','active' => '1','category' => $this->input->post('category')])->result_array();
     	$order = get_order($this->input->post('id'));
-    	$address = $this->db->get_where('address',['userid' => $order['user']])->row_array();
+    	$address = $this->db->get_where('address',['userid' => $order['userid']])->row_array();
     	//$list = $this->db->get_where('z_service',['verified' => 'Verified','df' => '','block' => '','approved' => '1','category' => $this->input->post('category')])->result_array();
     	$services = explode(',',checkMultiPoligon($address['latitude'], $address['longitude'])[2]);
 		$this->db->distinct();
