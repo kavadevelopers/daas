@@ -53,7 +53,8 @@
                                     </td>
                                     <td class="text-center"><?= $value['verified'] ?></td>
                                     <td class="text-center">
-                                        <?= rs().' '.number_format($this->general_model->getTotalPoints($value['id'],'amount'),2) ?>
+                                        <?= rs().' '.number_format($this->general_model->getTotalPoints($value['id'],'amount'),2) ?><br>
+                                        Points : <?= $this->general_model->getTotalPoints($value['id'],'point') ?>
                                     </td>
                                     <td class="text-center">
                                     	<?php if($value['block'] == "yes"){ ?>
