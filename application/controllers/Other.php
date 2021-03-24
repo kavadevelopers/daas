@@ -19,7 +19,7 @@ class Other extends CI_Controller
 	{
 		$tokens = [];
 		if($this->input->post('user_type') == "customer"){
-			$users = $this->db->select('token')->where('df','')->where('token !=','')->get('z_customer')->result_array();
+			$users = $this->db->where('df','')->where('token !=','')->get('z_customer')->result_array();
 			foreach ($users as $key => $value) {
 				$address = $this->db->get_where('address',['userid' => $value['id']])->row_array();
 				$area = $this->db->get_where('areas',['id' => $this->input->post('area')])->row_array();	
