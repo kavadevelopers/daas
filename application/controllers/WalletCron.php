@@ -21,7 +21,7 @@ class WalletCron extends CI_Controller
 						else if(minusMonth('2',$user['sub_expired_on']) == strtotime(date('d-m-Y'))){
 							$setedMonth = true;	
 						}
-						else if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-Y'))){
+						else if(strtotime($user['sub_expired_on']) <= strtotime(date('d-m-Y'))){
 							$setedMonth = true;
 						}
 						if($setedMonth){
@@ -41,7 +41,7 @@ class WalletCron extends CI_Controller
 							}
 						}
 					}else{
-						if(strtotime($user['sub_expired_on']) == strtotime(date('d-m-Y'))){
+						if(strtotime($user['sub_expired_on']) <= strtotime(date('d-m-Y'))){
 							$points = $this->general_model->getTotalPoints($user['id'],'point');
 							if($points >= 500 && $points < 750){
 								$amount = $this->db->get_where('range_of_points',['id' => '1'])->row_array()['amount'];
