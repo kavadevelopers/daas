@@ -8,9 +8,6 @@ class Apicustomer extends CI_Controller
 
 	public function addReferId()
 	{
-		generateReferCodeUser($user);
-
-
 		$users = $this->db->get_where('z_customer',['referid' => ''])->result_array();
 		foreach ($users as $key => $value) {
 			$this->db->where('id',$value['id'])->update('z_customer',['referid' => generateReferCodeUser($value['id'])]);
