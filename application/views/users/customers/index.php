@@ -43,6 +43,7 @@
                                     </td> -->
                                     <td>
                                         <?= $value['fname'].' '.$value['lname'] ?>
+                                        <br>
                                         <b>Referal Code</b>
                                         <p><?= $value['referid'] ?></p>
                                         <b>Refered By</b>
