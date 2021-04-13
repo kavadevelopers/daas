@@ -6,7 +6,7 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
-	public function addReferId()
+	public function addreferid()
 	{
 		$users = $this->db->get_where('z_customer',['referid' => ''])->result_array();
 		foreach ($users as $key => $value) {
