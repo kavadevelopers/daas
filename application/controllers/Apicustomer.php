@@ -6,15 +6,6 @@ class Apicustomer extends CI_Controller
 		parent::__construct();
 	}
 
-	public function addreferid()
-	{
-		$users = $this->db->get_where('z_customer',['referid' => ''])->result_array();
-		foreach ($users as $key => $value) {
-			$this->db->where('id',$value['id'])->update('z_customer',['referid' => generateReferCodeUser($value['id'])]);
-		}
-
-	}
-
 	public function get_wallet_transactions()
 	{
 		if($this->input->post('userid')){

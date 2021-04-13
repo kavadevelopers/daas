@@ -46,8 +46,12 @@
                                         <br>
                                         <b>Referal Code</b>
                                         <p><?= $value['referid'] ?></p>
-                                        <b>Refered By</b>
-                                        <p><?= $value['referfrom'] ?></p>        
+                                        <p>
+                                            <?php if($value['referfrom'] != "" && $value['referfrom'] != null){ $referBy = get_customer_by_referal_code($value['referfrom']); ?>
+                                                <b>Refered By</b>
+                                                (<?= $value['referfrom'] ?>) - <?= $referBy['fname'] ?> <?= $referBy['lname'] ?>
+                                            <?php } ?>
+                                        </p>        
                                     </td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>

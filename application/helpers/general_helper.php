@@ -165,6 +165,11 @@ function get_customer($id){
     return $CI->db->get_where('z_customer',['id' => $id])->row_array();
 }
 
+function get_customer_by_referal_code($code){
+    $CI =& get_instance();
+    return $CI->db->get_where('z_customer',['referid' => $code])->row_array();
+}
+
 function get_customer_address($customer){
     $CI =& get_instance();
     return $CI->db->get_where('address',['userid' => $customer])->row_array();
