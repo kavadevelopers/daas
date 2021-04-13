@@ -41,7 +41,13 @@
                                     <!-- <td class="text-center">
                                         <img src="<?= base_url('uploads/user/').$value['image'] ?>" style="max-width: 50px;">
                                     </td> -->
-                                    <td><?= $value['fname'].' '.$value['lname'] ?></td>
+                                    <td>
+                                        <?= $value['fname'].' '.$value['lname'] ?>
+                                        <b>Referal Code</b>
+                                        <p><?= $value['referid'] ?></p>
+                                        <b>Refered By</b>
+                                        <p><?= $value['referfrom'] ?></p>        
+                                    </td>
                                     <td class="text-center"><?= $value['mobile'] ?></td>
                                     <td class="text-center"><?= $value['gender'] ?></td>
                                     <td class="text-left">
