@@ -106,7 +106,7 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>Three Month Membership Price <span class="-req">*</span></label>
+                            <label>Three Month Membership Price with GST <span class="-req">*</span></label>
                             <input name="price_three_month" type="text" class="form-control decimal-num" placeholder="Three Month Membership Price" value="<?= set_value('price_three_month',get_setting()['price_three_month']); ?>" >
                             <?= form_error('price_three_month') ?>
                         </div>
