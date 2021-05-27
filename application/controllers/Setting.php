@@ -90,7 +90,9 @@ class Setting extends CI_Controller
 				'ppoints'					=> $this->input->post('ppoints'),
 				'referalamt'				=> $this->input->post('referalamt'),
 				'price_one_month'				=> $this->input->post('price_one_month'),
-				'price_three_month'				=> $this->input->post('price_three_month')
+				'price_three_month'				=> $this->input->post('price_three_month'),
+				'wprice_one_month'				=> $this->input->post('wprice_one_month'),
+				'wprice_three_month'				=> $this->input->post('wprice_three_month')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
