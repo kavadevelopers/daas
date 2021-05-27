@@ -79,6 +79,22 @@
                             <?= form_error('gmap_api') ?>
                         </div>
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>One Month Membership Price <span class="-req">*</span></label>
+                            <input name="price_one_month" type="text" class="form-control decimal-num" placeholder="One Month Membership Price" value="<?= set_value('price_one_month',get_setting()['price_one_month']); ?>" >
+                            <?= form_error('price_one_month') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Three Month Membership Price <span class="-req">*</span></label>
+                            <input name="price_three_month" type="text" class="form-control decimal-num" placeholder="Three Month Membership Price" value="<?= set_value('price_three_month',get_setting()['price_three_month']); ?>" >
+                            <?= form_error('price_three_month') ?>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
@@ -132,6 +148,20 @@
                     </div>
                     <div class="col-md-2">
                         <img style="width: 100%;" src="<?= base_url('uploads/').get_setting()['upi_qr'] ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Paytm UPI QR CODE <span class="-req">*</span></label>
+                            <input name="paytm_qr" type="file" onchange="readFileImage(this)" class="form-control" placeholder="">
+                            <?= form_error('paytm_qr') ?>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <img style="width: 100%;" src="<?= base_url('uploads/').get_setting()['paytm_qr'] ?>">
                     </div>
                 </div>
             </div>

@@ -132,12 +132,15 @@ class Apicommon extends CI_Controller
 			'support_mobile' => get_setting()['support_mobile'],
 			'upi_id' 			=> get_setting()['upi_id'],
 			'upi_qr' 			=> base_url('uploads/').get_setting()['upi_qr'],
+			'paytm_qr' 			=> base_url('uploads/').get_setting()['paytm_qr'],
 			'cust_ver' 			=> get_setting()['cust_ver'],
 			'serv_ver' 			=> get_setting()['serv_ver'],
 			'deli_ver' 			=> get_setting()['deli_ver'],
 			'icust_ver' 			=> get_setting()['icust_ver'],
 			'iserv_ver' 			=> get_setting()['iserv_ver'],
-			'ideli_ver' 			=> get_setting()['ideli_ver']
+			'ideli_ver' 			=> get_setting()['ideli_ver'],
+			'price_one_month' 			=> get_setting()['price_one_month'],
+			'price_three_month' 			=> get_setting()['price_three_month']
 		];
 
 		if($this->input->post('type') && $this->input->post('userid')){

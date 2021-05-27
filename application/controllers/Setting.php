@@ -51,6 +51,9 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('seventoone', 'Amount','trim|required');
 		$this->form_validation->set_rules('morethanone', 'Amount','trim|required');
 
+		$this->form_validation->set_rules('price_one_month', 'One Month Membership Price','trim|required');
+		$this->form_validation->set_rules('price_three_month', 'Three Month Membership Price','trim|required');
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['_title']	= 'Settings';
@@ -82,7 +85,9 @@ class Setting extends CI_Controller
 				'spoints'					=> $this->input->post('spoints'),
 				'apoints'					=> $this->input->post('apoints'),
 				'ppoints'					=> $this->input->post('ppoints'),
-				'referalamt'				=> $this->input->post('referalamt')
+				'referalamt'				=> $this->input->post('referalamt'),
+				'price_one_month'				=> $this->input->post('price_one_month'),
+				'price_three_month'				=> $this->input->post('price_three_month')
 			];
 			$this->db->where('id','1');
 			$this->db->update('setting',$data);
@@ -106,6 +111,24 @@ class Setting extends CI_Controller
 		    			@unlink(FCPATH.'/uploads/'.$old['upi_qr']);
 		    		}
 		    		$this->db->where('id','1')->update('setting',['upi_qr' => $file_name]);
+		    	}
+			}
+
+			$config['upload_path'] = './uploads/';
+		    $config['allowed_types']	= '*';
+		    $config['max_size']      = '0';
+		    $config['overwrite']     = FALSE;
+		    $this->load->library('upload', $config);
+		    if (isset($_FILES ['paytm_qr']) && $_FILES ['paytm_qr']['error'] == 0) {
+				$file_name = microtime(true).".".pathinfo($_FILES['paytm_qr']['name'], PATHINFO_EXTENSION);
+				$config['file_name'] = $file_name;
+		    	$this->upload->initialize($config);
+		    	if($this->upload->do_upload('paytm_qr')){
+		    		$old = $this->db->get_where('setting',['id' => '1'])->row_array();
+		    		if($old['paytm_qr'] != "" && file_exists(FCPATH.'uploads/'.$old['paytm_qr'])){
+		    			@unlink(FCPATH.'/uploads/'.$old['paytm_qr']);
+		    		}
+		    		$this->db->where('id','1')->update('setting',['paytm_qr' => $file_name]);
 		    	}
 			}
 			$this->session->set_flashdata('msg', 'Settings Saved');
