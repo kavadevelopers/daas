@@ -54,6 +54,9 @@ class Setting extends CI_Controller
 		$this->form_validation->set_rules('price_one_month', 'One Month Membership Price','trim|required');
 		$this->form_validation->set_rules('price_three_month', 'Three Month Membership Price','trim|required');
 
+		$this->form_validation->set_rules('wprice_one_month', 'One Month Membership Price without GST','trim|required');
+		$this->form_validation->set_rules('wprice_three_month', 'Three Month Membership Price  without GST','trim|required');
+
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data['_title']	= 'Settings';

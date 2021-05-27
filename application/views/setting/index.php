@@ -82,9 +82,25 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label>One Month Membership Price <span class="-req">*</span></label>
+                            <label>One Month Membership Price without GST<span class="-req">*</span></label>
+                            <input name="wprice_one_month" type="text" class="form-control decimal-num" placeholder="One Month Membership Price" value="<?= set_value('wprice_one_month',get_setting()['wprice_one_month']); ?>" >
+                            <?= form_error('wprice_one_month') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>One Month Membership Price with GST <span class="-req">*</span></label>
                             <input name="price_one_month" type="text" class="form-control decimal-num" placeholder="One Month Membership Price" value="<?= set_value('price_one_month',get_setting()['price_one_month']); ?>" >
                             <?= form_error('price_one_month') ?>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Three Month Membership Price without GST<span class="-req">*</span></label>
+                            <input name="wprice_three_month" type="text" class="form-control decimal-num" placeholder="Three Month Membership Price" value="<?= set_value('wprice_three_month',get_setting()['wprice_three_month']); ?>" >
+                            <?= form_error('wprice_three_month') ?>
                         </div>
                     </div>
 

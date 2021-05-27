@@ -140,7 +140,9 @@ class Apicommon extends CI_Controller
 			'iserv_ver' 			=> get_setting()['iserv_ver'],
 			'ideli_ver' 			=> get_setting()['ideli_ver'],
 			'price_one_month' 			=> get_setting()['price_one_month'],
-			'price_three_month' 			=> get_setting()['price_three_month']
+			'price_three_month' 			=> get_setting()['price_three_month'],
+			'wprice_one_month' 			=> get_setting()['wprice_one_month'],
+			'wprice_three_month' 			=> get_setting()['wprice_three_month']
 		];
 
 		if($this->input->post('type') && $this->input->post('userid')){
