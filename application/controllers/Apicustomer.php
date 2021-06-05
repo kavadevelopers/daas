@@ -634,160 +634,165 @@ class Apicustomer extends CI_Controller
 	public function order()
 	{
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
-			// $servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
-			$servicesCount = serviceOnlineCount($this->input->post('userid'),$this->input->post('category'));
-			$deliveryCount = 1;
-			// if(getDeliveryNear($this->input->post('userid'))[0])
-			// {
-			// 	$deliveryCount = 1;
-			// }
-			if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
-				retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
-			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
-				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
-			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "service" && $servicesCount == 0){
-				retJson(['_return' => false,'msg' => 'No Service Provider online at this time']);	
-			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $servicesCount == 0){
-				retJson(['_return' => false,'msg' => 'No Alignment online at this time']);	
-			}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $deliveryCount == 0){
-				retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
-			}else{
-
-				$order_type = "";
-				if($this->input->post('order_type')){
-					$order_type = $this->input->post('order_type');
-				}
-
-				$delivery_date = "";
-				if($this->input->post('delivery_date')){
-					$delivery_date = $this->input->post('delivery_date');
-				}
-
-				$desc = "";
-				if($this->input->post('desc')){
-					$desc = $this->input->post('desc');
-				}
-				$last_id = $this->db->order_by('id','desc')->limit(1)->get('corder')->row_array();
-				if($last_id){
-					$order_id = mt_rand(10000000, 99999999).($last_id['id'] + 1);
+			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
+			if(checkSubscriptionExpiration($user['sub_expired_on']) == "active"){
+				// $servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
+				$servicesCount = serviceOnlineCount($this->input->post('userid'),$this->input->post('category'));
+				$deliveryCount = 1;
+				// if(getDeliveryNear($this->input->post('userid'))[0])
+				// {
+				// 	$deliveryCount = 1;
+				// }
+				if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $servicesCount == 0){
+					retJson(['_return' => false,'msg' => 'No Shop online at this time']);	
+				}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "delivery" && $deliveryCount == 0){
+					retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
+				}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "service" && $servicesCount == 0){
+					retJson(['_return' => false,'msg' => 'No Service Provider online at this time']);	
+				}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $servicesCount == 0){
+					retJson(['_return' => false,'msg' => 'No Alignment online at this time']);	
+				}else if($this->input->post('order_type') != "later" && $this->input->post('type') == "alignment" && $deliveryCount == 0){
+					retJson(['_return' => false,'msg' => 'No Driver online at this time']);	
 				}else{
-					$order_id = mt_rand(10000000, 99999999).'1';
+
+					$order_type = "";
+					if($this->input->post('order_type')){
+						$order_type = $this->input->post('order_type');
+					}
+
+					$delivery_date = "";
+					if($this->input->post('delivery_date')){
+						$delivery_date = $this->input->post('delivery_date');
+					}
+
+					$desc = "";
+					if($this->input->post('desc')){
+						$desc = $this->input->post('desc');
+					}
+					$last_id = $this->db->order_by('id','desc')->limit(1)->get('corder')->row_array();
+					if($last_id){
+						$order_id = mt_rand(10000000, 99999999).($last_id['id'] + 1);
+					}else{
+						$order_id = mt_rand(10000000, 99999999).'1';
+					}
+					$data = [
+						'userid'		=> $this->input->post('userid'),
+						'order_id'		=> $order_id,
+						'type'			=> $this->input->post('type'),
+						'category'		=> $this->input->post('category'),
+						'descr'			=> $desc,
+						'status'		=> 'upcoming',
+						'status_desc'	=> 'Order Placed',
+						'notes'			=> 'Pending',
+						'order_type'	=> $order_type,
+						'delivery_date'	=> $delivery_date,
+						'created_at'	=> date('Y-m-d H:i:s')
+					];
+					$this->db->insert('corder',$data);
+					$or_id = $this->db->insert_id();
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img1']) && $_FILES['img1']['error'] == 0){
+						$img1 = microtime(true).".".pathinfo($_FILES['img1']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img1;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img1')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img1','image' => $img1]);
+				    	}
+					}
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img2']) && $_FILES['img2']['error'] == 0){
+						$img2 = microtime(true).".".pathinfo($_FILES['img2']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img2;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img2')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img2','image' => $img2]);
+				    	}
+					}
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img3']) && $_FILES['img3']['error'] == 0){
+						$img3 = microtime(true).".".pathinfo($_FILES['img3']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img3;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img3')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img3','image' => $img3]);
+				    	}
+					}
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img4']) && $_FILES['img4']['error'] == 0){
+						$img4 = microtime(true).".".pathinfo($_FILES['img4']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img4;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img4')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img4','image' => $img4]);
+				    	}
+					}
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img5']) && $_FILES['img5']['error'] == 0){
+						$img5 = microtime(true).".".pathinfo($_FILES['img5']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img5;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img5')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img5','image' => $img5]);
+				    	}
+					}
+
+					$config['upload_path'] = './uploads/order/';
+				    $config['allowed_types']	= '*';
+				    $config['max_size']      = '0';
+				    $config['overwrite']     = FALSE;
+				    $this->load->library('upload', $config);
+					if(isset($_FILES ['img6']) && $_FILES['img6']['error'] == 0){
+						$img6 = microtime(true).".".pathinfo($_FILES['img6']['name'], PATHINFO_EXTENSION);
+						$config['file_name'] = $img6;
+				    	$this->upload->initialize($config);
+				    	if($this->upload->do_upload('img6')){
+				    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
+				    	}
+					}
+
+					$services = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1'])->result_array();
+					$tokens = [];
+					foreach ($services as $key => $value) {
+						array_push($tokens, $value['token']);
+					}
+					sendPush($tokens,"Order #".$order_id,"New Order Arrived","order",$or_id);
+
+
+
+					@sendEmail(
+						get_setting()['admin_receive_email'],
+						"Order Placed : #".$order_id,
+						$this->load->view('mail/admin_new_order',['order' => $or_id],true)
+					);
+					retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
 				}
-				$data = [
-					'userid'		=> $this->input->post('userid'),
-					'order_id'		=> $order_id,
-					'type'			=> $this->input->post('type'),
-					'category'		=> $this->input->post('category'),
-					'descr'			=> $desc,
-					'status'		=> 'upcoming',
-					'status_desc'	=> 'Order Placed',
-					'notes'			=> 'Pending',
-					'order_type'	=> $order_type,
-					'delivery_date'	=> $delivery_date,
-					'created_at'	=> date('Y-m-d H:i:s')
-				];
-				$this->db->insert('corder',$data);
-				$or_id = $this->db->insert_id();
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img1']) && $_FILES['img1']['error'] == 0){
-					$img1 = microtime(true).".".pathinfo($_FILES['img1']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img1;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img1')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img1','image' => $img1]);
-			    	}
-				}
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img2']) && $_FILES['img2']['error'] == 0){
-					$img2 = microtime(true).".".pathinfo($_FILES['img2']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img2;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img2')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img2','image' => $img2]);
-			    	}
-				}
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img3']) && $_FILES['img3']['error'] == 0){
-					$img3 = microtime(true).".".pathinfo($_FILES['img3']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img3;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img3')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img3','image' => $img3]);
-			    	}
-				}
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img4']) && $_FILES['img4']['error'] == 0){
-					$img4 = microtime(true).".".pathinfo($_FILES['img4']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img4;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img4')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img4','image' => $img4]);
-			    	}
-				}
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img5']) && $_FILES['img5']['error'] == 0){
-					$img5 = microtime(true).".".pathinfo($_FILES['img5']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img5;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img5')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img5','image' => $img5]);
-			    	}
-				}
-
-				$config['upload_path'] = './uploads/order/';
-			    $config['allowed_types']	= '*';
-			    $config['max_size']      = '0';
-			    $config['overwrite']     = FALSE;
-			    $this->load->library('upload', $config);
-				if(isset($_FILES ['img6']) && $_FILES['img6']['error'] == 0){
-					$img6 = microtime(true).".".pathinfo($_FILES['img6']['name'], PATHINFO_EXTENSION);
-					$config['file_name'] = $img6;
-			    	$this->upload->initialize($config);
-			    	if($this->upload->do_upload('img6')){
-			    		$this->db->insert('corder_images',['order_id' => $or_id,'name' => 'img6','image' => $img6]);
-			    	}
-				}
-
-				$services = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1'])->result_array();
-				$tokens = [];
-				foreach ($services as $key => $value) {
-					array_push($tokens, $value['token']);
-				}
-				sendPush($tokens,"Order #".$order_id,"New Order Arrived","order",$or_id);
-
-
-
-				@sendEmail(
-					get_setting()['admin_receive_email'],
-					"Order Placed : #".$order_id,
-					$this->load->view('mail/admin_new_order',['order' => $or_id],true)
-				);
-				retJson(['_return' => true,'msg' => 'Order Placed.','order' => $order_id,'order_id' => $or_id]);
+			}else{
+				retJson(['_return' => false,'msg' => 'Your subscription has been expired. Please renew your plan.']);	
 			}
 		}else{
 			retJson(['_return' => false,'msg' => '`userid`,`category` and `type` are Required']);
