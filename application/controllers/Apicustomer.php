@@ -635,7 +635,7 @@ class Apicustomer extends CI_Controller
 	{
 		if($this->input->post('userid') && $this->input->post('category') && $this->input->post('type')){
 			$user = $this->db->get_where('z_customer',['id' => $this->input->post('userid')])->row_array();
-			if($user['free'] == 'yes' || checkSubscriptionExpiration($user['sub_expired_on']) == "active"){
+			if($user['free'] == 'yes' || (checkSubscriptionExpiration($user['sub_expired_on']) == "active" && $user['block'] == '')){
 				// $servicesCount = $this->db->get_where('z_service',['category' => $this->input->post('category'),"verified" => 'Verified','approved' => '1','block' => '','active' => '1','token !=' => '','df' => ''])->num_rows();
 				$servicesCount = serviceOnlineCount($this->input->post('userid'),$this->input->post('category'));
 				$deliveryCount = 1;
